@@ -42,7 +42,7 @@ export async function performOrderAction(id: string, action: OrderAction, input:
   const status = nextStatus(action, order);
   const now = new Date();
   const updated = await Order.findOneAndUpdate({ _id: id, status: order.status, paymentStatus: order.paymentStatus, updatedAt: order.updatedAt }, {
-    $set: { status, ...(action === 'accept' ? { acceptedAt: now, acceptedBy: actor.userId, readyEstimateMinAt: new Date(now.getTime() + settings.restaurant.pickup.estimatedMinutes.min * 60000), readyEstimateMaxAt: new Date(now.getTime() + settings.restaurant.pickup.estimatedMinutes.max * 60000) } : {}), ...(action === 'reject' ? { rejectedReason: input.reason.trim() } : {}) },
+    $set: { status, ...(action === 'accept' ? { acceptedAt: now, acceptedBy: actor.userId, readyEstimateMinAt: new Date(now.getTime() + settings.restaurant[order.fulfillment].estimatedMinutes.min * 60000), readyEstimateMaxAt: new Date(now.getTime() + settings.restaurant[order.fulfillment].estimatedMinutes.max * 60000) } : {}), ...(action === 'reject' ? { rejectedReason: input.reason.trim() } : {}) },
     $push: { statusHistory: { status, previousStatus: order.status, newStatus: status, changedAt: now, changedBy: actor.userId, actorRole: actor.role, reason: input.reason.trim(), action, actionId: input.actionId } },
   }, { new: true, runValidators: true }).select('-requestKey');
   if (!updated) { const latest = await orderDetail(id); if (isReplay(latest, actor, action, input)) return latest; throw new AppError(409, 'STALE_ORDER', 'The order changed. Refresh before continuing.'); }

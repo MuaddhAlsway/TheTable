@@ -1,3 +1,4 @@
+import LoadingImage from "../common/LoadingImage";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { ArrowUpRight, Utensils } from "lucide-react";
@@ -56,7 +57,7 @@ function FeaturedMenu({ catalog }: { catalog: MenuCatalog }) {
         {!loading && !error && visibleItems.map((item) => (
           <article className="menu-card" key={item.id}>
             <Link className="menu-card__image-link" to="/menu" aria-label={`Explore ${item.name} on the menu`}>
-              <img className="menu-card__image" src={item.image} alt={item.name} loading="lazy" decoding="async" />
+              <LoadingImage className="menu-card__image" src={item.image} alt={item.name} loading="lazy" decoding="async" />
               <span className="menu-card__badge">{item.category}</span>
               <span className="menu-card__arrow" aria-hidden="true"><ArrowUpRight size={22} /></span>
             </Link>

@@ -1,3 +1,4 @@
+import LoadingImage from "../components/common/LoadingImage";
 import { openStripeCheckout } from "../lib/payments";
 import PayOrderButton from "../components/checkout/PayOrderButton";
 import { usePublicSettings } from "../hooks/usePublicSettings";
@@ -169,7 +170,7 @@ function Checkout() {
             </div>
             <aside className="checkout-page__summary" aria-labelledby="checkout-summary-title">
               <div className="checkout-page__summary-heading"><span>GOOD THINGS, TOGETHER</span><h2 id="checkout-summary-title">Your order.</h2><p>{totalQuantity} {totalQuantity === 1 ? "item" : "items"} · {fulfillment ? fulfillment === "delivery" ? "Delivery" : "Pickup" : "Fulfillment not available"}</p><Link to="/cart">Edit your bag <ArrowUpRight size={14} aria-hidden="true" /></Link></div>
-              <ul className="checkout-page__items" aria-label="Order items">{cartItems.map(({ item, quantity }) => <li key={item.id} className="checkout-page__item"><img src={item.image} alt="" loading="lazy" /><div><h3>{item.name}</h3><p>Qty {quantity} · {formatPrice(item.price)} each</p></div><strong>{formatPrice(item.price * quantity)}</strong></li>)}</ul>
+              <ul className="checkout-page__items" aria-label="Order items">{cartItems.map(({ item, quantity }) => <li key={item.id} className="checkout-page__item"><LoadingImage src={item.image} alt="" loading="lazy" /><div><h3>{item.name}</h3><p>Qty {quantity} · {formatPrice(item.price)} each</p></div><strong>{formatPrice(item.price * quantity)}</strong></li>)}</ul>
               <dl className="checkout-page__totals"><div><dt>Subtotal</dt><dd>{formatPrice(subtotal)}</dd></div><div><dt>Delivery fee</dt><dd>{totals.deliveryFee === null ? "Not configured" : fulfillment === "pickup" ? "Not applicable (pickup)" : formatPrice(totals.deliveryFee)}</dd></div><div><dt>Tax {taxRate === null ? "(not configured)" : ""}</dt><dd>{formatPrice(estimatedTax)}</dd></div><div className="checkout-page__total"><dt>Estimated total</dt><dd>{totals.total === null ? "Unavailable" : formatPrice(totals.total + estimatedTax)}</dd></div></dl>
               {totals.minimumShortfall > 0 && <p className="checkout-page__error" role="status">Add {formatPrice(totals.minimumShortfall)} more in items to meet the {formatPrice(config.delivery.minimumOrder!)} delivery minimum. <Link to="/menu">Explore the menu</Link></p>}
               {!available && <p className="checkout-page__hint">No fully configured fulfillment option is currently selected. Review the availability details above.</p>}

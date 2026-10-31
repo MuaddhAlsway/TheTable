@@ -1,3 +1,4 @@
+import LoadingImage from "../common/LoadingImage";
 import reservationBackground from "../../assets/ReservationDining.png";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, CalendarDays, MapPin, Sparkles, Utensils } from "lucide-react";
@@ -6,7 +7,7 @@ import "../../styles/ReservationCta.css";
 function ReservationCta() {
   return (
     <section className="reservation-cta" id="reserve" aria-labelledby="reservation-cta-title">
-      <img className="reservation-cta__background" src={reservationBackground} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+      <LoadingImage className="reservation-cta__background" src={reservationBackground} alt="" aria-hidden="true" loading="lazy" decoding="async" />
       <div className="reservation-cta__inner">
         <div className="reservation-cta__story">
           <p className="reservation-cta__eyebrow"><span aria-hidden="true" /> GOOD COMPANY STARTS WITH AN INVITATION</p>

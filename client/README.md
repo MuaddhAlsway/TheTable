@@ -1,5 +1,7 @@
 # The Table frontend: Vercel deployment
 
+Local development uses ignored `client/.env.development.local` with `VITE_API_URL=http://localhost:4000/api/v1`. This overrides the Render URL only for `npm run dev`; production builds keep the production/Vercel settings. Run the backend and frontend in separate terminals from the repository root with `npm run --prefix server dev` and `npm run --prefix client dev`. Restart Vite after editing environment configuration if it does not automatically reload.
+
 The frontend is the existing React + Vite + TypeScript application in client. Deploy it as its own Vercel project; the Express backend stays on Render. No Vercel project or public frontend URL has been created by this local configuration change.
 
 ## Vercel import settings

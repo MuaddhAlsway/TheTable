@@ -1,3 +1,4 @@
+import LoadingImage from "../common/LoadingImage";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { ArrowDown, ArrowUpRight, ChevronLeft, ChevronRight, MapPin, MoveUpRight } from "lucide-react";
@@ -28,7 +29,7 @@ function Hero({ catalog }: { catalog: MenuCatalog }) {
 
         <div className="hero-visual" id="hero-dish" role="group" aria-label="Featured dish" aria-busy={loading}>
           {!loading && !error && dishes.map((item, index) => (
-            <img key={item.id} className={`hero-photo${index === selectedIndex ? " is-active" : ""}`} src={item.image} alt={index === selectedIndex ? item.name : ""} aria-hidden={index !== selectedIndex} fetchPriority={index === 0 ? "high" : "auto"} loading={index === 0 ? "eager" : "lazy"} />
+            <LoadingImage key={item.id} className={`hero-photo${index === selectedIndex ? " is-active" : ""}`} src={item.image} alt={index === selectedIndex ? item.name : ""} aria-hidden={index !== selectedIndex} defer={index !== selectedIndex} loading="lazy" />
           ))}
           <div className="hero-photo-shade" />
           <div className="hero-visual-top"><span>THE TABLE / A TASTE OF THE GOOD LIFE</span><MoveUpRight size={25} strokeWidth={1} aria-hidden="true" /></div>

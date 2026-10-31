@@ -1,3 +1,4 @@
+import LoadingImage from "../common/LoadingImage";
 import { Plus } from "lucide-react";
 import type { MenuItem } from "../../data/menuItems";
 import "../../styles/MenuItemCard.css";
@@ -7,7 +8,7 @@ function MenuItemCard({ item, onAdd }: MenuItemCardProps) {
   return (
     <article className="menu-item-card">
       <div className="menu-item-card__image-wrap">
-        <img className="menu-item-card__image" src={item.image} alt={item.name} loading="lazy" decoding="async" />
+        <LoadingImage className="menu-item-card__image" src={item.image} alt={item.name} loading="lazy" decoding="async" />
         {item.tag && <span className="menu-item-card__tag">{item.tag}</span>}
         <span className="menu-item-card__image-index" aria-hidden="true">THE TABLE / {item.category.toUpperCase()}</span>
       </div>

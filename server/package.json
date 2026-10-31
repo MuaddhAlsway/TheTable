@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "seed:demo": "tsx src/scripts/seedMenu.ts",
     "setup:admin": "tsx src/scripts/setupAdmin.ts",
+    "setup:service": "tsx src/scripts/setupService.ts",
     "seed:menu": "tsx src/scripts/seedMenu.ts"
   },
   "dependencies": {
