@@ -7,7 +7,7 @@ import { apiRequest, ApiError, API_CONFIGURED } from "../lib/api";
 import type { OrderRecord } from "../lib/api-types";
 import { normalizeSaudiMobile, SAUDI_MOBILE_ERROR } from "../utils/saudiPhone";
 import { useRef, useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight, ShoppingBag, Store, Truck } from "lucide-react";
 import { useCart } from "../hooks/useCart";
 import { fulfillmentConfig as previewConfig, type FulfillmentMethod } from "../config/fulfillment";
@@ -20,20 +20,54 @@ const formatPrice = (value: number) => `${previewConfig.currency} ${value.toFixe
 const initialValues = { name: "", email: "", phone: "", recipientName: "", recipientPhone: "", city: "", neighborhood: "", postalCode: "", street: "", buildingUnit: "", instructions: "" };
 type FieldName = keyof typeof initialValues;
 type Errors = Partial<Record<FieldName | "fulfillment" | "timing", string>>;
+type CheckoutDraft = { values: typeof initialValues; fulfillment: FulfillmentMethod | null; pickupTiming: string };
+
+const DRAFT_KEY = "thetable.checkout-draft";
+
+// Keep the typed checkout details across the Clerk sign-in round trip.
+// Session storage is tab-scoped and is cleared after the order is created.
+function readDraft(): CheckoutDraft | null {
+  try {
+    const raw = sessionStorage.getItem(DRAFT_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<CheckoutDraft> | null;
+    if (!parsed || typeof parsed !== "object" || !parsed.values || typeof parsed.values !== "object") return null;
+    const values = { ...initialValues };
+    for (const key of Object.keys(initialValues) as FieldName[]) {
+      const value = (parsed.values as Record<string, unknown>)[key];
+      if (typeof value === "string") values[key] = value;
+    }
+    return {
+      values,
+      fulfillment: parsed.fulfillment === "delivery" || parsed.fulfillment === "pickup" ? parsed.fulfillment : null,
+      pickupTiming: typeof parsed.pickupTiming === "string" ? parsed.pickupTiming : "",
+    };
+  } catch {
+    return null;
+  }
+}
+function writeDraft(draft: CheckoutDraft) {
+  try { sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); } catch { /* Storage can be unavailable in private modes. */ }
+}
+function clearDraft() {
+  try { sessionStorage.removeItem(DRAFT_KEY); } catch { /* Storage can be unavailable in private modes. */ }
+}
 
 function Checkout() {
   const { cartItems, totalQuantity, subtotal } = useCart();
   const auth = useBackendAuth();
   const remoteSettings = usePublicSettings();
+  const navigate = useNavigate();
   const config = remoteSettings.settings?.fulfillment ?? previewConfig;
+  const [draft] = useState(readDraft);
   const [submitting, setSubmitting] = useState(false);
   const [orderError, setOrderError] = useState("");
   const [createdOrder, setCreatedOrder] = useState<OrderRecord | null>(null);
   const request = useRef({ fingerprint: "", key: "" });
-  const [fulfillmentChoice, setFulfillment] = useState<FulfillmentMethod | null>(null);
+  const [fulfillmentChoice, setFulfillment] = useState<FulfillmentMethod | null>(draft?.fulfillment ?? null);
   const fulfillment = fulfillmentChoice ?? (isFulfillmentAvailable(config, "delivery") ? "delivery" : isFulfillmentAvailable(config, "pickup") ? "pickup" : null);
-  const [values, setValues] = useState(initialValues);
-  const [pickupTiming, setPickupTiming] = useState("");
+  const [values, setValues] = useState(draft?.values ?? initialValues);
+  const [pickupTiming, setPickupTiming] = useState(draft?.pickupTiming ?? "");
   const [errors, setErrors] = useState<Errors>({});
   const [paymentNotice, setPaymentNotice] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -59,6 +93,13 @@ function Checkout() {
     setFulfillment(method);
     setErrors({});
     setPaymentNotice(false);
+  }
+  function persistDraft(nextValues: typeof initialValues = values) {
+    writeDraft({ values: nextValues, fulfillment, pickupTiming });
+  }
+  function goToSignIn(nextValues: typeof initialValues = values) {
+    persistDraft(nextValues);
+    navigate(`/login?redirect=${encodeURIComponent("/checkout")}`);
   }
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -89,9 +130,10 @@ function Checkout() {
       return;
     }
     // Normalize before the authenticated server submission.
-    setValues((current) => ({ ...current, phone: normalizedPhone!, ...(fulfillment === "delivery" ? { recipientPhone: normalizedRecipientPhone! } : {}) }));
+    const normalizedValues = { ...values, phone: normalizedPhone!, ...(fulfillment === "delivery" ? { recipientPhone: normalizedRecipientPhone! } : {}) };
+    setValues(normalizedValues);
     if (!API_CONFIGURED) { setPaymentNotice(true); return; }
-    if (!auth.configured || !auth.signedIn) { setOrderError("Sign in before creating an order."); return; }
+    if (!auth.configured || !auth.signedIn) { goToSignIn(normalizedValues); return; }
     if (serverAvailability && !serverAvailability.available) { setOrderError(serverAvailability.reasons.join(" ")); return; }
     if (!remoteSettings.settings?.ordersEnabled || !fulfillment) { setOrderError("Online order creation is not enabled. No order has been placed."); return; }
     if (cartItems.some(line => !/^[a-fA-F0-9]{24}$/.test(line.item.id))) { setOrderError("Your bag contains preview menu items. Remove them and add current dishes from the connected menu."); return; }
@@ -106,6 +148,7 @@ function Checkout() {
     try {
       const result = await apiRequest<OrderRecord>("/orders", { method: "POST", token: await auth.getToken(), body: payload, headers: { "Idempotency-Key": request.current.key } });
       setCreatedOrder(result.data);
+      clearDraft();
       if (result.data.paymentStatus === "unpaid" && result.data.status === "pending_payment") await openStripeCheckout(result.data._id, await auth.getToken());
       else window.location.assign(`/account/orders/${result.data._id}`);
     } catch (error) {
@@ -126,7 +169,7 @@ function Checkout() {
           <Link className="checkout-page__back" to="/cart"><ArrowLeft size={16} aria-hidden="true" /> Back to your bag</Link>
           {remoteSettings.loading && <p role="status">Loading restaurant settings…</p>}
           {remoteSettings.error && <p className="checkout-page__error" role="alert">{remoteSettings.error} <button type="button" onClick={remoteSettings.refresh}>Try again</button></p>}
-          {API_CONFIGURED && !auth.signedIn && <p className="checkout-page__hint"><Link to="/login?redirect=%2Fcheckout">Sign in</Link> to save an order. Guest orders are not enabled.</p>}
+          {API_CONFIGURED && !auth.signedIn && <p className="checkout-page__hint"><Link to="/login?redirect=%2Fcheckout" onClick={() => persistDraft()}>Sign in</Link> to save an order. Guest orders are not enabled. Your checkout details will be kept while you sign in.</p>}
           {API_CONFIGURED && <div className="checkout-page__hint"><p>Restaurant time zone: {remoteSettings.settings?.schedule?.timeZone || "Asia/Riyadh"}. Availability is checked again when you submit.</p><button type="button" onClick={remoteSettings.refresh} disabled={remoteSettings.loading}>Refresh availability</button></div>}
           {serverAvailability && !serverAvailability.available && <div className="checkout-page__setup" role="status"><h3>Ordering availability</h3><ul>{serverAvailability.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul></div>}
           <form className="checkout-page__layout" ref={formRef} noValidate onSubmit={event => void handleSubmit(event)}>
@@ -174,7 +217,7 @@ function Checkout() {
               <dl className="checkout-page__totals"><div><dt>Subtotal</dt><dd>{formatPrice(subtotal)}</dd></div><div><dt>Delivery fee</dt><dd>{totals.deliveryFee === null ? "Not configured" : fulfillment === "pickup" ? "Not applicable (pickup)" : formatPrice(totals.deliveryFee)}</dd></div><div><dt>Tax {taxRate === null ? "(not configured)" : ""}</dt><dd>{formatPrice(estimatedTax)}</dd></div><div className="checkout-page__total"><dt>Estimated total</dt><dd>{totals.total === null ? "Unavailable" : formatPrice(totals.total + estimatedTax)}</dd></div></dl>
               {totals.minimumShortfall > 0 && <p className="checkout-page__error" role="status">Add {formatPrice(totals.minimumShortfall)} more in items to meet the {formatPrice(config.delivery.minimumOrder!)} delivery minimum. <Link to="/menu">Explore the menu</Link></p>}
               {!available && <p className="checkout-page__hint">No fully configured fulfillment option is currently selected. Review the availability details above.</p>}
-              <button className="checkout-page__primary" type="submit" disabled={!available || remoteSettings.loading || !!remoteSettings.error || (API_CONFIGURED && serverAvailability?.available === false) || totals.minimumShortfall > 0 || submitting || !!createdOrder || (API_CONFIGURED && (!remoteSettings.settings?.ordersEnabled || !auth.signedIn))}>{submitting ? "Opening secure payment…" : API_CONFIGURED ? !auth.signedIn ? "Sign in to continue" : remoteSettings.settings?.payment?.ready === false ? "Payment setup required" : !remoteSettings.settings?.ordersEnabled || serverAvailability?.available === false ? "Ordering unavailable" : "Continue to secure payment" : "Continue to payment"} <ArrowUpRight size={18} aria-hidden="true" /></button>
+              <button className="checkout-page__primary" type="submit" disabled={!available || remoteSettings.loading || !!remoteSettings.error || (API_CONFIGURED && serverAvailability?.available === false) || totals.minimumShortfall > 0 || submitting || !!createdOrder || (API_CONFIGURED && !remoteSettings.settings?.ordersEnabled)}>{submitting ? "Opening secure payment…" : API_CONFIGURED ? !auth.signedIn ? "Sign in to continue" : remoteSettings.settings?.payment?.ready === false ? "Payment setup required" : !remoteSettings.settings?.ordersEnabled || serverAvailability?.available === false ? "Ordering unavailable" : "Continue to secure payment" : "Continue to payment"} <ArrowUpRight size={18} aria-hidden="true" /></button>
               <p className="checkout-page__payment-note">{API_CONFIGURED ? "Prices and fulfillment rules are checked again by the server. Payment takes place on Stripe. Orders remain unpaid until a signed payment event is verified, and restaurant acceptance is still required." : "Demo only. Backend order creation and payment integration are not connected. No order will be placed and no payment will be taken."}</p>
               {API_CONFIGURED && !remoteSettings.settings?.ordersEnabled && <p className="checkout-page__hint">{remoteSettings.settings?.payment?.ready === false ? remoteSettings.settings.payment.reason : "Online order creation is paused in the server settings."}</p>}
               {orderError && <p className="checkout-page__error" role="alert">{orderError}</p>}
