@@ -79,3 +79,7 @@
 .checkout-page__phone-country { display: block; padding: 10px 14px; border: 1px solid #bdae98; border-bottom: 0; border-radius: 2px 2px 0 0; background: #eee6d8; color: #805035; font-size: .75rem; line-height: 1.6; }
 .checkout-page__phone-control input { border-radius: 0 0 2px 2px; direction: ltr; text-align: left; }
 .checkout-page__phone-control:has([aria-invalid="true"]) .checkout-page__phone-country { border-color: #8b3827; }
+
+.checkout-page__availability { padding: 14px 16px; margin: 16px 0; border-left: 3px solid var(--terracotta, #a26748); background: var(--canvas, #f5f0e7); color: var(--olive, #292e24); font-size: .8rem; line-height: 1.7; overflow-wrap: anywhere; }
+.checkout-page__availability strong { display: block; }
+.checkout-page__availability p { margin: 8px 0 0; }

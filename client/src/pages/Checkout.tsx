@@ -76,6 +76,27 @@ function Checkout() {
   const estimatedTax = totals.total !== null && taxRate !== null ? Math.round(Math.round((subtotal + (remoteSettings.settings?.taxDeliveryFee ? totals.deliveryFee || 0 : 0)) * 100) * taxRate / 10000) / 100 : 0;
   const available = fulfillment !== null && isFulfillmentAvailable(config, fulfillment);
   const serverAvailability = fulfillment ? remoteSettings.settings?.availability?.[fulfillment] : undefined;
+  const openingTime = remoteSettings.settings?.schedule?.opens;
+  const openingLabel = openingTime ? (() => {
+    const [hour, minute] = openingTime.split(":").map(Number);
+    return (hour % 12 || 12) + (minute ? ":" + String(minute).padStart(2, "0") : "") + (hour >= 12 ? " PM" : " AM");
+  })() : "";
+  function availabilityLabel(method: FulfillmentMethod) {
+    const state = remoteSettings.settings?.availability?.[method];
+    if (!state) return "Checking availability…";
+    if (state.available) return "Available";
+    if (state.hours.code === "OUTSIDE_OPENING_HOURS") return openingLabel && remoteSettings.settings?.schedule?.weekdays.length === 7 ? "Closed · opens at " + openingLabel : "Closed · view collection hours";
+    if (state.hours.code === "TOO_CLOSE_TO_CLOSING") return "Today's ordering cutoff reached";
+    return "Temporarily unavailable · view details";
+  }
+  const checkoutLabel = submitting ? "Opening secure payment…"
+    : !API_CONFIGURED ? "Continue to payment"
+    : remoteSettings.loading ? "Checking availability…"
+    : remoteSettings.error ? "Service unavailable · retry above"
+    : remoteSettings.settings?.payment?.ready === false ? "Payment setup required"
+    : !remoteSettings.settings?.ordersEnabled ? "Online ordering paused"
+    : serverAvailability?.available === false && fulfillment ? availabilityLabel(fulfillment)
+    : !auth.signedIn ? "Sign in to continue" : "Continue to secure payment";
   const areaError = fulfillment === "delivery" && values.city.trim() && values.neighborhood.trim() ? getDeliveryAreaError(config, values.city, values.neighborhood, values.postalCode) : null;
   const postalRequired = requiresDeliveryPostalCode(config, values.city, values.neighborhood);
   const cityOptions = [...new Set(config.delivery.supportedAreas.map(area => area.city))];
@@ -181,7 +202,7 @@ function Checkout() {
               <fieldset className="checkout-page__section" disabled={submitting || !!createdOrder}>
                 <legend><span>01</span> How shall we serve you?</legend>
                 <div className="checkout-page__fulfillment">
-                  {(["delivery", "pickup"] as const).map((method) => { const enabled = isFulfillmentAvailable(config, method); const Icon = method === "delivery" ? Truck : Store; return <label className="checkout-page__option" key={method}><input type="radio" name="fulfillment" value={method} checked={fulfillment === method} disabled={!enabled} onChange={() => selectFulfillment(method)} /><Icon size={23} strokeWidth={1.3} aria-hidden="true" /><span><strong>{method === "delivery" ? "Delivery" : "Pickup"}</strong><small>{enabled ? API_CONFIGURED ? remoteSettings.settings?.availability?.[method]?.available ? "Available" : "View details · ordering unavailable" : "Available in demo mode" : "Unavailable · setup required"}</small></span></label>; })}
+                  {(["delivery", "pickup"] as const).map((method) => { const enabled = isFulfillmentAvailable(config, method); const Icon = method === "delivery" ? Truck : Store; return <label className="checkout-page__option" key={method}><input type="radio" name="fulfillment" value={method} checked={fulfillment === method} disabled={!enabled} onChange={() => selectFulfillment(method)} /><Icon size={23} strokeWidth={1.3} aria-hidden="true" /><span><strong>{method === "delivery" ? "Delivery" : "Pickup"}</strong><small>{enabled ? API_CONFIGURED ? availabilityLabel(method) : "Available in demo mode" : "Unavailable · setup required"}</small></span></label>; })}
                 </div>
                 {config.delivery.estimatedMinutes && <p className="checkout-page__hint">{config.delivery.estimateConfirmed === false ? "Proposed delivery estimate (restaurant confirmation required)" : "Approximate delivery estimate"}: {config.delivery.estimatedMinutes.min}–{config.delivery.estimatedMinutes.max} minutes after acceptance. Not an arrival guarantee. Delivery is available only within confirmed coverage and when ordering is enabled.</p>}
                 <div className="checkout-page__setup" role="status">
@@ -222,7 +243,8 @@ function Checkout() {
               {totals.minimumShortfall > 0 && <p className="checkout-page__error" role="status">Add {formatPrice(totals.minimumShortfall)} more in items to meet the {formatPrice(config.delivery.minimumOrder!)} delivery minimum. <Link to="/menu">Explore the menu</Link></p>}
               {!available && <p className="checkout-page__hint">No fully configured fulfillment option is currently selected. Review the availability details above.</p>}
               <p className="checkout-page__hint">After your order is saved, its TBL order number appears here and in your account. The kitchen receives it after verified payment and restaurant acceptance.</p>
-              <button className="checkout-page__primary" type="submit" disabled={!available || remoteSettings.loading || !!remoteSettings.error || (API_CONFIGURED && serverAvailability?.available === false) || totals.minimumShortfall > 0 || submitting || !!createdOrder || (API_CONFIGURED && !remoteSettings.settings?.ordersEnabled)}>{submitting ? "Opening secure payment…" : API_CONFIGURED ? !auth.signedIn ? "Sign in to continue" : remoteSettings.settings?.payment?.ready === false ? "Payment setup required" : !remoteSettings.settings?.ordersEnabled || serverAvailability?.available === false ? "Ordering unavailable" : "Continue to secure payment" : "Continue to payment"} <ArrowUpRight size={18} aria-hidden="true" /></button>
+              {serverAvailability && !serverAvailability.available && <div id="checkout-availability-reason" className="checkout-page__availability" role="status"><strong>{fulfillment ? availabilityLabel(fulfillment) : "Ordering paused"}</strong>{serverAvailability.reasons.map(reason => <p key={reason}>{reason}</p>)}<p>Your bag stays saved. Availability refreshes automatically; you can return during opening hours.</p></div>}
+              <button aria-describedby={serverAvailability?.available === false ? "checkout-availability-reason" : undefined} className="checkout-page__primary" type="submit" disabled={!available || remoteSettings.loading || !!remoteSettings.error || (API_CONFIGURED && serverAvailability?.available === false) || totals.minimumShortfall > 0 || submitting || !!createdOrder || (API_CONFIGURED && !remoteSettings.settings?.ordersEnabled)}>{checkoutLabel} <ArrowUpRight size={18} aria-hidden="true" /></button>
               <p className="checkout-page__payment-note">{API_CONFIGURED ? "Prices and fulfillment rules are checked again by the server. Payment takes place on Stripe. Orders remain unpaid until a signed payment event is verified, and restaurant acceptance is still required." : "Demo only. Backend order creation and payment integration are not connected. No order will be placed and no payment will be taken."}</p>
               {API_CONFIGURED && !remoteSettings.settings?.ordersEnabled && <p className="checkout-page__hint">{remoteSettings.settings?.payment?.ready === false ? remoteSettings.settings.payment.reason : "Online order creation is paused in the server settings."}</p>}
               {orderError && <p className="checkout-page__error" role="alert">{orderError}</p>}
