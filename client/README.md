@@ -1,3 +1,9 @@
+## Image loading and cart persistence
+
+Every restaurant image now uses components/common/LoadingImage.tsx with native lazy loading, asynchronous decoding, a warm loading placeholder, cached-image handling and an unavailable-image fallback. Inactive hero slides defer their source until selected. Existing dimensions/aspect ratios and responsive slots are preserved; the animation respects reduced-motion preferences. All styles are under src/styles/.
+
+Cart persistence is browser-local, versioned and scoped by Clerk user ID. Stored items are validated before hydration; corrupt records are ignored and storage errors do not crash the app. Guest items are merged once on sign-in; other signed-in accounts remain separate. Matching carts synchronize across browser tabs. Quantities are bounded to the existing backend limit. Persistence does not turn a bag into an order or store payment-card data.
+
 # The Table frontend: Vercel deployment
 
 Local development uses ignored `client/.env.development.local` with `VITE_API_URL=http://localhost:4000/api/v1`. This overrides the Render URL only for `npm run dev`; production builds keep the production/Vercel settings. Run the backend and frontend in separate terminals from the repository root with `npm run --prefix server dev` and `npm run --prefix client dev`. Restart Vite after editing environment configuration if it does not automatically reload.
@@ -144,7 +150,7 @@ export default defineConfig([
 
 The app uses React Router with browser URLs. Routes are declared in `src/app/router.tsx`, with the shared navbar and footer in `src/app/App.tsx` and route content rendered through `Outlet`.
 
-Available paths: `/` (home), `/about`, `/menu`, `/locations`, `/reservations`, `/contact`, `/login`, `/cart`, `/checkout`, and `/privacy`. Unmatched paths render a 404 page. Reservations, contact, login, and privacy are starter pages. The cart supports in-memory items and quantities; booking, authentication, payment processing, contact submission, and policy content are not implemented.
+Available paths: `/` (home), `/about`, `/menu`, `/locations`, `/reservations`, `/contact`, `/login`, `/cart`, `/checkout`, and `/privacy`. Unmatched paths render a 404 page. Reservations, contact, login, and privacy are starter pages. The cart persists item selections and quantities in browser storage; configured authentication, reservations and Stripe checkout use the Render backend. Contact/policy starter content remains separate.
 
 Use `Link` for internal navigation and `NavLink` for links that show the active page. Keep ordinary anchors for external URLs. Homepage fragments such as `/#menu` continue to work. Route changes update the document title, reset scroll, and focus the page heading; fragments scroll to their target instead.
 
@@ -167,9 +173,9 @@ Run `npm run test:responsive` for browser checks of all routes at 320, 390, 768,
 
 The persistent app layout in src/app/App.tsx wraps the navbar, route outlet, and footer with CartProvider. src/hooks/useCart.ts exposes cartItems (each line contains an existing MenuItem and quantity), addToCart(item), increaseQuantity(itemId), decreaseQuantity(itemId), removeItem(itemId), totalQuantity, and subtotal. MenuItem is imported from src/data/menuItems.ts; it is not redefined.
 
-Adding the same ID increments its existing line. Decreasing from one removes the line. Unknown IDs leave the bag unchanged. Both totals are derived from cart state. State survives client-side route navigation and resets on a full refresh; there is no storage, payment, or API integration.
+Adding the same ID increments its existing line. Decreasing from one removes the line. Unknown IDs leave the bag unchanged. Both totals are derived from cart state. State survives client-side route navigation and full refreshes through versioned localStorage. Guest and signed-in account carts have separate keys. A guest bag merges into the signed-in account once, and account switching restores that account’s own bag. Browser storage contains menu items/quantities only; no card details, addresses or tokens. The server still recalculates prices and validates every order.
 
-Verification: open /menu, add Roasted Tomato Soup twice, and confirm the navbar shows 2. Add Golden Fries once and confirm 3. Open the shopping bag: there should be two lines (soup quantity 2, fries quantity 1) with subtotal SAR 74.00. Increase/decrease quantities and check the navbar and subtotal together. Decrease a quantity of one to remove that line, or use Remove to delete the entire line. Refresh to reset the cart. Run npm run test:cart for automated browser checks, including rapid additions, route persistence, mobile layout, and refresh reset.
+Verification: open /menu, add Roasted Tomato Soup twice, and confirm the navbar shows 2. Add Golden Fries once and confirm 3. Open the shopping bag: there should be two lines (soup quantity 2, fries quantity 1) with subtotal SAR 74.00. Increase/decrease quantities and check the navbar and subtotal together. Decrease a quantity of one to remove that line, or use Remove to delete the entire line. A refresh should now restore the cart. Existing legacy automated cart checks may still describe the earlier refresh-reset behavior; no test suites were run for this change.
 
 
 ## Checkout and fulfillment setup

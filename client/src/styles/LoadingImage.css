@@ -1,4 +1,4 @@
-.image-loader { display: block; position: relative; overflow: hidden; isolation: isolate; background: var(--sandstone, #d9c9b6); }
+:where(.image-loader) { display: block; position: relative; overflow: hidden; isolation: isolate; background: var(--sandstone, #d9c9b6); }
 .image-loader > .image-loader__image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: inherit; opacity: 0; transition: opacity 260ms ease; }
 .image-loader[data-image-state="loaded"] > .image-loader__image { opacity: 1; }
 .image-loader__placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #655d4e; background: linear-gradient(100deg, #d9c9b6 20%, #efe6d8 40%, #d9c9b6 60%); background-size: 240% 100%; animation: image-placeholder-shimmer 1.7s ease-in-out infinite; pointer-events: none; }

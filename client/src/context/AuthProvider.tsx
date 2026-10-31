@@ -20,7 +20,7 @@ function ClerkBridge({ children }: { children: ReactNode }) {
     }
     void load(); return () => { active = false; };
   }, [isLoaded, isSignedIn, userId, getToken]);
-  return <AuthContext.Provider value={{ configured: true, loaded: isLoaded, signedIn: !!isSignedIn, profile: profile?.id === userId ? profile : null, profileError, getToken, signOut }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ configured: true, loaded: isLoaded, signedIn: !!isSignedIn, userId: isSignedIn ? userId || null : null, profile: profile?.id === userId ? profile : null, profileError, getToken, signOut }}>{children}</AuthContext.Provider>;
 }
 export function AuthProvider({ children }: { children: ReactNode }) {
   if (!publishableKey) return <>{children}</>;

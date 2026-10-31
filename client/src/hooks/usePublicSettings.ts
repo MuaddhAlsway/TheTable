@@ -13,5 +13,6 @@ export function usePublicSettings() {
     void load(); return () => controller.abort();
   }, [version]);
   useEffect(() => { if (!API_CONFIGURED) return; const timer = setInterval(() => { if (!document.hidden && navigator.onLine) setVersion(value => value + 1); }, 60000); return () => clearInterval(timer); }, []);
+  useEffect(() => { if (!API_CONFIGURED) return; const refresh = () => { if (!document.hidden && navigator.onLine) setVersion(value => value + 1); }; window.addEventListener('focus', refresh); window.addEventListener('online', refresh); document.addEventListener('visibilitychange', refresh); return () => { window.removeEventListener('focus', refresh); window.removeEventListener('online', refresh); document.removeEventListener('visibilitychange', refresh); }; }, []);
   return { settings, loading, error, refresh: () => setVersion(v => v + 1) };
 }
