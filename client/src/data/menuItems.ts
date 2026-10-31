@@ -15,6 +15,8 @@ export type MenuItem = {
   category: Exclude<MenuCategory, "All">;
   image: string;
   tag?: string;
+  heroSlide?: number;
+  heroImage?: string;
 };
 
 export const menuCategories: MenuCategory[] = [

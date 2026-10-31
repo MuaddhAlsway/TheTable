@@ -1,0 +1,18 @@
+.customer-account > section { scroll-margin-top: 150px; }
+.customer-account__heading { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; }
+.customer-account__heading h2, .customer-account__heading h3 { margin: 0; }
+.customer-account h3 { font-family: var(--font-display); font-size: 1.7rem; font-weight: 500; }
+.customer-account__profile dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.customer-account__profile dt { font-size: .75rem; color: #805035; margin-bottom: 8px; }
+.customer-account__profile dd { margin: 0; overflow-wrap: anywhere; }
+.customer-account__orders { list-style: none; padding: 0; margin: 0; }
+.customer-account__orders > li { border-top: 1px solid var(--sandstone, #d9c9b6); padding: 24px 0; }
+.customer-account__orders time { font-size: .8rem; color: #625848; }
+.customer-account__orders article > a { display: inline-flex; align-items: center; min-height: 44px; font-size: .85rem; }
+.customer-account__item-preview { padding-left: 20px; font-size: .85rem; line-height: 1.9; }
+.customer-account__empty { padding: 12px 0 22px; }
+.customer-account__fulfillment { border-top: 1px solid var(--sandstone, #d9c9b6); padding: 18px 0; }
+.customer-account address { font-style: normal; line-height: 1.8; overflow-wrap: anywhere; }
+.customer-account__history { padding-left: 22px; font-size: .85rem; line-height: 1.9; }
+.customer-account__history li { padding: 8px 0; }
+@media (max-width: 600px) { .customer-account__profile dl { grid-template-columns: 1fr; } .customer-account__heading { align-items: flex-start; } .customer-account__orders .customer-account__heading { flex-direction: column; gap: 8px; } }

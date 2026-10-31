@@ -5,6 +5,7 @@ const schema = new Schema({
   name: { type: String, required: true, maxlength: 120 }, slug: { type: String, required: true, unique: true }, description: { type: String, required: true, maxlength: 2000 },
   priceHalalas: { type: Number, required: true, min: 0, validate: Number.isSafeInteger }, category: { type: String, required: true, enum: ['Starters', 'Mains', 'Sides', 'Desserts'] },
   imageUrl: { type: String, required: true }, available: { type: Boolean, default: true }, archived: { type: Boolean, default: false },
+  heroSlide: { type: Number, min: 1, max: 4, validate: Number.isInteger }, heroImageUrl: { type: String },
   tags: { type: [String], default: [] }, allergens: { type: [String], default: [] }, customizationOptions: { type: [optionGroup], default: [] },
 }, { timestamps: true });
 schema.index({ category: 1, available: 1, archived: 1 });

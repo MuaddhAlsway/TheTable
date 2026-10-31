@@ -14,7 +14,8 @@
     "seed:demo": "tsx src/scripts/seedMenu.ts",
     "setup:admin": "tsx src/scripts/setupAdmin.ts",
     "setup:service": "tsx src/scripts/setupService.ts",
-    "seed:menu": "tsx src/scripts/seedMenu.ts"
+    "seed:menu": "tsx src/scripts/seedMenu.ts",
+    "setup:hero": "tsx src/scripts/setupHero.ts"
   },
   "dependencies": {
     "@clerk/express": "^2.1.86",

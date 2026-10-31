@@ -1,6 +1,6 @@
 import type { MenuItem } from '../data/menuItems';
 import type { FulfillmentConfig, FulfillmentMethod } from '../config/fulfillment';
-export type ApiMenuItem = { id: string; name: string; slug: string; description: string; priceHalalas: number; category: MenuItem['category']; imageUrl: string; available: boolean; tags: string[]; allergens: string[]; customizationOptions: { id: string; name: string; required: boolean; maxSelections: number; options: { id: string; name: string; priceHalalas: number; available: boolean }[] }[] };
+export type ApiMenuItem = { id: string; name: string; slug: string; description: string; priceHalalas: number; category: MenuItem['category']; imageUrl: string; heroSlide?: number; heroImageUrl?: string; available: boolean; tags: string[]; allergens: string[]; customizationOptions: { id: string; name: string; required: boolean; maxSelections: number; options: { id: string; name: string; priceHalalas: number; available: boolean }[] }[] };
 export type Customer = { name: string; email: string; phone: string };
 export type UserRole = 'admin' | 'cashier' | 'kitchen' | 'customer';
 export type StaffRole = Exclude<UserRole, 'customer'>;

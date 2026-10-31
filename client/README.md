@@ -203,3 +203,11 @@ Staff workspaces are available at `/cashier`, `/kitchen`, and `/admin/operations
 
 The home hero and featured menu share one `useMenuCatalog` result from `Home`. With `VITE_API_URL` configured, their names, prices, images, categories and tags come from the menu API backed by `thetable`, just like the Menu page. The hero shows up to four dishes and featured filters show up to three dishes per selection. Loading, empty and retry states replace hardcoded dish fallbacks on API errors. An unconfigured API retains the existing explicit preview mode. Editing menu records in the admin workspace is reflected when the catalog is fetched again. Checkout and fulfillment settings are unchanged.
 
+
+### Customer account dashboard
+
+Open `/account` after signing in. The existing Clerk session token is sent through the shared API client to `/users/me`, `/orders`, `/orders/:id`, and `/reservations`. These customer endpoints derive ownership from verified Clerk authentication; no browser-supplied account ID or email selects records. The dashboard shows saved API statuses, Saudi-time dates, SAR totals, order history, and fulfillment-specific details. Profile, orders, reservations, and order details have loading/error/retry states. Switching accounts remounts protected content to discard the previous account's loaded records. No passwords are collected or stored by this dashboard.
+
+### Homepage slide images
+
+Slides 01–04 use `Hero01.png`–`Hero04.png`. MongoDB menu records carry optional `heroSlide` and `heroImageUrl` fields; the menu card `imageUrl` is preserved. Public copies are in `public/hero-images/`. Deploy both frontend and backend to expose the stored mapping; the frontend uses the same bundled images as a fallback while the backend update rolls out.

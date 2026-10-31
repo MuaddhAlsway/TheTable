@@ -1,3 +1,7 @@
+import hero01 from "../../assets/Hero01.png";
+import hero02 from "../../assets/Hero02.png";
+import hero03 from "../../assets/Hero03.png";
+import hero04 from "../../assets/Hero04.png";
 import LoadingImage from "../common/LoadingImage";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -7,7 +11,9 @@ import "../../styles/Hero.css";
 
 function Hero({ catalog }: { catalog: MenuCatalog }) {
   const { loading, error, refresh } = catalog;
-  const dishes = catalog.items.slice(0, 4);
+  const configuredSlides = catalog.items.filter(item => item.heroSlide && item.heroSlide >= 1 && item.heroSlide <= 4).sort((a, b) => a.heroSlide! - b.heroSlide!);
+  const dishes = configuredSlides.length ? configuredSlides : catalog.items.slice(0, 4);
+  const heroImages = [hero01, hero02, hero03, hero04];
   const [activeDish, setActiveDish] = useState(0);
   const selectedIndex = Math.min(activeDish, Math.max(0, dishes.length - 1));
   const dish = dishes[selectedIndex];
@@ -29,7 +35,7 @@ function Hero({ catalog }: { catalog: MenuCatalog }) {
 
         <div className="hero-visual" id="hero-dish" role="group" aria-label="Featured dish" aria-busy={loading}>
           {!loading && !error && dishes.map((item, index) => (
-            <LoadingImage key={item.id} className={`hero-photo${index === selectedIndex ? " is-active" : ""}`} src={item.image} alt={index === selectedIndex ? item.name : ""} aria-hidden={index !== selectedIndex} defer={index !== selectedIndex} loading="lazy" />
+            <LoadingImage key={item.id} className={`hero-photo${index === selectedIndex ? " is-active" : ""}`} src={item.heroImage || heroImages[index]} alt={index === selectedIndex ? item.name : ""} aria-hidden={index !== selectedIndex} defer={index !== selectedIndex} loading="lazy" />
           ))}
           <div className="hero-photo-shade" />
           <div className="hero-visual-top"><span>THE TABLE / A TASTE OF THE GOOD LIFE</span><MoveUpRight size={25} strokeWidth={1} aria-hidden="true" /></div>
