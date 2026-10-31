@@ -45,7 +45,12 @@ function Footer() {
         <div className="site-footer__bottom">
           <p>© {new Date().getFullYear()} <SiteText contentKey="Footer-text-x57ra" fallback={"The Table. All rights reserved."} /></p>
           <Link className="site-footer__privacy" to="/privacy"><SiteText contentKey="Footer-text-fhaxvj" fallback={"Privacy policy"} /></Link>
-          <Link className="site-footer__back" to="#root"><SiteText contentKey="Footer-text-xsjgbl" fallback={"Back to the top "} /><span><ArrowUp size={16} strokeWidth={1.5} aria-hidden="true" /></span></Link>
+          <Link className="site-footer__back" to="#root" onClick={event => {
+            event.preventDefault();
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({ top: 0, left: 0, behavior: reducedMotion ? 'instant' : 'smooth' });
+            document.querySelector<HTMLElement>('main h1')?.focus({ preventScroll: true });
+          }}><SiteText contentKey="Footer-text-xsjgbl" fallback={"Back to the top "} /><span><ArrowUp size={16} strokeWidth={1.5} aria-hidden="true" /></span></Link>
         </div>
       </div>
     </footer>

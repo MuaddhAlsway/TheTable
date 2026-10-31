@@ -1,3 +1,4 @@
+import { useDishDetails } from "../hooks/useDishDetails";
 import SiteText from "../components/content/SiteText";
 import LoadingImage from "../components/common/LoadingImage";
 import { useMenuCatalog } from "../hooks/useMenuCatalog";
@@ -12,6 +13,7 @@ import "../styles/Menu.css";
 function Menu() {
   const { items: menuItems, loading: menuLoading, error: menuError, connected, refresh: refreshMenu } = useMenuCatalog();
   const { addToCart } = useCart();
+  const { openDish } = useDishDetails();
   const [activeCategory, setActiveCategory] = useState<MenuCategory>("All");
   const [query, setQuery] = useState("");
   const [addedItemName, setAddedItemName] = useState("");
@@ -41,7 +43,8 @@ function Menu() {
           <a className="menu-page__browse" href="#menu-dishes"><SiteText contentKey="Menu-text-1qp4gz" fallback={"Take a look around "} /><ArrowDownRight size={19} aria-hidden="true" /></a>
           <div className="menu-page__hero-foot"><Utensils size={16} strokeWidth={1.3} aria-hidden="true" /><span><SiteText contentKey="Menu-text-izwfth" fallback={"Good ingredients. Generous moments."} /></span></div>
         </div>
-        {featuredDish && <div className="menu-page__feature">
+        {featuredDish && <div className="menu-page__feature dish-preview">
+          <button className="dish-open" type="button" onClick={() => openDish(featuredDish)} aria-label={`View ${featuredDish.name} details`} aria-haspopup="dialog" />
           <LoadingImage src={featuredDish.image} alt={featuredDish.name} loading="lazy" />
           <div className="menu-page__feature-top"><span><SiteText contentKey="Menu-text-1770fx7" fallback={"A LITTLE MENU INSPIRATION"} /></span><span><SiteText contentKey="Menu-text-1vyzp2n" fallback={"THE TABLE / JEDDAH"} /></span></div>
           <div className="menu-page__feature-caption"><span><SiteText contentKey="Menu-text-117buuk" fallback={"FROM THE MAINS"} /></span><p>{featuredDish.name}<span><small>SAR</small> {featuredDish.price}</span></p><span>{featuredDish.description}</span></div>

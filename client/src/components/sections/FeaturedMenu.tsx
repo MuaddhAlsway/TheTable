@@ -1,3 +1,4 @@
+import { useDishDetails } from "../../hooks/useDishDetails";
 import SiteText from "../content/SiteText";
 import LoadingImage from "../common/LoadingImage";
 import { Link } from "react-router-dom";
@@ -9,6 +10,7 @@ import "../../styles/FeaturedMenu.css";
 
 function FeaturedMenu({ catalog }: { catalog: MenuCatalog }) {
   const { items, loading, error, refresh } = catalog;
+  const { openDish } = useDishDetails();
   const [activeCategory, setActiveCategory] = useState<MenuCategory>("All");
   const categories = menuCategories.filter(category => category === "All" || items.some(item => item.category === category));
   const visibleItems = items.filter(item => activeCategory === "All" || item.category === activeCategory).slice(0, 3);
@@ -53,12 +55,13 @@ function FeaturedMenu({ catalog }: { catalog: MenuCatalog }) {
       <div className="featured-menu__grid" id="featured-menu-dishes" aria-busy={loading}>
         {loading ? <p className="featured-menu__status" role="status"><SiteText contentKey="FeaturedMenu-text-1qxl7on" fallback={"Loading the kitchen menu…"} /></p> : error ? <div className="featured-menu__status" role="alert"><p>{error}</p><button type="button" onClick={refresh}><SiteText contentKey="FeaturedMenu-text-982hh6" fallback={"Try again"} /></button></div> : !visibleItems.length ? <p className="featured-menu__status" role="status"><SiteText contentKey="FeaturedMenu-text-17osjtk" fallback={"No dishes are currently available in this selection."} /></p> : null}
         {!loading && !error && visibleItems.map((item) => (
-          <article className="menu-card" key={item.id}>
-            <Link className="menu-card__image-link" to="/menu" aria-label={`Explore ${item.name} on the menu`}>
+          <article className="menu-card dish-preview" key={item.id}>
+            <button className="dish-open" type="button" onClick={() => openDish(item)} aria-label={`View ${item.name} details`} aria-haspopup="dialog"><span className="dish-open__hint">View dish ↗</span></button>
+            <div className="menu-card__image-link">
               <LoadingImage className="menu-card__image" src={item.image} alt={item.name} loading="lazy" decoding="async" />
               <span className="menu-card__badge">{item.category}</span>
               <span className="menu-card__arrow" aria-hidden="true"><ArrowUpRight size={22} /></span>
-            </Link>
+            </div>
             <div className="menu-card__details">
               <p className="menu-card__category">{item.tag || item.category}</p>
               <div className="menu-card__title-row">

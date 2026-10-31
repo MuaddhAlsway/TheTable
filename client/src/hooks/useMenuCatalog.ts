@@ -16,7 +16,7 @@ export function useMenuCatalog() {
         const records: ApiMenuItem[] = [];
         let page = 1, pages = 1;
         do { const result = await apiRequest<ApiMenuItem[]>(`/menu?limit=100&page=${page}`, { signal: controller.signal }); records.push(...result.data); pages = result.pagination?.pages || 1; page++; } while (page <= pages);
-        if (!controller.signal.aborted) { setItems(records.map(item => ({ id: item.id, name: item.name, description: item.description, price: item.priceHalalas / 100, category: item.category, image: item.imageUrl, heroSlide: item.heroSlide, heroImage: item.heroImageUrl, tag: item.tags[0] }))); setError(''); }
+        if (!controller.signal.aborted) { setItems(records.map(item => ({ id: item.id, name: item.name, description: item.description, price: item.priceHalalas / 100, category: item.category, image: item.imageUrl, allergens: item.allergens, heroSlide: item.heroSlide, heroImage: item.heroImageUrl, tag: item.tags[0] }))); setError(''); }
       } catch (error) { if (!controller.signal.aborted) { setItems([]); setError(error instanceof Error ? error.message : 'Unable to load menu.'); } }
       finally { if (!controller.signal.aborted) setLoading(false); }
     }

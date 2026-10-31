@@ -72,3 +72,6 @@
   .site-footer__visit { border-top: 1px solid #eee8da26; padding-top: 22px; }
 }
 @media (prefers-reduced-motion: reduce) { .site-footer *, .site-footer *::after { transition: none; } }
+.site-footer__back > span > svg { transition: transform 220ms ease; }
+.site-footer__back:is(:hover, :focus-visible) > span > svg { transform: translateY(-3px); }
+@media (prefers-reduced-motion: reduce) { .site-footer__back > span > svg { transition: none; transform: none; } }

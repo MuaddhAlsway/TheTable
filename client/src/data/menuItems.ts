@@ -15,6 +15,7 @@ export type MenuItem = {
   category: Exclude<MenuCategory, "All">;
   image: string;
   tag?: string;
+  allergens?: string[];
   heroSlide?: number;
   heroImage?: string;
 };

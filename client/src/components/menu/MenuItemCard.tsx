@@ -1,3 +1,4 @@
+import { useDishDetails } from "../../hooks/useDishDetails";
 import LoadingImage from "../common/LoadingImage";
 import { Plus } from "lucide-react";
 import type { MenuItem } from "../../data/menuItems";
@@ -5,8 +6,10 @@ import "../../styles/MenuItemCard.css";
 
 type MenuItemCardProps = { item: MenuItem; onAdd: (item: MenuItem) => void };
 function MenuItemCard({ item, onAdd }: MenuItemCardProps) {
+  const { openDish } = useDishDetails();
   return (
-    <article className="menu-item-card">
+    <article className="menu-item-card dish-preview">
+      <button className="dish-open" type="button" onClick={() => openDish(item)} aria-label={`View ${item.name} details`} aria-haspopup="dialog"><span className="dish-open__hint">View dish ↗</span></button>
       <div className="menu-item-card__image-wrap">
         <LoadingImage className="menu-item-card__image" src={item.image} alt={item.name} loading="lazy" decoding="async" />
         {item.tag && <span className="menu-item-card__tag">{item.tag}</span>}

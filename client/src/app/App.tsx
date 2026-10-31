@@ -1,3 +1,4 @@
+import DishDetailsProvider from "../context/DishDetailsProvider";
 import { CartProvider } from "../context/CartContext";
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
@@ -22,6 +23,6 @@ function App() {
     return () => cancelAnimationFrame(frame);
   }, [pathname, hash]);
 
-  return <CartProvider><Navbar key={pathname} /><Outlet /><Footer /></CartProvider>;
+  return <CartProvider><DishDetailsProvider key={pathname}><Navbar key={pathname} /><Outlet /><Footer /></DishDetailsProvider></CartProvider>;
 }
 export default App;
