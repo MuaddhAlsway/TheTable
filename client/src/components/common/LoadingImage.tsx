@@ -1,6 +1,7 @@
+import { useSiteContent } from '../../hooks/useSiteContent';
 import { useCallback, useState, type ImgHTMLAttributes } from 'react';
 import '../../styles/LoadingImage.css';
-type LoadingImageProps = ImgHTMLAttributes<HTMLImageElement> & { defer?: boolean };
+type LoadingImageProps = ImgHTMLAttributes<HTMLImageElement> & { defer?: boolean; contentKey?: string };
 function ImageFrame({ className = '', alt = '', defer = false, onLoad, onError, loading = 'lazy', decoding = 'async', style, ...props }: LoadingImageProps) {
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
   const attach = useCallback((node: HTMLImageElement | null) => {
@@ -12,6 +13,9 @@ function ImageFrame({ className = '', alt = '', defer = false, onLoad, onError, 
   </span>;
 }
 /** A changed source gets fresh loading state; cached images settle via the callback ref. */
-export default function LoadingImage(props: LoadingImageProps) {
-  return <ImageFrame key={`${props.src || ''}|${props.srcSet || ''}`} {...props} />;
+export default function LoadingImage({ contentKey, ...props }: LoadingImageProps) {
+  const { text } = useSiteContent();
+  const src = contentKey ? text(contentKey, props.src || '') : props.src;
+  const alt = contentKey ? text(contentKey + '-alt', props.alt || '') : props.alt;
+  return <ImageFrame key={`${src || ''}|${props.srcSet || ''}`} {...props} src={src} alt={alt} />;
 }

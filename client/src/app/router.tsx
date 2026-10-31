@@ -1,3 +1,4 @@
+import WebsiteContent from "../pages/admin/WebsiteContent";
 import FulfillmentSettingsPage from "../pages/admin/FulfillmentSettings";
 import CashierDashboard, { CashierOrderDetail } from "../pages/staff/CashierDashboard";
 import KitchenDashboard from "../pages/staff/KitchenDashboard";
@@ -41,6 +42,7 @@ export const routes: RouteObject[] = [{
     { path: "kitchen", element: <RequireAuth roles={["admin", "kitchen"]}><KitchenDashboard /></RequireAuth> },
     { path: "admin/fulfillment", element: <RequireAuth admin><FulfillmentSettingsPage /></RequireAuth> },
     { path: "admin/operations", element: <RequireAuth admin><OperationsSettingsPage /></RequireAuth> },
+    { path: "admin/content", element: <RequireAuth admin><WebsiteContent /></RequireAuth> },
     { path: "admin/menu", element: <RequireAuth admin><AdminMenu /></RequireAuth> },
     { path: "cart", element: <Cart /> },
     { path: "checkout", element: <Checkout /> },

@@ -1,0 +1,3201 @@
+[
+  {
+    "key": "About-text-1gqq2i",
+    "page": "About",
+    "label": "THE TABLE / OUR PHILOSOPHY",
+    "type": "text",
+    "defaultValue": "THE TABLE / OUR PHILOSOPHY"
+  },
+  {
+    "key": "About-text-lpeva6",
+    "page": "About",
+    "label": "FOOD. PEOPLE. A LITTLE TIME.",
+    "type": "text",
+    "defaultValue": "FOOD. PEOPLE. A LITTLE TIME."
+  },
+  {
+    "key": "About-text-1ulxr6k",
+    "page": "About",
+    "label": "OUR PHILOSOPHY",
+    "type": "text",
+    "defaultValue": "OUR PHILOSOPHY"
+  },
+  {
+    "key": "About-text-3rkhgr",
+    "page": "About",
+    "label": "Heading: More than",
+    "type": "text",
+    "defaultValue": "More than"
+  },
+  {
+    "key": "About-text-18t3a0b",
+    "page": "About",
+    "label": "Heading: a meal.",
+    "type": "text",
+    "defaultValue": "a meal."
+  },
+  {
+    "key": "About-text-d61kka",
+    "page": "About",
+    "label": "Heading: A moment.",
+    "type": "text",
+    "defaultValue": "A moment."
+  },
+  {
+    "key": "About-text-1q2xe2i",
+    "page": "About",
+    "label": "Some of the best things",
+    "type": "text",
+    "defaultValue": "Some of the best things"
+  },
+  {
+    "key": "About-text-1jyo79t",
+    "page": "About",
+    "label": "happen around a table.",
+    "type": "text",
+    "defaultValue": "happen around a table."
+  },
+  {
+    "key": "About-text-186e7di",
+    "page": "About",
+    "label": "A familiar face. Something good to share. A conversation you don’t want to end. That’",
+    "type": "text",
+    "defaultValue": "A familiar face. Something good to share. A conversation you don’t want to end. That’s the feeling we make room for."
+  },
+  {
+    "key": "About-text-te9kru",
+    "page": "About",
+    "label": "Take a seat. Get to know us.",
+    "type": "text",
+    "defaultValue": "Take a seat. Get to know us. "
+  },
+  {
+    "key": "About-image-diningImage",
+    "page": "About",
+    "label": "Image: diningImage",
+    "type": "image",
+    "defaultValue": "/content-images/ReservationDining.png"
+  },
+  {
+    "key": "About-image-diningImage-alt",
+    "page": "About",
+    "label": "Image description: diningImage",
+    "type": "text",
+    "defaultValue": "An inviting dining space with set tables and warm lighting"
+  },
+  {
+    "key": "About-text-1j10a6",
+    "page": "About",
+    "label": "THE ART OF MAKING ROOM",
+    "type": "text",
+    "defaultValue": "THE ART OF MAKING ROOM"
+  },
+  {
+    "key": "About-image-foodImage",
+    "page": "About",
+    "label": "Image: foodImage",
+    "type": "image",
+    "defaultValue": "/content-images/Burrata_GardenGreens.png"
+  },
+  {
+    "key": "About-image-foodImage-alt",
+    "page": "About",
+    "label": "Image description: foodImage",
+    "type": "text",
+    "defaultValue": "Burrata with garden greens on a plate"
+  },
+  {
+    "key": "About-text-x0vxgw",
+    "page": "About",
+    "label": "A little of something good.",
+    "type": "text",
+    "defaultValue": "A little of something good."
+  },
+  {
+    "key": "About-text-4sux21",
+    "page": "About",
+    "label": "01 — THE FEELING",
+    "type": "text",
+    "defaultValue": "01 — THE FEELING"
+  },
+  {
+    "key": "About-text-blynls",
+    "page": "About",
+    "label": "Come hungry.",
+    "type": "text",
+    "defaultValue": "Come hungry."
+  },
+  {
+    "key": "About-text-1sr1dva",
+    "page": "About",
+    "label": "Leave a little happier.",
+    "type": "text",
+    "defaultValue": "Leave a little happier."
+  },
+  {
+    "key": "About-text-a08r3f",
+    "page": "About",
+    "label": "A SIMPLE BELIEF",
+    "type": "text",
+    "defaultValue": "A SIMPLE BELIEF"
+  },
+  {
+    "key": "About-text-13l7kfk",
+    "page": "About",
+    "label": "Heading: The food brings us in.",
+    "type": "text",
+    "defaultValue": "The food brings us in."
+  },
+  {
+    "key": "About-text-13lxt4c",
+    "page": "About",
+    "label": "Heading: The feeling brings us back.",
+    "type": "text",
+    "defaultValue": "The feeling brings us back."
+  },
+  {
+    "key": "About-text-17vfkk5",
+    "page": "About",
+    "label": "We believe good food and genuine hospitality belong together. The plate matters. So d",
+    "type": "text",
+    "defaultValue": "We believe good food and genuine hospitality belong together. The plate matters. So does the welcome, the company, and having a little space to enjoy it all."
+  },
+  {
+    "key": "About-text-1npcukj",
+    "page": "About",
+    "label": "The Table is an invitation to make time for that. To share a favorite, try something ",
+    "type": "text",
+    "defaultValue": "The Table is an invitation to make time for that. To share a favorite, try something different, or simply sit down with someone whose company you’ve missed."
+  },
+  {
+    "key": "About-text-faq08p",
+    "page": "About",
+    "label": "THE THINGS WE COME BACK TO",
+    "type": "text",
+    "defaultValue": "THE THINGS WE COME BACK TO"
+  },
+  {
+    "key": "About-text-1vmh2qu",
+    "page": "About",
+    "label": "Heading: Simple things.",
+    "type": "text",
+    "defaultValue": "Simple things."
+  },
+  {
+    "key": "About-text-ejofjn",
+    "page": "About",
+    "label": "Heading: Given our full attention.",
+    "type": "text",
+    "defaultValue": "Given our full attention."
+  },
+  {
+    "key": "About-text-145klvh",
+    "page": "About",
+    "label": "Good food is only part of it.",
+    "type": "text",
+    "defaultValue": "Good food is only part of it."
+  },
+  {
+    "key": "About-text-f9jvbe",
+    "page": "About",
+    "label": "How we cook, how we care, and how we welcome you make up the rest.",
+    "type": "text",
+    "defaultValue": "How we cook, how we care, and how we welcome you make up the rest."
+  },
+  {
+    "key": "About-text-179xy9q",
+    "page": "About",
+    "label": "THREE IDEAS. ONE SHARED TABLE.",
+    "type": "text",
+    "defaultValue": "THREE IDEAS. ONE SHARED TABLE."
+  },
+  {
+    "key": "About-text-uny1zj",
+    "page": "About",
+    "label": "It’s the little things that stay with you.",
+    "type": "text",
+    "defaultValue": "It’s the little things that stay with you."
+  },
+  {
+    "key": "About-text-1t4hkhd",
+    "page": "About",
+    "label": "THERE DOESN’T HAVE TO BE AN OCCASION",
+    "type": "text",
+    "defaultValue": "THERE DOESN’T HAVE TO BE AN OCCASION"
+  },
+  {
+    "key": "About-text-1vise5h",
+    "page": "About",
+    "label": "Heading: The ordinary days",
+    "type": "text",
+    "defaultValue": "The ordinary days"
+  },
+  {
+    "key": "About-text-u7x8lb",
+    "page": "About",
+    "label": "Heading: deserve",
+    "type": "text",
+    "defaultValue": "deserve "
+  },
+  {
+    "key": "About-text-1rsm3go",
+    "page": "About",
+    "label": "Heading: a table, too.",
+    "type": "text",
+    "defaultValue": "a table, too."
+  },
+  {
+    "key": "About-text-12thtyy",
+    "page": "About",
+    "label": "An overdue catch-up. A family dinner. An evening with no plans beyond something good ",
+    "type": "text",
+    "defaultValue": "An overdue catch-up. A family dinner. An evening with no plans beyond something good to eat. These are moments worth making room for."
+  },
+  {
+    "key": "About-text-1x8z3ir",
+    "page": "About",
+    "label": "Bring your people",
+    "type": "text",
+    "defaultValue": "Bring your people "
+  },
+  {
+    "key": "About-text-hpaxuz",
+    "page": "About",
+    "label": "FROM OUR TABLE TO YOUR NEXT VISIT",
+    "type": "text",
+    "defaultValue": "FROM OUR TABLE TO YOUR NEXT VISIT"
+  },
+  {
+    "key": "About-text-1tfonmb",
+    "page": "About",
+    "label": "Heading: Your next",
+    "type": "text",
+    "defaultValue": "Your next"
+  },
+  {
+    "key": "About-text-1qa0n9a",
+    "page": "About",
+    "label": "Heading: good moment.",
+    "type": "text",
+    "defaultValue": "good moment."
+  },
+  {
+    "key": "About-text-1hptxp2",
+    "page": "About",
+    "label": "01 / SOMETHING DELICIOUS",
+    "type": "text",
+    "defaultValue": "01 / SOMETHING DELICIOUS"
+  },
+  {
+    "key": "About-text-1l9l37e",
+    "page": "About",
+    "label": "Explore the menu",
+    "type": "text",
+    "defaultValue": "Explore the menu"
+  },
+  {
+    "key": "About-text-1kt1964",
+    "page": "About",
+    "label": "02 / SOMEWHERE TO SETTLE IN",
+    "type": "text",
+    "defaultValue": "02 / SOMEWHERE TO SETTLE IN"
+  },
+  {
+    "key": "About-text-bam1gh",
+    "page": "About",
+    "label": "Find The Table",
+    "type": "text",
+    "defaultValue": "Find The Table"
+  },
+  {
+    "key": "About-text-1kca8b6",
+    "page": "About",
+    "label": "03 / SOMEONE TO SHARE IT WITH",
+    "type": "text",
+    "defaultValue": "03 / SOMEONE TO SHARE IT WITH"
+  },
+  {
+    "key": "About-text-1rq9czr",
+    "page": "About",
+    "label": "Request a reservation",
+    "type": "text",
+    "defaultValue": "Request a reservation"
+  },
+  {
+    "key": "About-values-label-8skuj3",
+    "page": "About",
+    "label": "ON THE PLATE",
+    "type": "text",
+    "defaultValue": "ON THE PLATE"
+  },
+  {
+    "key": "About-values-title-tayqlx",
+    "page": "About",
+    "label": "Thoughtful ingredients.",
+    "type": "text",
+    "defaultValue": "Thoughtful ingredients."
+  },
+  {
+    "key": "About-values-text-14bz0pt",
+    "page": "About",
+    "label": "Keep flavors clear and combinations considered. Our approach starts with a simple que",
+    "type": "text",
+    "defaultValue": "Keep flavors clear and combinations considered. Our approach starts with a simple question: what will make this a meal worth sitting down for?"
+  },
+  {
+    "key": "About-values-label-1gnjtbv",
+    "page": "About",
+    "label": "IN THE DETAILS",
+    "type": "text",
+    "defaultValue": "IN THE DETAILS"
+  },
+  {
+    "key": "About-values-title-gg1fmf",
+    "page": "About",
+    "label": "Care you can feel.",
+    "type": "text",
+    "defaultValue": "Care you can feel."
+  },
+  {
+    "key": "About-values-text-116z4v4",
+    "page": "About",
+    "label": "The little things shape the whole experience. A balanced plate, an attentive welcome,",
+    "type": "text",
+    "defaultValue": "The little things shape the whole experience. A balanced plate, an attentive welcome, a moment to settle in. We believe each deserves a little care."
+  },
+  {
+    "key": "About-values-label-132y5e7",
+    "page": "About",
+    "label": "AROUND THE TABLE",
+    "type": "text",
+    "defaultValue": "AROUND THE TABLE"
+  },
+  {
+    "key": "About-values-title-jztgr",
+    "page": "About",
+    "label": "Room for your people.",
+    "type": "text",
+    "defaultValue": "Room for your people."
+  },
+  {
+    "key": "About-values-text-b9e7f4",
+    "page": "About",
+    "label": "A quick lunch or a conversation that runs long. Whatever brings you together, we want",
+    "type": "text",
+    "defaultValue": "A quick lunch or a conversation that runs long. Whatever brings you together, we want the table to feel like a place where you can be yourself."
+  },
+  {
+    "key": "heading-1bsc302",
+    "page": "Cart",
+    "label": "title: Your shopping bag.",
+    "type": "text",
+    "defaultValue": "Your shopping bag."
+  },
+  {
+    "key": "heading-1exrthq",
+    "page": "Cart",
+    "label": "description: A little of this. A little of that. Your favorites, together.",
+    "type": "text",
+    "defaultValue": "A little of this. A little of that. Your favorites, together."
+  },
+  {
+    "key": "Cart-text-1irqhw9",
+    "page": "Cart",
+    "label": "Restoring your shopping bag…",
+    "type": "text",
+    "defaultValue": "Restoring your shopping bag…"
+  },
+  {
+    "key": "Cart-text-ggizsd",
+    "page": "Cart",
+    "label": "Heading: Your bag is empty.",
+    "type": "text",
+    "defaultValue": "Your bag is empty."
+  },
+  {
+    "key": "Cart-text-1bqk829",
+    "page": "Cart",
+    "label": "Find something delicious to get started.",
+    "type": "text",
+    "defaultValue": "Find something delicious to get started."
+  },
+  {
+    "key": "Cart-text-1l9l37e",
+    "page": "Cart",
+    "label": "Explore the menu",
+    "type": "text",
+    "defaultValue": "Explore the menu"
+  },
+  {
+    "key": "Cart-text-5ok4rs",
+    "page": "Cart",
+    "label": "each",
+    "type": "text",
+    "defaultValue": "each"
+  },
+  {
+    "key": "Cart-text-9c35st",
+    "page": "Cart",
+    "label": "Remove",
+    "type": "text",
+    "defaultValue": "Remove"
+  },
+  {
+    "key": "Cart-text-uu7h3r",
+    "page": "Cart",
+    "label": "Subtotal",
+    "type": "text",
+    "defaultValue": "Subtotal "
+  },
+  {
+    "key": "Cart-text-1j2s5i3",
+    "page": "Cart",
+    "label": "Your bag is saved in this browser and restored after refresh. Signed-in accounts keep",
+    "type": "text",
+    "defaultValue": "Your bag is saved in this browser and restored after refresh. Signed-in accounts keep separate bags. Secure payment is handled by Stripe when checkout is available."
+  },
+  {
+    "key": "Cart-text-2qksl6",
+    "page": "Cart",
+    "label": "Proceed to checkout",
+    "type": "text",
+    "defaultValue": "Proceed to checkout"
+  },
+  {
+    "key": "Cart-text-xia7cy",
+    "page": "Cart",
+    "label": "Continue exploring the menu",
+    "type": "text",
+    "defaultValue": "Continue exploring the menu"
+  },
+  {
+    "key": "heading-mos1ik",
+    "page": "Checkout",
+    "label": "title: A little closer to delicious.",
+    "type": "text",
+    "defaultValue": "A little closer to delicious."
+  },
+  {
+    "key": "heading-s5ww6y",
+    "page": "Checkout",
+    "label": "description: Review your favorites and choose how you'd like to enjoy them. Review the f",
+    "type": "text",
+    "defaultValue": "Review your favorites and choose how you'd like to enjoy them. Review the fulfillment details before continuing."
+  },
+  {
+    "key": "Checkout-text-1irqhw9",
+    "page": "Checkout",
+    "label": "Restoring your shopping bag…",
+    "type": "text",
+    "defaultValue": "Restoring your shopping bag…"
+  },
+  {
+    "key": "Checkout-text-10zemhh",
+    "page": "Checkout",
+    "label": "Heading: Your bag is waiting for something good.",
+    "type": "text",
+    "defaultValue": "Your bag is waiting for something good."
+  },
+  {
+    "key": "Checkout-text-e29c73",
+    "page": "Checkout",
+    "label": "Add a dish from the menu before continuing to checkout.",
+    "type": "text",
+    "defaultValue": "Add a dish from the menu before continuing to checkout."
+  },
+  {
+    "key": "Checkout-text-i8g88e",
+    "page": "Checkout",
+    "label": "Explore the menu",
+    "type": "text",
+    "defaultValue": "Explore the menu "
+  },
+  {
+    "key": "Checkout-text-104tt0s",
+    "page": "Checkout",
+    "label": "Back to your bag",
+    "type": "text",
+    "defaultValue": "Back to your bag"
+  },
+  {
+    "key": "Checkout-text-133rpxf",
+    "page": "Checkout",
+    "label": "Loading restaurant settings…",
+    "type": "text",
+    "defaultValue": "Loading restaurant settings…"
+  },
+  {
+    "key": "Checkout-text-982hh6",
+    "page": "Checkout",
+    "label": "Try again",
+    "type": "text",
+    "defaultValue": "Try again"
+  },
+  {
+    "key": "Checkout-text-w9nig3",
+    "page": "Checkout",
+    "label": "Sign in",
+    "type": "text",
+    "defaultValue": "Sign in"
+  },
+  {
+    "key": "Checkout-text-1co3fvn",
+    "page": "Checkout",
+    "label": "to save an order. Guest orders are not enabled. Your checkout details will be kept wh",
+    "type": "text",
+    "defaultValue": "to save an order. Guest orders are not enabled. Your checkout details will be kept while you sign in."
+  },
+  {
+    "key": "Checkout-text-1cow7g1",
+    "page": "Checkout",
+    "label": "Restaurant time zone:",
+    "type": "text",
+    "defaultValue": "Restaurant time zone: "
+  },
+  {
+    "key": "Checkout-text-1cpvbki",
+    "page": "Checkout",
+    "label": ". Availability is checked again when you submit.",
+    "type": "text",
+    "defaultValue": ". Availability is checked again when you submit."
+  },
+  {
+    "key": "Checkout-text-1gsfl33",
+    "page": "Checkout",
+    "label": "Refresh availability",
+    "type": "text",
+    "defaultValue": "Refresh availability"
+  },
+  {
+    "key": "Checkout-text-30b44",
+    "page": "Checkout",
+    "label": "Heading: Ordering availability",
+    "type": "text",
+    "defaultValue": "Ordering availability"
+  },
+  {
+    "key": "Checkout-text-9m3l4q",
+    "page": "Checkout",
+    "label": "How shall we serve you?",
+    "type": "text",
+    "defaultValue": "How shall we serve you?"
+  },
+  {
+    "key": "Checkout-text-vyfw37",
+    "page": "Checkout",
+    "label": "minutes after acceptance. Not an arrival guarantee. Delivery is available only within",
+    "type": "text",
+    "defaultValue": "minutes after acceptance. Not an arrival guarantee. Delivery is available only within confirmed coverage and when ordering is enabled."
+  },
+  {
+    "key": "Checkout-text-rbqnue",
+    "page": "Checkout",
+    "label": "Heading: setup",
+    "type": "text",
+    "defaultValue": "setup"
+  },
+  {
+    "key": "Checkout-text-1bo0beq",
+    "page": "Checkout",
+    "label": "This fulfillment option is disabled in the restaurant settings.",
+    "type": "text",
+    "defaultValue": "This fulfillment option is disabled in the restaurant settings."
+  },
+  {
+    "key": "Checkout-text-1lnn6sg",
+    "page": "Checkout",
+    "label": "A little about you.",
+    "type": "text",
+    "defaultValue": "A little about you."
+  },
+  {
+    "key": "Checkout-text-1pk7u5o",
+    "page": "Checkout",
+    "label": "All fields are required unless marked optional.",
+    "type": "text",
+    "defaultValue": "All fields are required unless marked optional."
+  },
+  {
+    "key": "Checkout-text-j2nopr",
+    "page": "Checkout",
+    "label": "Collect from the restaurant.",
+    "type": "text",
+    "defaultValue": "Collect from the restaurant."
+  },
+  {
+    "key": "Checkout-text-kovy5m",
+    "page": "Checkout",
+    "label": "Restaurant address",
+    "type": "text",
+    "defaultValue": "Restaurant address"
+  },
+  {
+    "key": "Checkout-text-1t7lrc2",
+    "page": "Checkout",
+    "label": "View pickup location on Google Maps",
+    "type": "text",
+    "defaultValue": "View pickup location on Google Maps"
+  },
+  {
+    "key": "Checkout-text-jw33j3",
+    "page": "Checkout",
+    "label": "Area display only; exact street address has not been confirmed.",
+    "type": "text",
+    "defaultValue": "Area display only; exact street address has not been confirmed."
+  },
+  {
+    "key": "Checkout-text-y6wczu",
+    "page": "Checkout",
+    "label": "Collection hours",
+    "type": "text",
+    "defaultValue": "Collection hours"
+  },
+  {
+    "key": "Checkout-text-5n7d0u",
+    "page": "Checkout",
+    "label": "Collection instructions",
+    "type": "text",
+    "defaultValue": "Collection instructions"
+  },
+  {
+    "key": "Checkout-text-g3jecm",
+    "page": "Checkout",
+    "label": "Available pickup timing",
+    "type": "text",
+    "defaultValue": "Available pickup timing"
+  },
+  {
+    "key": "Checkout-text-1laxzd6",
+    "page": "Checkout",
+    "label": "Approximate estimate after staff acceptance, not a guarantee.",
+    "type": "text",
+    "defaultValue": "Approximate estimate after staff acceptance, not a guarantee. "
+  },
+  {
+    "key": "Checkout-text-1f8fful",
+    "page": "Checkout",
+    "label": "Opening days/hours and near-closing cutoff are checked by the server. Automatic notif",
+    "type": "text",
+    "defaultValue": "Opening days/hours and near-closing cutoff are checked by the server. Automatic notifications are not connected."
+  },
+  {
+    "key": "Checkout-text-1bx7hcy",
+    "page": "Checkout",
+    "label": "Where are we headed?",
+    "type": "text",
+    "defaultValue": "Where are we headed?"
+  },
+  {
+    "key": "Checkout-text-1w4pvp5",
+    "page": "Checkout",
+    "label": "Approximate delivery:",
+    "type": "text",
+    "defaultValue": "Approximate delivery: "
+  },
+  {
+    "key": "Checkout-text-ggxdi5",
+    "page": "Checkout",
+    "label": "minutes after restaurant acceptance, not guaranteed.",
+    "type": "text",
+    "defaultValue": "minutes after restaurant acceptance, not guaranteed. "
+  },
+  {
+    "key": "Checkout-text-1v3gs07",
+    "page": "Checkout",
+    "label": "Minimum items subtotal:",
+    "type": "text",
+    "defaultValue": "Minimum items subtotal: "
+  },
+  {
+    "key": "Checkout-text-142k4ma",
+    "page": "Checkout",
+    "label": "City",
+    "type": "text",
+    "defaultValue": "City"
+  },
+  {
+    "key": "Checkout-text-30w21",
+    "page": "Checkout",
+    "label": "Neighborhood",
+    "type": "text",
+    "defaultValue": "Neighborhood"
+  },
+  {
+    "key": "Checkout-text-4l1lu1",
+    "page": "Checkout",
+    "label": "Delivery instructions (optional)",
+    "type": "text",
+    "defaultValue": "Delivery instructions (optional)"
+  },
+  {
+    "key": "Checkout-text-1ozvb9n",
+    "page": "Checkout",
+    "label": "GOOD THINGS, TOGETHER",
+    "type": "text",
+    "defaultValue": "GOOD THINGS, TOGETHER"
+  },
+  {
+    "key": "Checkout-text-ahhg7c",
+    "page": "Checkout",
+    "label": "Heading: Your order.",
+    "type": "text",
+    "defaultValue": "Your order."
+  },
+  {
+    "key": "Checkout-text-125pf0y",
+    "page": "Checkout",
+    "label": "Edit your bag",
+    "type": "text",
+    "defaultValue": "Edit your bag "
+  },
+  {
+    "key": "Checkout-text-bgee09",
+    "page": "Checkout",
+    "label": "Qty",
+    "type": "text",
+    "defaultValue": "Qty "
+  },
+  {
+    "key": "Checkout-text-5ok4rs",
+    "page": "Checkout",
+    "label": "each",
+    "type": "text",
+    "defaultValue": "each"
+  },
+  {
+    "key": "Checkout-text-1mnez65",
+    "page": "Checkout",
+    "label": "Subtotal",
+    "type": "text",
+    "defaultValue": "Subtotal"
+  },
+  {
+    "key": "Checkout-text-a2dh0d",
+    "page": "Checkout",
+    "label": "Delivery fee",
+    "type": "text",
+    "defaultValue": "Delivery fee"
+  },
+  {
+    "key": "Checkout-text-1nxs6fi",
+    "page": "Checkout",
+    "label": "Tax",
+    "type": "text",
+    "defaultValue": "Tax "
+  },
+  {
+    "key": "Checkout-text-cf4vwb",
+    "page": "Checkout",
+    "label": "Estimated total",
+    "type": "text",
+    "defaultValue": "Estimated total"
+  },
+  {
+    "key": "Checkout-text-13okvdo",
+    "page": "Checkout",
+    "label": "Add",
+    "type": "text",
+    "defaultValue": "Add "
+  },
+  {
+    "key": "Checkout-text-1ikb2aw",
+    "page": "Checkout",
+    "label": "more in items to meet the",
+    "type": "text",
+    "defaultValue": "more in items to meet the "
+  },
+  {
+    "key": "Checkout-text-qipbuf",
+    "page": "Checkout",
+    "label": "delivery minimum.",
+    "type": "text",
+    "defaultValue": "delivery minimum. "
+  },
+  {
+    "key": "Checkout-text-1l9l37e",
+    "page": "Checkout",
+    "label": "Explore the menu",
+    "type": "text",
+    "defaultValue": "Explore the menu"
+  },
+  {
+    "key": "Checkout-text-h4d2bx",
+    "page": "Checkout",
+    "label": "No fully configured fulfillment option is currently selected. Review the availability",
+    "type": "text",
+    "defaultValue": "No fully configured fulfillment option is currently selected. Review the availability details above."
+  },
+  {
+    "key": "Checkout-text-1qacba7",
+    "page": "Checkout",
+    "label": "After your order is saved, its TBL order number appears here and in your account. The",
+    "type": "text",
+    "defaultValue": "After your order is saved, its TBL order number appears here and in your account. The kitchen receives it after verified payment and restaurant acceptance."
+  },
+  {
+    "key": "Checkout-text-10kbeto",
+    "page": "Checkout",
+    "label": "Your bag stays saved. Availability refreshes automatically; you can return during ope",
+    "type": "text",
+    "defaultValue": "Your bag stays saved. Availability refreshes automatically; you can return during opening hours."
+  },
+  {
+    "key": "Checkout-text-kxldth",
+    "page": "Checkout",
+    "label": "Order",
+    "type": "text",
+    "defaultValue": "Order "
+  },
+  {
+    "key": "Checkout-text-ks2i7s",
+    "page": "Checkout",
+    "label": "saved. Payment status:",
+    "type": "text",
+    "defaultValue": "saved. Payment status: "
+  },
+  {
+    "key": "Checkout-text-1dtvl9c",
+    "page": "Checkout",
+    "label": ". Server total:",
+    "type": "text",
+    "defaultValue": ". Server total: "
+  },
+  {
+    "key": "Checkout-text-zu1nzw",
+    "page": "Checkout",
+    "label": ". Restaurant acceptance is separate from payment; check the saved order for the lates",
+    "type": "text",
+    "defaultValue": ". Restaurant acceptance is separate from payment; check the saved order for the latest verified status. "
+  },
+  {
+    "key": "Checkout-text-t579p7",
+    "page": "Checkout",
+    "label": "View saved order",
+    "type": "text",
+    "defaultValue": "View saved order"
+  },
+  {
+    "key": "Checkout-text-1h1zwpb",
+    "page": "Checkout",
+    "label": "Please correct the highlighted fields before continuing.",
+    "type": "text",
+    "defaultValue": "Please correct the highlighted fields before continuing."
+  },
+  {
+    "key": "CustomerDashboard-text-1t5jxvs",
+    "page": "Account",
+    "label": "Previous",
+    "type": "text",
+    "defaultValue": "Previous"
+  },
+  {
+    "key": "CustomerDashboard-text-lwcd4y",
+    "page": "Account",
+    "label": "Page",
+    "type": "text",
+    "defaultValue": "Page "
+  },
+  {
+    "key": "CustomerDashboard-text-1rlpqvs",
+    "page": "Account",
+    "label": "of",
+    "type": "text",
+    "defaultValue": "of "
+  },
+  {
+    "key": "CustomerDashboard-text-1padbm0",
+    "page": "Account",
+    "label": "Next",
+    "type": "text",
+    "defaultValue": "Next"
+  },
+  {
+    "key": "heading-10hmk29",
+    "page": "Account",
+    "label": "title: Your place at The Table.",
+    "type": "text",
+    "defaultValue": "Your place at The Table."
+  },
+  {
+    "key": "heading-1avgmni",
+    "page": "Account",
+    "label": "description: Your profile, orders, and moments worth gathering for.",
+    "type": "text",
+    "defaultValue": "Your profile, orders, and moments worth gathering for."
+  },
+  {
+    "key": "CustomerDashboard-text-myzkf3",
+    "page": "Account",
+    "label": "Your orders",
+    "type": "text",
+    "defaultValue": "Your orders"
+  },
+  {
+    "key": "CustomerDashboard-text-puoso1",
+    "page": "Account",
+    "label": "Your reservations",
+    "type": "text",
+    "defaultValue": "Your reservations"
+  },
+  {
+    "key": "CustomerDashboard-text-1l9l37e",
+    "page": "Account",
+    "label": "Explore the menu",
+    "type": "text",
+    "defaultValue": "Explore the menu"
+  },
+  {
+    "key": "CustomerDashboard-text-ob84f4",
+    "page": "Account",
+    "label": "Admin dashboard",
+    "type": "text",
+    "defaultValue": "Admin dashboard"
+  },
+  {
+    "key": "CustomerDashboard-text-1rkazfr",
+    "page": "Account",
+    "label": "Cashier desk",
+    "type": "text",
+    "defaultValue": "Cashier desk"
+  },
+  {
+    "key": "CustomerDashboard-text-1x3su7h",
+    "page": "Account",
+    "label": "Kitchen display",
+    "type": "text",
+    "defaultValue": "Kitchen display"
+  },
+  {
+    "key": "CustomerDashboard-text-12niv00",
+    "page": "Account",
+    "label": "Sign out",
+    "type": "text",
+    "defaultValue": "Sign out"
+  },
+  {
+    "key": "CustomerDashboard-text-14tpxlv",
+    "page": "Account",
+    "label": "Heading: Your profile",
+    "type": "text",
+    "defaultValue": "Your profile"
+  },
+  {
+    "key": "CustomerDashboard-text-15f9bnz",
+    "page": "Account",
+    "label": "Loading your profile…",
+    "type": "text",
+    "defaultValue": "Loading your profile…"
+  },
+  {
+    "key": "CustomerDashboard-text-lemglg",
+    "page": "Account",
+    "label": "Retry profile",
+    "type": "text",
+    "defaultValue": "Retry profile"
+  },
+  {
+    "key": "CustomerDashboard-text-4el6o6",
+    "page": "Account",
+    "label": "Name",
+    "type": "text",
+    "defaultValue": "Name"
+  },
+  {
+    "key": "CustomerDashboard-text-inbfc7",
+    "page": "Account",
+    "label": "Email",
+    "type": "text",
+    "defaultValue": "Email"
+  },
+  {
+    "key": "CustomerDashboard-text-l04rlx",
+    "page": "Account",
+    "label": "Refresh orders",
+    "type": "text",
+    "defaultValue": "Refresh orders"
+  },
+  {
+    "key": "CustomerDashboard-text-14dplce",
+    "page": "Account",
+    "label": "Loading orders…",
+    "type": "text",
+    "defaultValue": "Loading orders…"
+  },
+  {
+    "key": "CustomerDashboard-text-982hh6",
+    "page": "Account",
+    "label": "Try again",
+    "type": "text",
+    "defaultValue": "Try again"
+  },
+  {
+    "key": "CustomerDashboard-text-9fhz3b",
+    "page": "Account",
+    "label": "· Saudi time",
+    "type": "text",
+    "defaultValue": "· Saudi time"
+  },
+  {
+    "key": "CustomerDashboard-text-19woqhs",
+    "page": "Account",
+    "label": "· Order:",
+    "type": "text",
+    "defaultValue": "· Order: "
+  },
+  {
+    "key": "CustomerDashboard-text-6s4gf6",
+    "page": "Account",
+    "label": "· Payment:",
+    "type": "text",
+    "defaultValue": "· Payment: "
+  },
+  {
+    "key": "CustomerDashboard-text-60csmj",
+    "page": "Account",
+    "label": "View order details and history",
+    "type": "text",
+    "defaultValue": "View order details and history"
+  },
+  {
+    "key": "CustomerDashboard-text-3zhte2",
+    "page": "Account",
+    "label": "Find your next favorite",
+    "type": "text",
+    "defaultValue": "Find your next favorite"
+  },
+  {
+    "key": "CustomerDashboard-text-1mrjx6z",
+    "page": "Account",
+    "label": "Refresh reservations",
+    "type": "text",
+    "defaultValue": "Refresh reservations"
+  },
+  {
+    "key": "CustomerDashboard-text-1e75dx4",
+    "page": "Account",
+    "label": "Loading reservations…",
+    "type": "text",
+    "defaultValue": "Loading reservations…"
+  },
+  {
+    "key": "CustomerDashboard-text-1bokf65",
+    "page": "Account",
+    "label": "(Saudi time)",
+    "type": "text",
+    "defaultValue": "(Saudi time)"
+  },
+  {
+    "key": "CustomerDashboard-text-16eqqch",
+    "page": "Account",
+    "label": "Request a table",
+    "type": "text",
+    "defaultValue": "Request a table"
+  },
+  {
+    "key": "heading-ahhg7c",
+    "page": "Account",
+    "label": "title: Your order.",
+    "type": "text",
+    "defaultValue": "Your order."
+  },
+  {
+    "key": "heading-1122z3r",
+    "page": "Account",
+    "label": "description: The latest saved order and payment status.",
+    "type": "text",
+    "defaultValue": "The latest saved order and payment status."
+  },
+  {
+    "key": "CustomerDashboard-text-1t9oijh",
+    "page": "Account",
+    "label": "Back to your account",
+    "type": "text",
+    "defaultValue": "Back to your account"
+  },
+  {
+    "key": "CustomerDashboard-text-xo2w3q",
+    "page": "Account",
+    "label": "Refresh status",
+    "type": "text",
+    "defaultValue": "Refresh status"
+  },
+  {
+    "key": "CustomerDashboard-text-14fdunn",
+    "page": "Account",
+    "label": "Loading order…",
+    "type": "text",
+    "defaultValue": "Loading order…"
+  },
+  {
+    "key": "CustomerDashboard-text-2fq925",
+    "page": "Account",
+    "label": "Status:",
+    "type": "text",
+    "defaultValue": "Status: "
+  },
+  {
+    "key": "CustomerDashboard-text-1rad61f",
+    "page": "Account",
+    "label": "Saved pending payment. This is not a paid order or confirmation of restaurant fulfill",
+    "type": "text",
+    "defaultValue": "Saved pending payment. This is not a paid order or confirmation of restaurant fulfillment. Returning from Stripe alone does not confirm payment."
+  },
+  {
+    "key": "CustomerDashboard-text-54x0mg",
+    "page": "Account",
+    "label": "Waiting for restaurant acceptance. This is not yet an accepted order.",
+    "type": "text",
+    "defaultValue": "Waiting for restaurant acceptance. This is not yet an accepted order."
+  },
+  {
+    "key": "CustomerDashboard-text-rbcawt",
+    "page": "Account",
+    "label": "Preparation is marked ready. This does not mean the order has been dispatched or deli",
+    "type": "text",
+    "defaultValue": "Preparation is marked ready. This does not mean the order has been dispatched or delivered."
+  },
+  {
+    "key": "CustomerDashboard-text-m7r20m",
+    "page": "Account",
+    "label": "The restaurant rejected this request.",
+    "type": "text",
+    "defaultValue": "The restaurant rejected this request. "
+  },
+  {
+    "key": "CustomerDashboard-text-1pqr2mw",
+    "page": "Account",
+    "label": "Approximate ready window:",
+    "type": "text",
+    "defaultValue": "Approximate ready window: "
+  },
+  {
+    "key": "CustomerDashboard-text-11i85zk",
+    "page": "Account",
+    "label": "(Saudi time). Not guaranteed.",
+    "type": "text",
+    "defaultValue": "(Saudi time). Not guaranteed."
+  },
+  {
+    "key": "CustomerDashboard-text-1mnez65",
+    "page": "Account",
+    "label": "Subtotal",
+    "type": "text",
+    "defaultValue": "Subtotal"
+  },
+  {
+    "key": "CustomerDashboard-text-a2dh0d",
+    "page": "Account",
+    "label": "Delivery fee",
+    "type": "text",
+    "defaultValue": "Delivery fee"
+  },
+  {
+    "key": "CustomerDashboard-text-1nxs6fi",
+    "page": "Account",
+    "label": "Tax",
+    "type": "text",
+    "defaultValue": "Tax "
+  },
+  {
+    "key": "CustomerDashboard-text-1c0as9p",
+    "page": "Account",
+    "label": "Total",
+    "type": "text",
+    "defaultValue": "Total"
+  },
+  {
+    "key": "CustomerDashboard-text-v6hl37",
+    "page": "Account",
+    "label": "Heading: Delivery information",
+    "type": "text",
+    "defaultValue": "Delivery information"
+  },
+  {
+    "key": "CustomerDashboard-text-1ilq90u",
+    "page": "Account",
+    "label": "Instructions:",
+    "type": "text",
+    "defaultValue": "Instructions: "
+  },
+  {
+    "key": "CustomerDashboard-text-phwb5f",
+    "page": "Account",
+    "label": "Heading: Pickup information",
+    "type": "text",
+    "defaultValue": "Pickup information"
+  },
+  {
+    "key": "CustomerDashboard-text-r8emow",
+    "page": "Account",
+    "label": "Approximate preparation: up to",
+    "type": "text",
+    "defaultValue": "Approximate preparation: up to "
+  },
+  {
+    "key": "CustomerDashboard-text-12weqdz",
+    "page": "Account",
+    "label": "minutes after acceptance.",
+    "type": "text",
+    "defaultValue": "minutes after acceptance."
+  },
+  {
+    "key": "CustomerDashboard-text-1ea0tkj",
+    "page": "Account",
+    "label": "No pickup instructions were saved with this order. Please contact the restaurant.",
+    "type": "text",
+    "defaultValue": "No pickup instructions were saved with this order. Please contact the restaurant."
+  },
+  {
+    "key": "CustomerDashboard-text-77bwlj",
+    "page": "Account",
+    "label": "Heading: Status history",
+    "type": "text",
+    "defaultValue": "Status history"
+  },
+  {
+    "key": "CustomerDashboard-text-1szck4v",
+    "page": "Account",
+    "label": "No status history is available.",
+    "type": "text",
+    "defaultValue": "No status history is available."
+  },
+  {
+    "key": "Locations-text-161pi20",
+    "page": "Locations",
+    "label": "THE TABLE / FIND US",
+    "type": "text",
+    "defaultValue": "THE TABLE / FIND US"
+  },
+  {
+    "key": "Locations-text-100vlk5",
+    "page": "Locations",
+    "label": "A LITTLE CLOSER TO A GOOD EVENING",
+    "type": "text",
+    "defaultValue": "A LITTLE CLOSER TO A GOOD EVENING"
+  },
+  {
+    "key": "Locations-text-3e96od",
+    "page": "Locations",
+    "label": "GOOD FOOD HAS A GATHERING PLACE",
+    "type": "text",
+    "defaultValue": "GOOD FOOD HAS A GATHERING PLACE"
+  },
+  {
+    "key": "Locations-text-k4n0ux",
+    "page": "Locations",
+    "label": "Heading: Your people.",
+    "type": "text",
+    "defaultValue": "Your people."
+  },
+  {
+    "key": "Locations-text-11rzvzx",
+    "page": "Locations",
+    "label": "Heading: Your place.",
+    "type": "text",
+    "defaultValue": "Your place."
+  },
+  {
+    "key": "Locations-text-1e3wkue",
+    "page": "Locations",
+    "label": "Bring an appetite.",
+    "type": "text",
+    "defaultValue": "Bring an appetite."
+  },
+  {
+    "key": "Locations-text-scq6jf",
+    "page": "Locations",
+    "label": "We’ll make room for the moment.",
+    "type": "text",
+    "defaultValue": "We’ll make room for the moment."
+  },
+  {
+    "key": "Locations-text-a2qhwq",
+    "page": "Locations",
+    "label": "Plan your visit",
+    "type": "text",
+    "defaultValue": "Plan your visit "
+  },
+  {
+    "key": "Locations-image-diningImage",
+    "page": "Locations",
+    "label": "Image: diningImage",
+    "type": "image",
+    "defaultValue": "/content-images/ReservationDining.png"
+  },
+  {
+    "key": "Locations-image-diningImage-alt",
+    "page": "Locations",
+    "label": "Image description: diningImage",
+    "type": "text",
+    "defaultValue": "Warm lighting and tables set for a relaxed meal"
+  },
+  {
+    "key": "Locations-text-1yxa7su",
+    "page": "Locations",
+    "label": "COME AS YOU ARE",
+    "type": "text",
+    "defaultValue": "COME AS YOU ARE"
+  },
+  {
+    "key": "Locations-text-40244g",
+    "page": "Locations",
+    "label": "A SEAT. A STORY. SOMETHING DELICIOUS.",
+    "type": "text",
+    "defaultValue": "A SEAT. A STORY. SOMETHING DELICIOUS."
+  },
+  {
+    "key": "Locations-text-1v6pw8b",
+    "page": "Locations",
+    "label": "See you",
+    "type": "text",
+    "defaultValue": "See you"
+  },
+  {
+    "key": "Locations-text-1wqb40n",
+    "page": "Locations",
+    "label": "at the table.",
+    "type": "text",
+    "defaultValue": "at the table."
+  },
+  {
+    "key": "Locations-text-17qi4gz",
+    "page": "Locations",
+    "label": "YOUR NEXT DESTINATION",
+    "type": "text",
+    "defaultValue": "YOUR NEXT DESTINATION"
+  },
+  {
+    "key": "Locations-text-14e04gv",
+    "page": "Locations",
+    "label": "SAUDI ARABIA",
+    "type": "text",
+    "defaultValue": "SAUDI ARABIA"
+  },
+  {
+    "key": "Locations-text-1uqnibp",
+    "page": "Locations",
+    "label": "For the catch-ups, the celebrations,",
+    "type": "text",
+    "defaultValue": "For the catch-ups, the celebrations,"
+  },
+  {
+    "key": "Locations-text-6e5toa",
+    "page": "Locations",
+    "label": "and the “let’s go out” evenings.",
+    "type": "text",
+    "defaultValue": "and the “let’s go out” evenings."
+  },
+  {
+    "key": "Locations-text-bhl1ho",
+    "page": "Locations",
+    "label": "Updating visiting details…",
+    "type": "text",
+    "defaultValue": "Updating visiting details…"
+  },
+  {
+    "key": "Locations-text-982hh6",
+    "page": "Locations",
+    "label": "Try again",
+    "type": "text",
+    "defaultValue": "Try again"
+  },
+  {
+    "key": "Locations-text-1e3lyl0",
+    "page": "Locations",
+    "label": "THE ADDRESS",
+    "type": "text",
+    "defaultValue": "THE ADDRESS"
+  },
+  {
+    "key": "Locations-text-10f7h9b",
+    "page": "Locations",
+    "label": "Address details are being updated.",
+    "type": "text",
+    "defaultValue": "Address details are being updated."
+  },
+  {
+    "key": "Locations-text-x9nwsm",
+    "page": "Locations",
+    "label": "The exact street address is still being confirmed. Check the saved map location befor",
+    "type": "text",
+    "defaultValue": "The exact street address is still being confirmed. Check the saved map location before travelling."
+  },
+  {
+    "key": "Locations-text-181a60s",
+    "page": "Locations",
+    "label": "MAKE TIME",
+    "type": "text",
+    "defaultValue": "MAKE TIME"
+  },
+  {
+    "key": "Locations-text-18hdl9a",
+    "page": "Locations",
+    "label": "Restaurant time ·",
+    "type": "text",
+    "defaultValue": "Restaurant time · "
+  },
+  {
+    "key": "Locations-text-9ychlh",
+    "page": "Locations",
+    "label": "Opening days and hours are awaiting confirmation.",
+    "type": "text",
+    "defaultValue": "Opening days and hours are awaiting confirmation."
+  },
+  {
+    "key": "Locations-text-1wy6wvf",
+    "page": "Locations",
+    "label": "Get directions",
+    "type": "text",
+    "defaultValue": "Get directions"
+  },
+  {
+    "key": "Locations-text-uu42m",
+    "page": "Locations",
+    "label": "Open the saved map location · new tab",
+    "type": "text",
+    "defaultValue": "Open the saved map location · new tab"
+  },
+  {
+    "key": "Locations-text-1t4y9oc",
+    "page": "Locations",
+    "label": "Make time for a table",
+    "type": "text",
+    "defaultValue": "Make time for a table "
+  },
+  {
+    "key": "Locations-text-1aopqrl",
+    "page": "Locations",
+    "label": "A LITTLE PLANNING. A LOT TO LOOK FORWARD TO.",
+    "type": "text",
+    "defaultValue": "A LITTLE PLANNING. A LOT TO LOOK FORWARD TO."
+  },
+  {
+    "key": "Locations-text-npe9kq",
+    "page": "Locations",
+    "label": "Heading: Make an evening",
+    "type": "text",
+    "defaultValue": "Make an evening"
+  },
+  {
+    "key": "Locations-text-1gg824h",
+    "page": "Locations",
+    "label": "Heading: of it.",
+    "type": "text",
+    "defaultValue": "of it."
+  },
+  {
+    "key": "Locations-text-k7cbqa",
+    "page": "Locations",
+    "label": "FIRST, SOMETHING DELICIOUS",
+    "type": "text",
+    "defaultValue": "FIRST, SOMETHING DELICIOUS"
+  },
+  {
+    "key": "Locations-text-wkw5rb",
+    "page": "Locations",
+    "label": "Heading: Find your favorite.",
+    "type": "text",
+    "defaultValue": "Find your favorite."
+  },
+  {
+    "key": "Locations-text-8lzes8",
+    "page": "Locations",
+    "label": "Take a look at the menu before you arrive.",
+    "type": "text",
+    "defaultValue": "Take a look at the menu before you arrive."
+  },
+  {
+    "key": "Locations-text-1fu9jbs",
+    "page": "Locations",
+    "label": "THEN, BRING YOUR PEOPLE",
+    "type": "text",
+    "defaultValue": "THEN, BRING YOUR PEOPLE"
+  },
+  {
+    "key": "Locations-text-1wzdt78",
+    "page": "Locations",
+    "label": "Heading: A table for your plans.",
+    "type": "text",
+    "defaultValue": "A table for your plans."
+  },
+  {
+    "key": "Locations-text-1b3u8vx",
+    "page": "Locations",
+    "label": "Send a reservation request for your next gathering.",
+    "type": "text",
+    "defaultValue": "Send a reservation request for your next gathering."
+  },
+  {
+    "key": "Locations-text-w82h5r",
+    "page": "Locations",
+    "label": "NO SPECIAL OCCASION NECESSARY.",
+    "type": "text",
+    "defaultValue": "NO SPECIAL OCCASION NECESSARY."
+  },
+  {
+    "key": "Locations-text-hyimww",
+    "page": "Locations",
+    "label": "Just a reason",
+    "type": "text",
+    "defaultValue": "Just a reason "
+  },
+  {
+    "key": "Locations-text-15cvbvs",
+    "page": "Locations",
+    "label": "to come together.",
+    "type": "text",
+    "defaultValue": "to come together."
+  },
+  {
+    "key": "Locations-text-1b8qcc8",
+    "page": "Locations",
+    "label": "Get to know The Table",
+    "type": "text",
+    "defaultValue": "Get to know The Table "
+  },
+  {
+    "key": "heading-1on06tz",
+    "page": "Login",
+    "label": "description: Your orders, reservations, and a little more of The Table.",
+    "type": "text",
+    "defaultValue": "Your orders, reservations, and a little more of The Table."
+  },
+  {
+    "key": "Login-text-l9seoj",
+    "page": "Login",
+    "label": "Sign-in setup is required. Add your Clerk publishable key as VITE_CLERK_PUBLISHABLE_K",
+    "type": "text",
+    "defaultValue": "Sign-in setup is required. Add your Clerk publishable key as VITE_CLERK_PUBLISHABLE_KEY in the frontend environment. Never add a secret key here."
+  },
+  {
+    "key": "Login-text-7jpft1",
+    "page": "Login",
+    "label": "You're signed in.",
+    "type": "text",
+    "defaultValue": "You're signed in. "
+  },
+  {
+    "key": "Login-text-ornghz",
+    "page": "Login",
+    "label": "Open your account",
+    "type": "text",
+    "defaultValue": "Open your account"
+  },
+  {
+    "key": "Login-text-1fo26jx",
+    "page": "Login",
+    "label": "Loading secure sign-up…",
+    "type": "text",
+    "defaultValue": "Loading secure sign-up…"
+  },
+  {
+    "key": "Login-text-108m0hj",
+    "page": "Login",
+    "label": "Loading secure sign-in…",
+    "type": "text",
+    "defaultValue": "Loading secure sign-in…"
+  },
+  {
+    "key": "Login-text-mg788s",
+    "page": "Login",
+    "label": "Having trouble with Google sign-in?",
+    "type": "text",
+    "defaultValue": "Having trouble with Google sign-in?"
+  },
+  {
+    "key": "Login-text-pa58w",
+    "page": "Login",
+    "label": "If verification times out, start a fresh sign-in and finish the Google steps in the s",
+    "type": "text",
+    "defaultValue": "If verification times out, start a fresh sign-in and finish the Google steps in the same browser. If you use an in-app browser, open this page in Chrome, Edge, Firefox or Safari and try again. Make sure your network can reach Google and Clerk."
+  },
+  {
+    "key": "Login-text-dphbzp",
+    "page": "Login",
+    "label": "You can also use the email sign-in method shown above. Complete every verification st",
+    "type": "text",
+    "defaultValue": "You can also use the email sign-in method shown above. Complete every verification step requested by your account."
+  },
+  {
+    "key": "Login-text-1pfz903",
+    "page": "Login",
+    "label": "Start a fresh sign-in",
+    "type": "text",
+    "defaultValue": "Start a fresh sign-in"
+  },
+  {
+    "key": "Menu-text-1jw59ig",
+    "page": "Menu",
+    "label": "FROM OUR KITCHEN, WITH CARE",
+    "type": "text",
+    "defaultValue": "FROM OUR KITCHEN, WITH CARE"
+  },
+  {
+    "key": "Menu-text-15ullxs",
+    "page": "Menu",
+    "label": "Heading: Good food,",
+    "type": "text",
+    "defaultValue": "Good food,"
+  },
+  {
+    "key": "Menu-text-1hw5waf",
+    "page": "Menu",
+    "label": "Heading: made for sharing.",
+    "type": "text",
+    "defaultValue": "made for sharing."
+  },
+  {
+    "key": "Menu-text-1masw94",
+    "page": "Menu",
+    "label": "Start with a little something. Find your new favorite. Leave a little room for the sw",
+    "type": "text",
+    "defaultValue": "Start with a little something. Find your new favorite. Leave a little room for the sweet things."
+  },
+  {
+    "key": "Menu-text-1qp4gz",
+    "page": "Menu",
+    "label": "Take a look around",
+    "type": "text",
+    "defaultValue": "Take a look around "
+  },
+  {
+    "key": "Menu-text-izwfth",
+    "page": "Menu",
+    "label": "Good ingredients. Generous moments.",
+    "type": "text",
+    "defaultValue": "Good ingredients. Generous moments."
+  },
+  {
+    "key": "Menu-text-1770fx7",
+    "page": "Menu",
+    "label": "A LITTLE MENU INSPIRATION",
+    "type": "text",
+    "defaultValue": "A LITTLE MENU INSPIRATION"
+  },
+  {
+    "key": "Menu-text-1vyzp2n",
+    "page": "Menu",
+    "label": "THE TABLE / JEDDAH",
+    "type": "text",
+    "defaultValue": "THE TABLE / JEDDAH"
+  },
+  {
+    "key": "Menu-text-117buuk",
+    "page": "Menu",
+    "label": "FROM THE MAINS",
+    "type": "text",
+    "defaultValue": "FROM THE MAINS"
+  },
+  {
+    "key": "Menu-text-1rl29y7",
+    "page": "Menu",
+    "label": "SOMETHING FOR EVERY APPETITE",
+    "type": "text",
+    "defaultValue": "SOMETHING FOR EVERY APPETITE"
+  },
+  {
+    "key": "Menu-text-12h7nv4",
+    "page": "Menu",
+    "label": "Heading: Follow",
+    "type": "text",
+    "defaultValue": "Follow"
+  },
+  {
+    "key": "Menu-text-iwsi3a",
+    "page": "Menu",
+    "label": "Heading: your appetite.",
+    "type": "text",
+    "defaultValue": "your appetite."
+  },
+  {
+    "key": "Menu-text-qx09gn",
+    "page": "Menu",
+    "label": "A little of this.",
+    "type": "text",
+    "defaultValue": "A little of this."
+  },
+  {
+    "key": "Menu-text-jese7w",
+    "page": "Menu",
+    "label": "A little of that.",
+    "type": "text",
+    "defaultValue": "A little of that."
+  },
+  {
+    "key": "Menu-text-yoag97",
+    "page": "Menu",
+    "label": "Better together.",
+    "type": "text",
+    "defaultValue": "Better together."
+  },
+  {
+    "key": "Menu-text-aliuc7",
+    "page": "Menu",
+    "label": "Make a meal of it",
+    "type": "text",
+    "defaultValue": "Make a meal of it "
+  },
+  {
+    "key": "Menu-text-10l0o63",
+    "page": "Menu",
+    "label": "THE GOOD STUFF",
+    "type": "text",
+    "defaultValue": "THE GOOD STUFF"
+  },
+  {
+    "key": "Menu-text-1ciruuv",
+    "page": "Menu",
+    "label": "Search dishes",
+    "type": "text",
+    "defaultValue": "Search dishes"
+  },
+  {
+    "key": "Menu-text-135tabz",
+    "page": "Menu",
+    "label": "added to your bag.",
+    "type": "text",
+    "defaultValue": "added to your bag."
+  },
+  {
+    "key": "Menu-text-hsqwq9",
+    "page": "Menu",
+    "label": "Preview menu. Online ordering is not connected.",
+    "type": "text",
+    "defaultValue": "Preview menu. Online ordering is not connected."
+  },
+  {
+    "key": "Menu-text-1qxl7on",
+    "page": "Menu",
+    "label": "Loading the kitchen menu…",
+    "type": "text",
+    "defaultValue": "Loading the kitchen menu…"
+  },
+  {
+    "key": "Menu-text-982hh6",
+    "page": "Menu",
+    "label": "Try again",
+    "type": "text",
+    "defaultValue": "Try again"
+  },
+  {
+    "key": "Menu-text-1srhprj",
+    "page": "Menu",
+    "label": "Heading: Nothing on this plate yet.",
+    "type": "text",
+    "defaultValue": "Nothing on this plate yet."
+  },
+  {
+    "key": "Menu-text-kpyvgw",
+    "page": "Menu",
+    "label": "Try another search or explore the whole menu.",
+    "type": "text",
+    "defaultValue": "Try another search or explore the whole menu."
+  },
+  {
+    "key": "Menu-text-r2eq3f",
+    "page": "Menu",
+    "label": "Show all dishes",
+    "type": "text",
+    "defaultValue": "Show all dishes "
+  },
+  {
+    "key": "Menu-text-wxcl1b",
+    "page": "Menu",
+    "label": "Found your favorite?",
+    "type": "text",
+    "defaultValue": "Found your favorite?"
+  },
+  {
+    "key": "Menu-text-1c6gx2y",
+    "page": "Menu",
+    "label": "There's a table with your name on it.",
+    "type": "text",
+    "defaultValue": "There's a table with your name on it."
+  },
+  {
+    "key": "Menu-text-zoa7ek",
+    "page": "Menu",
+    "label": "Reserve a table",
+    "type": "text",
+    "defaultValue": "Reserve a table "
+  },
+  {
+    "key": "heading-ffz1kk",
+    "page": "NotFound",
+    "label": "title: This table isn't here.",
+    "type": "text",
+    "defaultValue": "This table isn't here."
+  },
+  {
+    "key": "heading-12emq7p",
+    "page": "NotFound",
+    "label": "description: 404 — We couldn't find the page you're looking for.",
+    "type": "text",
+    "defaultValue": "404 — We couldn't find the page you're looking for."
+  },
+  {
+    "key": "NotFound-text-1tj3b6q",
+    "page": "NotFound",
+    "label": "Back to home",
+    "type": "text",
+    "defaultValue": "Back to home"
+  },
+  {
+    "key": "NotFound-text-1l9l37e",
+    "page": "NotFound",
+    "label": "Explore the menu",
+    "type": "text",
+    "defaultValue": "Explore the menu"
+  },
+  {
+    "key": "heading-1n59bty",
+    "page": "Reservations",
+    "label": "title: A table for you.",
+    "type": "text",
+    "defaultValue": "A table for you."
+  },
+  {
+    "key": "heading-mc0q5m",
+    "page": "Reservations",
+    "label": "description: Request a moment together. Reservations remain requests until staff confirm",
+    "type": "text",
+    "defaultValue": "Request a moment together. Reservations remain requests until staff confirm them."
+  },
+  {
+    "key": "Reservations-text-1w3qlam",
+    "page": "Reservations",
+    "label": "Loading reservation availability…",
+    "type": "text",
+    "defaultValue": "Loading reservation availability…"
+  },
+  {
+    "key": "Reservations-text-982hh6",
+    "page": "Reservations",
+    "label": "Try again",
+    "type": "text",
+    "defaultValue": "Try again"
+  },
+  {
+    "key": "Reservations-text-1xv01bf",
+    "page": "Reservations",
+    "label": "Reservation requests are currently unavailable.",
+    "type": "text",
+    "defaultValue": "Reservation requests are currently unavailable."
+  },
+  {
+    "key": "Reservations-text-1al3ty9",
+    "page": "Reservations",
+    "label": "Configure reservation requests",
+    "type": "text",
+    "defaultValue": "Configure reservation requests"
+  },
+  {
+    "key": "Reservations-text-c0gymz",
+    "page": "Reservations",
+    "label": "Restaurant hours:",
+    "type": "text",
+    "defaultValue": "Restaurant hours: "
+  },
+  {
+    "key": "Reservations-text-al19ah",
+    "page": "Reservations",
+    "label": ". Maximum",
+    "type": "text",
+    "defaultValue": ". Maximum "
+  },
+  {
+    "key": "Reservations-text-nqgm2y",
+    "page": "Reservations",
+    "label": "guests per request. Times are in Asia/Riyadh; requests require staff confirmation.",
+    "type": "text",
+    "defaultValue": "guests per request. Times are in Asia/Riyadh; requests require staff confirmation."
+  },
+  {
+    "key": "Reservations-text-r2z3ln",
+    "page": "Reservations",
+    "label": "Heading: Reservation request saved.",
+    "type": "text",
+    "defaultValue": "Reservation request saved."
+  },
+  {
+    "key": "Reservations-text-2fq925",
+    "page": "Reservations",
+    "label": "Status:",
+    "type": "text",
+    "defaultValue": "Status: "
+  },
+  {
+    "key": "Reservations-text-1x0jz0f",
+    "page": "Reservations",
+    "label": ". Your table is not confirmed until staff review it.",
+    "type": "text",
+    "defaultValue": ". Your table is not confirmed until staff review it."
+  },
+  {
+    "key": "Reservations-text-4dagpe",
+    "page": "Reservations",
+    "label": "View your reservations",
+    "type": "text",
+    "defaultValue": "View your reservations"
+  },
+  {
+    "key": "Reservations-text-ei0gzd",
+    "page": "Reservations",
+    "label": "Notes (optional)",
+    "type": "text",
+    "defaultValue": "Notes (optional)"
+  },
+  {
+    "key": "FeaturedMenu-text-1i2lvu2",
+    "page": "Home · FeaturedMenu",
+    "label": "A taste of our table",
+    "type": "text",
+    "defaultValue": "A taste of our table"
+  },
+  {
+    "key": "FeaturedMenu-text-16ektbq",
+    "page": "Home · FeaturedMenu",
+    "label": "Heading: Good food.",
+    "type": "text",
+    "defaultValue": "Good food."
+  },
+  {
+    "key": "FeaturedMenu-text-1pypirx",
+    "page": "Home · FeaturedMenu",
+    "label": "Heading: Great company.",
+    "type": "text",
+    "defaultValue": "Great company."
+  },
+  {
+    "key": "FeaturedMenu-text-eplw19",
+    "page": "Home · FeaturedMenu",
+    "label": "A few favorites from our kitchen. Thoughtfully prepared, generously served, and alway",
+    "type": "text",
+    "defaultValue": "A few favorites from our kitchen. Thoughtfully prepared, generously served, and always better together."
+  },
+  {
+    "key": "FeaturedMenu-text-1hnker0",
+    "page": "Home · FeaturedMenu",
+    "label": "Find your next favorite.",
+    "type": "text",
+    "defaultValue": "Find your next favorite."
+  },
+  {
+    "key": "FeaturedMenu-text-8x6f9t",
+    "page": "Home · FeaturedMenu",
+    "label": "Explore the full menu",
+    "type": "text",
+    "defaultValue": "Explore the full menu "
+  },
+  {
+    "key": "FeaturedMenu-text-1knjh23",
+    "page": "Home · FeaturedMenu",
+    "label": "to discover",
+    "type": "text",
+    "defaultValue": "to discover"
+  },
+  {
+    "key": "FeaturedMenu-text-1qxl7on",
+    "page": "Home · FeaturedMenu",
+    "label": "Loading the kitchen menu…",
+    "type": "text",
+    "defaultValue": "Loading the kitchen menu…"
+  },
+  {
+    "key": "FeaturedMenu-text-982hh6",
+    "page": "Home · FeaturedMenu",
+    "label": "Try again",
+    "type": "text",
+    "defaultValue": "Try again"
+  },
+  {
+    "key": "FeaturedMenu-text-17osjtk",
+    "page": "Home · FeaturedMenu",
+    "label": "No dishes are currently available in this selection.",
+    "type": "text",
+    "defaultValue": "No dishes are currently available in this selection."
+  },
+  {
+    "key": "FeaturedMenu-text-41le3",
+    "page": "Home · FeaturedMenu",
+    "label": "From our kitchen to your table.",
+    "type": "text",
+    "defaultValue": "From our kitchen to your table."
+  },
+  {
+    "key": "Hero-text-1xfukkm",
+    "page": "Home · Hero",
+    "label": "GOOD FOOD. YOUR PEOPLE.",
+    "type": "text",
+    "defaultValue": "GOOD FOOD. YOUR PEOPLE."
+  },
+  {
+    "key": "Hero-text-tt04tl",
+    "page": "Home · Hero",
+    "label": "Find your favorite",
+    "type": "text",
+    "defaultValue": "Find your favorite "
+  },
+  {
+    "key": "Hero-text-1px5cro",
+    "page": "Home · Hero",
+    "label": "A table for you",
+    "type": "text",
+    "defaultValue": "A table for you "
+  },
+  {
+    "key": "Hero-text-1khhgjn",
+    "page": "Home · Hero",
+    "label": "A little gathering place in Jeddah",
+    "type": "text",
+    "defaultValue": "A little gathering place in Jeddah"
+  },
+  {
+    "key": "Hero-text-1kag434",
+    "page": "Home · Hero",
+    "label": "THE TABLE / A TASTE OF THE GOOD LIFE",
+    "type": "text",
+    "defaultValue": "THE TABLE / A TASTE OF THE GOOD LIFE"
+  },
+  {
+    "key": "Hero-text-1qxl7on",
+    "page": "Home · Hero",
+    "label": "Loading the kitchen menu…",
+    "type": "text",
+    "defaultValue": "Loading the kitchen menu…"
+  },
+  {
+    "key": "Hero-text-982hh6",
+    "page": "Home · Hero",
+    "label": "Try again",
+    "type": "text",
+    "defaultValue": "Try again"
+  },
+  {
+    "key": "Hero-text-k52l50",
+    "page": "Home · Hero",
+    "label": "Our menu is being updated. Please check back soon.",
+    "type": "text",
+    "defaultValue": "Our menu is being updated. Please check back soon."
+  },
+  {
+    "key": "Hero-text-1f240g4",
+    "page": "Home · Hero",
+    "label": "A LITTLE INSPIRATION",
+    "type": "text",
+    "defaultValue": "A LITTLE INSPIRATION"
+  },
+  {
+    "key": "Hero-text-k2v5gl",
+    "page": "Home · Hero",
+    "label": "What are you craving?",
+    "type": "text",
+    "defaultValue": "What are you craving?"
+  },
+  {
+    "key": "LocationsSection-text-1kpv5sd",
+    "page": "Home · LocationsSection",
+    "label": "FIND YOUR TABLE",
+    "type": "text",
+    "defaultValue": "FIND YOUR TABLE"
+  },
+  {
+    "key": "LocationsSection-text-c46fl8",
+    "page": "Home · LocationsSection",
+    "label": "Heading: A little closer.",
+    "type": "text",
+    "defaultValue": "A little closer."
+  },
+  {
+    "key": "LocationsSection-text-rltmtx",
+    "page": "Home · LocationsSection",
+    "label": "Heading: A little more together.",
+    "type": "text",
+    "defaultValue": "A little more together."
+  },
+  {
+    "key": "LocationsSection-text-8k9dr3",
+    "page": "Home · LocationsSection",
+    "label": "Make time for a meal.",
+    "type": "text",
+    "defaultValue": "Make time for a meal."
+  },
+  {
+    "key": "LocationsSection-text-1mdxy0o",
+    "page": "Home · LocationsSection",
+    "label": "We'll take care of the rest.",
+    "type": "text",
+    "defaultValue": "We'll take care of the rest."
+  },
+  {
+    "key": "LocationsSection-text-1vyzp2n",
+    "page": "Home · LocationsSection",
+    "label": "THE TABLE / JEDDAH",
+    "type": "text",
+    "defaultValue": "THE TABLE / JEDDAH"
+  },
+  {
+    "key": "LocationsSection-text-1yxa7su",
+    "page": "Home · LocationsSection",
+    "label": "COME AS YOU ARE",
+    "type": "text",
+    "defaultValue": "COME AS YOU ARE"
+  },
+  {
+    "key": "LocationsSection-text-jjjl6t",
+    "page": "Home · LocationsSection",
+    "label": "Pull up a chair.",
+    "type": "text",
+    "defaultValue": "Pull up a chair."
+  },
+  {
+    "key": "LocationsSection-text-idxtnf",
+    "page": "Home · LocationsSection",
+    "label": "Good company is always on the menu.",
+    "type": "text",
+    "defaultValue": "Good company is always on the menu."
+  },
+  {
+    "key": "LocationsSection-text-10e35lf",
+    "page": "Home · LocationsSection",
+    "label": "OUR GATHERING PLACE",
+    "type": "text",
+    "defaultValue": "OUR GATHERING PLACE"
+  },
+  {
+    "key": "LocationsSection-text-14e04gv",
+    "page": "Home · LocationsSection",
+    "label": "SAUDI ARABIA",
+    "type": "text",
+    "defaultValue": "SAUDI ARABIA"
+  },
+  {
+    "key": "LocationsSection-text-13vjwzl",
+    "page": "Home · LocationsSection",
+    "label": "Heading: Jeddah",
+    "type": "text",
+    "defaultValue": "Jeddah"
+  },
+  {
+    "key": "LocationsSection-text-1uqnibp",
+    "page": "Home · LocationsSection",
+    "label": "For the catch-ups, the celebrations,",
+    "type": "text",
+    "defaultValue": "For the catch-ups, the celebrations,"
+  },
+  {
+    "key": "LocationsSection-text-mehl0u",
+    "page": "Home · LocationsSection",
+    "label": "and the “let's just go out” evenings.",
+    "type": "text",
+    "defaultValue": "and the “let's just go out” evenings."
+  },
+  {
+    "key": "LocationsSection-text-16t62ja",
+    "page": "Home · LocationsSection",
+    "label": "FIND US",
+    "type": "text",
+    "defaultValue": "FIND US"
+  },
+  {
+    "key": "LocationsSection-text-mf2pbj",
+    "page": "Home · LocationsSection",
+    "label": "Jeddah, Saudi Arabia",
+    "type": "text",
+    "defaultValue": "Jeddah, Saudi Arabia"
+  },
+  {
+    "key": "LocationsSection-text-xbvqcw",
+    "page": "Home · LocationsSection",
+    "label": "Contact us for the street address",
+    "type": "text",
+    "defaultValue": "Contact us for the street address "
+  },
+  {
+    "key": "LocationsSection-text-3sbejf",
+    "page": "Home · LocationsSection",
+    "label": "JOIN US",
+    "type": "text",
+    "defaultValue": "JOIN US"
+  },
+  {
+    "key": "LocationsSection-text-86uajf",
+    "page": "Home · LocationsSection",
+    "label": "Monday — Sunday",
+    "type": "text",
+    "defaultValue": "Monday — Sunday"
+  },
+  {
+    "key": "LocationsSection-text-1q5puev",
+    "page": "Home · LocationsSection",
+    "label": "12:00 PM",
+    "type": "text",
+    "defaultValue": "12:00 PM"
+  },
+  {
+    "key": "LocationsSection-text-14gfhgu",
+    "page": "Home · LocationsSection",
+    "label": "11:00 PM",
+    "type": "text",
+    "defaultValue": "11:00 PM"
+  },
+  {
+    "key": "LocationsSection-text-gfn71y",
+    "page": "Home · LocationsSection",
+    "label": "Reserve your table",
+    "type": "text",
+    "defaultValue": "Reserve your table"
+  },
+  {
+    "key": "LocationsSection-text-1qk5l9a",
+    "page": "Home · LocationsSection",
+    "label": "A good evening starts here.",
+    "type": "text",
+    "defaultValue": "A good evening starts here."
+  },
+  {
+    "key": "LocationsSection-text-cq25vh",
+    "page": "Home · LocationsSection",
+    "label": "Explore Jeddah on Google Maps",
+    "type": "text",
+    "defaultValue": "Explore Jeddah on Google Maps "
+  },
+  {
+    "key": "LocationsSection-text-1lc8zzo",
+    "page": "Home · LocationsSection",
+    "label": "(opens in a new tab)",
+    "type": "text",
+    "defaultValue": "(opens in a new tab)"
+  },
+  {
+    "key": "LocationsSection-text-40244g",
+    "page": "Home · LocationsSection",
+    "label": "A SEAT. A STORY. SOMETHING DELICIOUS.",
+    "type": "text",
+    "defaultValue": "A SEAT. A STORY. SOMETHING DELICIOUS."
+  },
+  {
+    "key": "LocationsSection-text-y9464x",
+    "page": "Home · LocationsSection",
+    "label": "See you",
+    "type": "text",
+    "defaultValue": "See you "
+  },
+  {
+    "key": "LocationsSection-text-1wqb40n",
+    "page": "Home · LocationsSection",
+    "label": "at the table.",
+    "type": "text",
+    "defaultValue": "at the table."
+  },
+  {
+    "key": "LocationsSection-text-1f58pen",
+    "page": "Home · LocationsSection",
+    "label": "Need a hand planning your visit?",
+    "type": "text",
+    "defaultValue": "Need a hand planning your visit? "
+  },
+  {
+    "key": "ReservationCta-image-reservationBackground",
+    "page": "Home · ReservationCta",
+    "label": "Image: reservationBackground",
+    "type": "image",
+    "defaultValue": "/content-images/ReservationDining.png"
+  },
+  {
+    "key": "ReservationCta-text-18zo0gi",
+    "page": "Home · ReservationCta",
+    "label": "GOOD COMPANY STARTS WITH AN INVITATION",
+    "type": "text",
+    "defaultValue": "GOOD COMPANY STARTS WITH AN INVITATION"
+  },
+  {
+    "key": "ReservationCta-text-10ed41a",
+    "page": "Home · ReservationCta",
+    "label": "Heading: Let's make",
+    "type": "text",
+    "defaultValue": "Let's make"
+  },
+  {
+    "key": "ReservationCta-text-1cwxfk2",
+    "page": "Home · ReservationCta",
+    "label": "Heading: an evening",
+    "type": "text",
+    "defaultValue": "an evening"
+  },
+  {
+    "key": "ReservationCta-text-1gg824h",
+    "page": "Home · ReservationCta",
+    "label": "Heading: of it.",
+    "type": "text",
+    "defaultValue": "of it."
+  },
+  {
+    "key": "ReservationCta-text-6qfl67",
+    "page": "Home · ReservationCta",
+    "label": "Put the everyday on pause. Bring your favorite people, order something delicious, and",
+    "type": "text",
+    "defaultValue": "Put the everyday on pause. Bring your favorite people, order something delicious, and let the conversation run a little longer."
+  },
+  {
+    "key": "ReservationCta-text-1jtcfk1",
+    "page": "Home · ReservationCta",
+    "label": "We'll set the table.",
+    "type": "text",
+    "defaultValue": "We'll set the table."
+  },
+  {
+    "key": "ReservationCta-text-2guje",
+    "page": "Home · ReservationCta",
+    "label": "You make the memories.",
+    "type": "text",
+    "defaultValue": "You make the memories."
+  },
+  {
+    "key": "ReservationCta-text-isovow",
+    "page": "Home · ReservationCta",
+    "label": "AN INVITATION FROM THE TABLE",
+    "type": "text",
+    "defaultValue": "AN INVITATION FROM THE TABLE"
+  },
+  {
+    "key": "ReservationCta-text-fekgpn",
+    "page": "Home · ReservationCta",
+    "label": "A seat for you. A moment for us.",
+    "type": "text",
+    "defaultValue": "A seat for you. A moment for us."
+  },
+  {
+    "key": "ReservationCta-text-1cvux6s",
+    "page": "Home · ReservationCta",
+    "label": "Heading: You're",
+    "type": "text",
+    "defaultValue": "You're"
+  },
+  {
+    "key": "ReservationCta-text-d737ee",
+    "page": "Home · ReservationCta",
+    "label": "Heading: invited.",
+    "type": "text",
+    "defaultValue": "invited."
+  },
+  {
+    "key": "ReservationCta-text-9x7clf",
+    "page": "Home · ReservationCta",
+    "label": "For a special occasion.",
+    "type": "text",
+    "defaultValue": "For a special occasion."
+  },
+  {
+    "key": "ReservationCta-text-tvgojl",
+    "page": "Home · ReservationCta",
+    "label": "Or just because it's a good day to gather.",
+    "type": "text",
+    "defaultValue": "Or just because it's a good day to gather."
+  },
+  {
+    "key": "ReservationCta-text-1ytmisv",
+    "page": "Home · ReservationCta",
+    "label": "THE PLACE",
+    "type": "text",
+    "defaultValue": "THE PLACE"
+  },
+  {
+    "key": "ReservationCta-text-159hthg",
+    "page": "Home · ReservationCta",
+    "label": "The Table, Jeddah",
+    "type": "text",
+    "defaultValue": "The Table, Jeddah"
+  },
+  {
+    "key": "ReservationCta-text-mzs2nz",
+    "page": "Home · ReservationCta",
+    "label": "THE OCCASION",
+    "type": "text",
+    "defaultValue": "THE OCCASION"
+  },
+  {
+    "key": "ReservationCta-text-oi2klk",
+    "page": "Home · ReservationCta",
+    "label": "Entirely up to you.",
+    "type": "text",
+    "defaultValue": "Entirely up to you."
+  },
+  {
+    "key": "ReservationCta-text-q4rgwu",
+    "page": "Home · ReservationCta",
+    "label": "Let's book a table",
+    "type": "text",
+    "defaultValue": "Let's book a table"
+  },
+  {
+    "key": "ReservationCta-text-w8ep14",
+    "page": "Home · ReservationCta",
+    "label": "Planning something together? Talk to us",
+    "type": "text",
+    "defaultValue": "Planning something together? Talk to us "
+  },
+  {
+    "key": "ReservationCta-text-1vyzp2n",
+    "page": "Home · ReservationCta",
+    "label": "THE TABLE / JEDDAH",
+    "type": "text",
+    "defaultValue": "THE TABLE / JEDDAH"
+  },
+  {
+    "key": "ReservationCta-text-6rxf4x",
+    "page": "Home · ReservationCta",
+    "label": "Less scrolling.",
+    "type": "text",
+    "defaultValue": "Less scrolling. "
+  },
+  {
+    "key": "ReservationCta-text-khvgiu",
+    "page": "Home · ReservationCta",
+    "label": "More sharing.",
+    "type": "text",
+    "defaultValue": "More sharing."
+  },
+  {
+    "key": "ReservationCta-text-1is1f8e",
+    "page": "Home · ReservationCta",
+    "label": "One more look at the menu",
+    "type": "text",
+    "defaultValue": "One more look at the menu "
+  },
+  {
+    "key": "WhyDineWithUs-text-b7y8yb",
+    "page": "Home · WhyDineWithUs",
+    "label": "THE REASON WE SET THE TABLE",
+    "type": "text",
+    "defaultValue": "THE REASON WE SET THE TABLE"
+  },
+  {
+    "key": "WhyDineWithUs-text-14urymu",
+    "page": "Home · WhyDineWithUs",
+    "label": "Heading: Come for",
+    "type": "text",
+    "defaultValue": "Come for"
+  },
+  {
+    "key": "WhyDineWithUs-text-1nwxfbm",
+    "page": "Home · WhyDineWithUs",
+    "label": "Heading: the food.",
+    "type": "text",
+    "defaultValue": "the food."
+  },
+  {
+    "key": "WhyDineWithUs-text-1lhphxr",
+    "page": "Home · WhyDineWithUs",
+    "label": "Heading: Stay for",
+    "type": "text",
+    "defaultValue": "Stay for"
+  },
+  {
+    "key": "WhyDineWithUs-text-m29aje",
+    "page": "Home · WhyDineWithUs",
+    "label": "Heading: the feeling.",
+    "type": "text",
+    "defaultValue": "the feeling."
+  },
+  {
+    "key": "WhyDineWithUs-text-1nyeeen",
+    "page": "Home · WhyDineWithUs",
+    "label": "The best part of a meal isn't always on the plate. It's feeling welcome, sharing some",
+    "type": "text",
+    "defaultValue": "The best part of a meal isn't always on the plate. It's feeling welcome, sharing something good, and forgetting to check the time."
+  },
+  {
+    "key": "WhyDineWithUs-text-fmf0mh",
+    "page": "Home · WhyDineWithUs",
+    "label": "A SIMPLE PHILOSOPHY",
+    "type": "text",
+    "defaultValue": "A SIMPLE PHILOSOPHY"
+  },
+  {
+    "key": "WhyDineWithUs-text-7hniq3",
+    "page": "Home · WhyDineWithUs",
+    "label": "Food with heart. A place to belong.",
+    "type": "text",
+    "defaultValue": "Food with heart. A place to belong."
+  },
+  {
+    "key": "WhyDineWithUs-text-1nangmt",
+    "page": "Home · WhyDineWithUs",
+    "label": "WHY DINE WITH US",
+    "type": "text",
+    "defaultValue": "WHY DINE WITH US"
+  },
+  {
+    "key": "WhyDineWithUs-text-ijzp68",
+    "page": "Home · WhyDineWithUs",
+    "label": "THREE LITTLE REASONS",
+    "type": "text",
+    "defaultValue": "THREE LITTLE REASONS"
+  },
+  {
+    "key": "WhyDineWithUs-text-1j6dza5",
+    "page": "Home · WhyDineWithUs",
+    "label": "There's a seat for you.",
+    "type": "text",
+    "defaultValue": "There's a seat for you."
+  },
+  {
+    "key": "WhyDineWithUs-text-1bv3uhg",
+    "page": "Home · WhyDineWithUs",
+    "label": "Bring an appetite. Bring your favorite people.",
+    "type": "text",
+    "defaultValue": "Bring an appetite. Bring your favorite people."
+  },
+  {
+    "key": "WhyDineWithUs-text-zoa7ek",
+    "page": "Home · WhyDineWithUs",
+    "label": "Reserve a table",
+    "type": "text",
+    "defaultValue": "Reserve a table "
+  },
+  {
+    "key": "WhyDineWithUs-reasons-detail-i1z6rc",
+    "page": "Home · WhyDineWithUs",
+    "label": "THE INGREDIENTS",
+    "type": "text",
+    "defaultValue": "THE INGREDIENTS"
+  },
+  {
+    "key": "WhyDineWithUs-reasons-title-1snbtic",
+    "page": "Home · WhyDineWithUs",
+    "label": "Good things, from the start.",
+    "type": "text",
+    "defaultValue": "Good things, from the start."
+  },
+  {
+    "key": "WhyDineWithUs-reasons-description-j4t66q",
+    "page": "Home · WhyDineWithUs",
+    "label": "Fresh ingredients, honest flavors. We choose thoughtfully, then let every ingredient ",
+    "type": "text",
+    "defaultValue": "Fresh ingredients, honest flavors. We choose thoughtfully, then let every ingredient do what it does best."
+  },
+  {
+    "key": "WhyDineWithUs-reasons-detail-1l35kbh",
+    "page": "Home · WhyDineWithUs",
+    "label": "THE CARE",
+    "type": "text",
+    "defaultValue": "THE CARE"
+  },
+  {
+    "key": "WhyDineWithUs-reasons-title-121n6in",
+    "page": "Home · WhyDineWithUs",
+    "label": "A little care in every bite.",
+    "type": "text",
+    "defaultValue": "A little care in every bite."
+  },
+  {
+    "key": "WhyDineWithUs-reasons-description-1tr7rxn",
+    "page": "Home · WhyDineWithUs",
+    "label": "From the first chop to the finishing touch, it's the little details that make a meal ",
+    "type": "text",
+    "defaultValue": "From the first chop to the finishing touch, it's the little details that make a meal worth slowing down for."
+  },
+  {
+    "key": "WhyDineWithUs-reasons-detail-3hrj3f",
+    "page": "Home · WhyDineWithUs",
+    "label": "THE COMPANY",
+    "type": "text",
+    "defaultValue": "THE COMPANY"
+  },
+  {
+    "key": "WhyDineWithUs-reasons-title-c8n7kf",
+    "page": "Home · WhyDineWithUs",
+    "label": "Your people. Your place.",
+    "type": "text",
+    "defaultValue": "Your people. Your place."
+  },
+  {
+    "key": "WhyDineWithUs-reasons-description-1h882nt",
+    "page": "Home · WhyDineWithUs",
+    "label": "A catch-up that runs long. A family favorite. A reason to celebrate. Whatever brings ",
+    "type": "text",
+    "defaultValue": "A catch-up that runs long. A family favorite. A reason to celebrate. Whatever brings you here, make yourself at home."
+  },
+  {
+    "key": "Navbar-text-1kjxe0f",
+    "page": "Shared · Navbar",
+    "label": "JEDDAH, SAUDI ARABIA",
+    "type": "text",
+    "defaultValue": "JEDDAH, SAUDI ARABIA"
+  },
+  {
+    "key": "Navbar-text-kislsa",
+    "page": "Shared · Navbar",
+    "label": "Good food. Long conversations.",
+    "type": "text",
+    "defaultValue": "Good food. Long conversations."
+  },
+  {
+    "key": "Navbar-text-1r6t8vc",
+    "page": "Shared · Navbar",
+    "label": "Say hello",
+    "type": "text",
+    "defaultValue": "Say hello "
+  },
+  {
+    "key": "Navbar-text-1q3fzns",
+    "page": "Shared · Navbar",
+    "label": "The Table",
+    "type": "text",
+    "defaultValue": "The Table"
+  },
+  {
+    "key": "Navbar-text-17tya8e",
+    "page": "Shared · Navbar",
+    "label": "A PLACE TO COME TOGETHER",
+    "type": "text",
+    "defaultValue": "A PLACE TO COME TOGETHER"
+  },
+  {
+    "key": "Navbar-text-1px5cro",
+    "page": "Shared · Navbar",
+    "label": "A table for you",
+    "type": "text",
+    "defaultValue": "A table for you "
+  },
+  {
+    "key": "Navbar-text-17q4gmg",
+    "page": "Shared · Navbar",
+    "label": "MAKE YOURSELF AT HOME",
+    "type": "text",
+    "defaultValue": "MAKE YOURSELF AT HOME"
+  },
+  {
+    "key": "Navbar-text-4ie1c4",
+    "page": "Shared · Navbar",
+    "label": "Something good",
+    "type": "text",
+    "defaultValue": "Something good"
+  },
+  {
+    "key": "Navbar-text-6d2poc",
+    "page": "Shared · Navbar",
+    "label": "starts here.",
+    "type": "text",
+    "defaultValue": "starts here."
+  },
+  {
+    "key": "Navbar-text-f1mefb",
+    "page": "Shared · Navbar",
+    "label": "Come hungry. Stay a little longer.",
+    "type": "text",
+    "defaultValue": "Come hungry. Stay a little longer."
+  },
+  {
+    "key": "Navbar-text-k9jm9f",
+    "page": "Shared · Navbar",
+    "label": "Your account",
+    "type": "text",
+    "defaultValue": "Your account "
+  },
+  {
+    "key": "Navbar-text-17rk92o",
+    "page": "Shared · Navbar",
+    "label": "Sign out",
+    "type": "text",
+    "defaultValue": "Sign out "
+  },
+  {
+    "key": "Navbar-navigation-label-n0mxf2",
+    "page": "Shared · Navbar",
+    "label": "Home",
+    "type": "text",
+    "defaultValue": "Home"
+  },
+  {
+    "key": "Navbar-navigation-label-6m5i0b",
+    "page": "Shared · Navbar",
+    "label": "The menu",
+    "type": "text",
+    "defaultValue": "The menu"
+  },
+  {
+    "key": "Navbar-navigation-label-6guq58",
+    "page": "Shared · Navbar",
+    "label": "Our philosophy",
+    "type": "text",
+    "defaultValue": "Our philosophy"
+  },
+  {
+    "key": "Navbar-navigation-label-1osq6nq",
+    "page": "Shared · Navbar",
+    "label": "Find us",
+    "type": "text",
+    "defaultValue": "Find us"
+  },
+  {
+    "key": "Navbar-navigation-label-1wilrmm",
+    "page": "Shared · Navbar",
+    "label": "Reservations",
+    "type": "text",
+    "defaultValue": "Reservations"
+  },
+  {
+    "key": "Navbar-navigation-label-s95lil",
+    "page": "Shared · Navbar",
+    "label": "Get in touch",
+    "type": "text",
+    "defaultValue": "Get in touch"
+  },
+  {
+    "key": "Footer-text-1f4j6bl",
+    "page": "Shared · Footer",
+    "label": "THERE'S ALWAYS A NEXT TIME",
+    "type": "text",
+    "defaultValue": "THERE'S ALWAYS A NEXT TIME"
+  },
+  {
+    "key": "Footer-text-91asu9",
+    "page": "Shared · Footer",
+    "label": "Heading: Good meals end.",
+    "type": "text",
+    "defaultValue": "Good meals end."
+  },
+  {
+    "key": "Footer-text-5tu7al",
+    "page": "Shared · Footer",
+    "label": "Heading: Good company stays.",
+    "type": "text",
+    "defaultValue": "Good company stays."
+  },
+  {
+    "key": "Footer-text-10fx3ds",
+    "page": "Shared · Footer",
+    "label": "Thanks for stopping by.",
+    "type": "text",
+    "defaultValue": "Thanks for stopping by."
+  },
+  {
+    "key": "Footer-text-bdijuj",
+    "page": "Shared · Footer",
+    "label": "We'll keep a little room at the table for you.",
+    "type": "text",
+    "defaultValue": "We'll keep a little room at the table for you."
+  },
+  {
+    "key": "Footer-text-1v2qo0o",
+    "page": "Shared · Footer",
+    "label": "Keep in touch",
+    "type": "text",
+    "defaultValue": "Keep in touch "
+  },
+  {
+    "key": "Footer-text-1srq6tt",
+    "page": "Shared · Footer",
+    "label": "Heading: TAKE A LOOK AROUND",
+    "type": "text",
+    "defaultValue": "TAKE A LOOK AROUND"
+  },
+  {
+    "key": "Footer-text-mhrrmw",
+    "page": "Shared · Footer",
+    "label": "Heading: COME ON OVER",
+    "type": "text",
+    "defaultValue": "COME ON OVER"
+  },
+  {
+    "key": "Footer-text-bypzbr",
+    "page": "Shared · Footer",
+    "label": "Jeddah,",
+    "type": "text",
+    "defaultValue": "Jeddah,"
+  },
+  {
+    "key": "Footer-text-pccj5r",
+    "page": "Shared · Footer",
+    "label": "Saudi Arabia",
+    "type": "text",
+    "defaultValue": "Saudi Arabia"
+  },
+  {
+    "key": "Footer-text-uotgz5",
+    "page": "Shared · Footer",
+    "label": "A LITTLE TIME TOGETHER",
+    "type": "text",
+    "defaultValue": "A LITTLE TIME TOGETHER"
+  },
+  {
+    "key": "Footer-text-171bs7a",
+    "page": "Shared · Footer",
+    "label": "Every day",
+    "type": "text",
+    "defaultValue": "Every day"
+  },
+  {
+    "key": "Footer-text-1q5puev",
+    "page": "Shared · Footer",
+    "label": "12:00 PM",
+    "type": "text",
+    "defaultValue": "12:00 PM"
+  },
+  {
+    "key": "Footer-text-14gfhgu",
+    "page": "Shared · Footer",
+    "label": "11:00 PM",
+    "type": "text",
+    "defaultValue": "11:00 PM"
+  },
+  {
+    "key": "Footer-text-a2qhwq",
+    "page": "Shared · Footer",
+    "label": "Plan your visit",
+    "type": "text",
+    "defaultValue": "Plan your visit "
+  },
+  {
+    "key": "Footer-text-1xfukkm",
+    "page": "Shared · Footer",
+    "label": "GOOD FOOD. YOUR PEOPLE.",
+    "type": "text",
+    "defaultValue": "GOOD FOOD. YOUR PEOPLE."
+  },
+  {
+    "key": "Footer-text-1kjxe0f",
+    "page": "Shared · Footer",
+    "label": "JEDDAH, SAUDI ARABIA",
+    "type": "text",
+    "defaultValue": "JEDDAH, SAUDI ARABIA"
+  },
+  {
+    "key": "Footer-text-1q3fzns",
+    "page": "Shared · Footer",
+    "label": "The Table",
+    "type": "text",
+    "defaultValue": "The Table"
+  },
+  {
+    "key": "Footer-text-x57ra",
+    "page": "Shared · Footer",
+    "label": "The Table. All rights reserved.",
+    "type": "text",
+    "defaultValue": "The Table. All rights reserved."
+  },
+  {
+    "key": "Footer-text-fhaxvj",
+    "page": "Shared · Footer",
+    "label": "Privacy policy",
+    "type": "text",
+    "defaultValue": "Privacy policy"
+  },
+  {
+    "key": "Footer-text-xsjgbl",
+    "page": "Shared · Footer",
+    "label": "Back to the top",
+    "type": "text",
+    "defaultValue": "Back to the top "
+  },
+  {
+    "key": "Footer-exploreLinks-label-rf1d1i",
+    "page": "Shared · Footer",
+    "label": "On the menu",
+    "type": "text",
+    "defaultValue": "On the menu"
+  },
+  {
+    "key": "Footer-exploreLinks-label-6guq58",
+    "page": "Shared · Footer",
+    "label": "Our philosophy",
+    "type": "text",
+    "defaultValue": "Our philosophy"
+  },
+  {
+    "key": "Footer-exploreLinks-label-128bz7x",
+    "page": "Shared · Footer",
+    "label": "Find your table",
+    "type": "text",
+    "defaultValue": "Find your table"
+  },
+  {
+    "key": "Footer-exploreLinks-label-1wilrmm",
+    "page": "Shared · Footer",
+    "label": "Reservations",
+    "type": "text",
+    "defaultValue": "Reservations"
+  },
+  {
+    "key": "heading-ihnapg",
+    "page": "Contact",
+    "label": "title: Let's talk.",
+    "type": "text",
+    "defaultValue": "Let's talk."
+  },
+  {
+    "key": "heading-zm0kra",
+    "page": "Contact",
+    "label": "description: Questions, gatherings, and your next visit to The Table.",
+    "type": "text",
+    "defaultValue": "Questions, gatherings, and your next visit to The Table."
+  },
+  {
+    "key": "heading-o859co",
+    "page": "Privacy",
+    "label": "title: Your privacy.",
+    "type": "text",
+    "defaultValue": "Your privacy."
+  },
+  {
+    "key": "heading-c5rfsc",
+    "page": "Privacy",
+    "label": "description: Our privacy information will be published here.",
+    "type": "text",
+    "defaultValue": "Our privacy information will be published here."
+  },
+  {
+    "key": "hero-1-title",
+    "page": "Home · Hero",
+    "label": "Slide 1 / title",
+    "type": "text",
+    "defaultValue": "Good pasta."
+  },
+  {
+    "key": "hero-1-emphasis",
+    "page": "Home · Hero",
+    "label": "Slide 1 / emphasis",
+    "type": "text",
+    "defaultValue": "Great company."
+  },
+  {
+    "key": "hero-1-label",
+    "page": "Home · Hero",
+    "label": "Slide 1 / label",
+    "type": "text",
+    "defaultValue": "Pasta, please."
+  },
+  {
+    "key": "hero-1-category",
+    "page": "Home · Hero",
+    "label": "Slide 1 / category",
+    "type": "text",
+    "defaultValue": "A LITTLE COMFORT"
+  },
+  {
+    "key": "hero-1-caption",
+    "page": "Home · Hero",
+    "label": "Slide 1 / caption",
+    "type": "text",
+    "defaultValue": "A bowl worth gathering around."
+  },
+  {
+    "key": "hero-1-description",
+    "page": "Home · Hero",
+    "label": "Slide 1 / description",
+    "type": "text",
+    "defaultValue": "A bowl of pasta, a little conversation, and a reason to slow down. Some good things are better shared."
+  },
+  {
+    "key": "hero-1-alt",
+    "page": "Home · Hero",
+    "label": "Slide 1 / alt",
+    "type": "text",
+    "defaultValue": "Bow-tie pasta with tomatoes and vegetables in a dark bowl"
+  },
+  {
+    "key": "hero-1-image",
+    "page": "Home · Hero",
+    "label": "Slide 1 / image",
+    "type": "image",
+    "defaultValue": "/hero-images/hero01.png"
+  },
+  {
+    "key": "hero-2-title",
+    "page": "Home · Hero",
+    "label": "Slide 2 / title",
+    "type": "text",
+    "defaultValue": "One more"
+  },
+  {
+    "key": "hero-2-emphasis",
+    "page": "Home · Hero",
+    "label": "Slide 2 / emphasis",
+    "type": "text",
+    "defaultValue": "slice together."
+  },
+  {
+    "key": "hero-2-label",
+    "page": "Home · Hero",
+    "label": "Slide 2 / label",
+    "type": "text",
+    "defaultValue": "Share a slice."
+  },
+  {
+    "key": "hero-2-category",
+    "page": "Home · Hero",
+    "label": "Slide 2 / category",
+    "type": "text",
+    "defaultValue": "MADE FOR SHARING"
+  },
+  {
+    "key": "hero-2-caption",
+    "page": "Home · Hero",
+    "label": "Slide 2 / caption",
+    "type": "text",
+    "defaultValue": "Make room for one more slice."
+  },
+  {
+    "key": "hero-2-description",
+    "page": "Home · Hero",
+    "label": "Slide 2 / description",
+    "type": "text",
+    "defaultValue": "A pizza at the center of the table. Your favorite people around it. Let the conversation take its time."
+  },
+  {
+    "key": "hero-2-alt",
+    "page": "Home · Hero",
+    "label": "Slide 2 / alt",
+    "type": "text",
+    "defaultValue": "Pizza topped with tomato, cheese, and basil beside bread and herbs"
+  },
+  {
+    "key": "hero-2-image",
+    "page": "Home · Hero",
+    "label": "Slide 2 / image",
+    "type": "image",
+    "defaultValue": "/hero-images/hero02.png"
+  },
+  {
+    "key": "hero-3-title",
+    "page": "Home · Hero",
+    "label": "Slide 3 / title",
+    "type": "text",
+    "defaultValue": "Big bites."
+  },
+  {
+    "key": "hero-3-emphasis",
+    "page": "Home · Hero",
+    "label": "Slide 3 / emphasis",
+    "type": "text",
+    "defaultValue": "Good moments."
+  },
+  {
+    "key": "hero-3-label",
+    "page": "Home · Hero",
+    "label": "Slide 3 / label",
+    "type": "text",
+    "defaultValue": "Burger moments."
+  },
+  {
+    "key": "hero-3-category",
+    "page": "Home · Hero",
+    "label": "Slide 3 / category",
+    "type": "text",
+    "defaultValue": "BRING YOUR APPETITE"
+  },
+  {
+    "key": "hero-3-caption",
+    "page": "Home · Hero",
+    "label": "Slide 3 / caption",
+    "type": "text",
+    "defaultValue": "A little time for a big bite."
+  },
+  {
+    "key": "hero-3-description",
+    "page": "Home · Hero",
+    "label": "Slide 3 / description",
+    "type": "text",
+    "defaultValue": "For the moments that call for a burger, a side of fries, and a proper pause in your day."
+  },
+  {
+    "key": "hero-3-alt",
+    "page": "Home · Hero",
+    "label": "Slide 3 / alt",
+    "type": "text",
+    "defaultValue": "A stacked burger with cheese, lettuce, tomato, sauce, and fries"
+  },
+  {
+    "key": "hero-3-image",
+    "page": "Home · Hero",
+    "label": "Slide 3 / image",
+    "type": "image",
+    "defaultValue": "/hero-images/hero03.png"
+  },
+  {
+    "key": "hero-4-title",
+    "page": "Home · Hero",
+    "label": "Slide 4 / title",
+    "type": "text",
+    "defaultValue": "Golden bites."
+  },
+  {
+    "key": "hero-4-emphasis",
+    "page": "Home · Hero",
+    "label": "Slide 4 / emphasis",
+    "type": "text",
+    "defaultValue": "Shared smiles."
+  },
+  {
+    "key": "hero-4-label",
+    "page": "Home · Hero",
+    "label": "Slide 4 / label",
+    "type": "text",
+    "defaultValue": "Pass the fries."
+  },
+  {
+    "key": "hero-4-category",
+    "page": "Home · Hero",
+    "label": "Slide 4 / category",
+    "type": "text",
+    "defaultValue": "ONE MORE HANDFUL"
+  },
+  {
+    "key": "hero-4-caption",
+    "page": "Home · Hero",
+    "label": "Slide 4 / caption",
+    "type": "text",
+    "defaultValue": "Something golden to pass around."
+  },
+  {
+    "key": "hero-4-description",
+    "page": "Home · Hero",
+    "label": "Slide 4 / description",
+    "type": "text",
+    "defaultValue": "Put something golden in the middle, pull up another chair, and make an ordinary catch-up a little better."
+  },
+  {
+    "key": "hero-4-alt",
+    "page": "Home · Hero",
+    "label": "Slide 4 / alt",
+    "type": "text",
+    "defaultValue": "Golden fries on a wooden board with dips and a burger in the background"
+  },
+  {
+    "key": "hero-4-image",
+    "page": "Home · Hero",
+    "label": "Slide 4 / image",
+    "type": "image",
+    "defaultValue": "/hero-images/hero04.png"
+  },
+  {
+    "key": "starter-contact-body",
+    "page": "Contact",
+    "label": "Page body",
+    "type": "text",
+    "defaultValue": "This page is being prepared."
+  },
+  {
+    "key": "starter-contact-note",
+    "page": "Contact",
+    "label": "Additional information",
+    "type": "text",
+    "defaultValue": "Online services for this section are not connected yet."
+  },
+  {
+    "key": "starter-privacy-body",
+    "page": "Privacy",
+    "label": "Page body",
+    "type": "text",
+    "defaultValue": "This page is being prepared."
+  },
+  {
+    "key": "starter-privacy-note",
+    "page": "Privacy",
+    "label": "Additional information",
+    "type": "text",
+    "defaultValue": "Online services for this section are not connected yet."
+  }
+]

@@ -1,4 +1,5 @@
 import './config/database.js';
+import { WebsiteContent } from './modules/content/content.model.js';
 import { Fulfillment } from './modules/fulfillment/fulfillment.model.js';
 import { WebhookReceipt } from './modules/webhooks/webhookReceipt.model.js';
 import { Operations } from './modules/operations/operations.model.js';
@@ -18,7 +19,7 @@ async function start() {
   if (!paymentReadiness().ready) console.warn('Stripe setup is incomplete: payment sessions and new orders are disabled. API startup can continue.');
   await connectDatabase();
   startupStage = 'database index initialization';
-  const models: { createCollection(): Promise<unknown>; createIndexes(): Promise<unknown> }[] = [Menu, Order, Reservation, UserProfile, Operations, WebhookReceipt, Fulfillment];
+  const models: { createCollection(): Promise<unknown>; createIndexes(): Promise<unknown> }[] = [Menu, Order, Reservation, UserProfile, Operations, WebhookReceipt, Fulfillment, WebsiteContent];
   await Promise.all(models.map(async model => { await model.createCollection(); await model.createIndexes(); }));
   startupStage = 'HTTP listener';
   const server = app.listen(env.PORT, '0.0.0.0', () => console.log(`The Table API listening on 0.0.0.0:${env.PORT}`));

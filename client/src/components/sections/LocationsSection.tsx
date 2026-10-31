@@ -1,3 +1,4 @@
+import SiteText from "../content/SiteText";
 import { Link } from "react-router-dom";
 import { ArrowDownRight, ArrowUpRight, Clock3, MapPin } from "lucide-react";
 import "../../styles/LocationsSection.css";
@@ -45,33 +46,33 @@ function LocationsSection() {
   return (
     <section className="locations" id="locations" aria-labelledby="locations-title">
       <header className="locations__header">
-        <p className="locations__eyebrow"><span /> FIND YOUR TABLE</p>
+        <p className="locations__eyebrow"><span /> <SiteText contentKey="LocationsSection-text-1kpv5sd" fallback={"FIND YOUR TABLE"} /></p>
         <div className="locations__headline-row">
-          <h2 id="locations-title">A little closer.<br /><em>A little more together.</em></h2>
-          <div className="locations__header-note"><ArrowDownRight size={30} strokeWidth={1} aria-hidden="true" /><p>Make time for a meal.<br />We'll take care of the rest.</p></div>
+          <h2 id="locations-title"><SiteText contentKey="LocationsSection-text-c46fl8" fallback={"A little closer."} /><br /><em><SiteText contentKey="LocationsSection-text-rltmtx" fallback={"A little more together."} /></em></h2>
+          <div className="locations__header-note"><ArrowDownRight size={30} strokeWidth={1} aria-hidden="true" /><p><SiteText contentKey="LocationsSection-text-8k9dr3" fallback={"Make time for a meal."} /><br /><SiteText contentKey="LocationsSection-text-1mdxy0o" fallback={"We'll take care of the rest."} /></p></div>
         </div>
       </header>
 
       <div className="locations__destination">
         <div className="locations__scene">
           <DiningRoomIllustration />
-          <div className="locations__scene-top"><span>THE TABLE / JEDDAH</span><span>COME AS YOU ARE</span></div>
-          <div className="locations__scene-bottom"><span>Pull up a chair.</span><p>Good company is always on the menu.</p></div>
+          <div className="locations__scene-top"><span><SiteText contentKey="LocationsSection-text-1vyzp2n" fallback={"THE TABLE / JEDDAH"} /></span><span><SiteText contentKey="LocationsSection-text-1yxa7su" fallback={"COME AS YOU ARE"} /></span></div>
+          <div className="locations__scene-bottom"><span><SiteText contentKey="LocationsSection-text-jjjl6t" fallback={"Pull up a chair."} /></span><p><SiteText contentKey="LocationsSection-text-idxtnf" fallback={"Good company is always on the menu."} /></p></div>
         </div>
         <article className="locations__visit" aria-labelledby="locations-city">
-          <div className="locations__index"><span>OUR GATHERING PLACE</span><span>01</span></div>
-          <p className="locations__country">SAUDI ARABIA</p>
-          <h3 id="locations-city">Jeddah<span>.</span></h3>
-          <p className="locations__welcome">For the catch-ups, the celebrations,<br />and the “let's just go out” evenings.</p>
+          <div className="locations__index"><span><SiteText contentKey="LocationsSection-text-10e35lf" fallback={"OUR GATHERING PLACE"} /></span><span>01</span></div>
+          <p className="locations__country"><SiteText contentKey="LocationsSection-text-14e04gv" fallback={"SAUDI ARABIA"} /></p>
+          <h3 id="locations-city"><SiteText contentKey="LocationsSection-text-13vjwzl" fallback={"Jeddah"} /><span>.</span></h3>
+          <p className="locations__welcome"><SiteText contentKey="LocationsSection-text-1uqnibp" fallback={"For the catch-ups, the celebrations,"} /><br /><SiteText contentKey="LocationsSection-text-mehl0u" fallback={"and the “let's just go out” evenings."} /></p>
           <dl className="locations__facts">
-            <div><dt><MapPin size={17} strokeWidth={1.5} aria-hidden="true" /> FIND US</dt><dd><address>Jeddah, Saudi Arabia</address><Link to="/contact">Contact us for the street address <ArrowUpRight size={13} aria-hidden="true" /></Link></dd></div>
-            <div><dt><Clock3 size={17} strokeWidth={1.5} aria-hidden="true" /> JOIN US</dt><dd><span>Monday — Sunday</span><strong><time dateTime="12:00">12:00 PM</time> — <time dateTime="23:00">11:00 PM</time></strong></dd></div>
+            <div><dt><MapPin size={17} strokeWidth={1.5} aria-hidden="true" /> <SiteText contentKey="LocationsSection-text-16t62ja" fallback={"FIND US"} /></dt><dd><address><SiteText contentKey="LocationsSection-text-mf2pbj" fallback={"Jeddah, Saudi Arabia"} /></address><Link to="/contact"><SiteText contentKey="LocationsSection-text-xbvqcw" fallback={"Contact us for the street address "} /><ArrowUpRight size={13} aria-hidden="true" /></Link></dd></div>
+            <div><dt><Clock3 size={17} strokeWidth={1.5} aria-hidden="true" /> <SiteText contentKey="LocationsSection-text-3sbejf" fallback={"JOIN US"} /></dt><dd><span><SiteText contentKey="LocationsSection-text-86uajf" fallback={"Monday — Sunday"} /></span><strong><time dateTime="12:00"><SiteText contentKey="LocationsSection-text-1q5puev" fallback={"12:00 PM"} /></time> — <time dateTime="23:00"><SiteText contentKey="LocationsSection-text-14gfhgu" fallback={"11:00 PM"} /></time></strong></dd></div>
           </dl>
-          <Link className="locations__booking" to="/reservations"><span>Reserve your table<small>A good evening starts here.</small></span><ArrowUpRight size={24} strokeWidth={1.3} aria-hidden="true" /></Link>
-          <a className="locations__map" href="https://www.google.com/maps/search/?api=1&query=Jeddah%2C%20Saudi%20Arabia" target="_blank" rel="noopener noreferrer">Explore Jeddah on Google Maps <ArrowUpRight size={15} aria-hidden="true" /><span className="locations__sr-only"> (opens in a new tab)</span></a>
+          <Link className="locations__booking" to="/reservations"><span><SiteText contentKey="LocationsSection-text-gfn71y" fallback={"Reserve your table"} /><small><SiteText contentKey="LocationsSection-text-1qk5l9a" fallback={"A good evening starts here."} /></small></span><ArrowUpRight size={24} strokeWidth={1.3} aria-hidden="true" /></Link>
+          <a className="locations__map" href="https://www.google.com/maps/search/?api=1&query=Jeddah%2C%20Saudi%20Arabia" target="_blank" rel="noopener noreferrer"><SiteText contentKey="LocationsSection-text-cq25vh" fallback={"Explore Jeddah on Google Maps "} /><ArrowUpRight size={15} aria-hidden="true" /><span className="locations__sr-only"> <SiteText contentKey="LocationsSection-text-1lc8zzo" fallback={"(opens in a new tab)"} /></span></a>
         </article>
       </div>
-      <div className="locations__afterword"><span>A SEAT. A STORY. SOMETHING DELICIOUS.</span><p>See you <em>at the table.</em></p><Link to="/contact">Need a hand planning your visit? <ArrowUpRight size={15} aria-hidden="true" /></Link></div>
+      <div className="locations__afterword"><span><SiteText contentKey="LocationsSection-text-40244g" fallback={"A SEAT. A STORY. SOMETHING DELICIOUS."} /></span><p><SiteText contentKey="LocationsSection-text-y9464x" fallback={"See you "} /><em><SiteText contentKey="LocationsSection-text-1wqb40n" fallback={"at the table."} /></em></p><Link to="/contact"><SiteText contentKey="LocationsSection-text-1f58pen" fallback={"Need a hand planning your visit? "} /><ArrowUpRight size={15} aria-hidden="true" /></Link></div>
     </section>
   );
 }

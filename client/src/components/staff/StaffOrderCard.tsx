@@ -17,6 +17,7 @@ export default function StaffOrderCard({ order, disabled, onSaved, detail = fals
     <ul className="staff-items">{order.items.map((line, index) => <li key={`${line.menuItemId}-${index}`}><div><strong>{line.quantity} × {line.name}</strong>{line.selectedOptions.map((group, g) => <small key={g}>{group.name}: {group.options.map(option => option.name).join(', ')}</small>)}</div><span>{money(line.unitPriceHalalas * line.quantity)}</span></li>)}</ul>
     <p>Kitchen notes: {order.preparationNotes || 'None supplied.'}</p>
     <p className="staff-total">Total <strong>{money(order.totalHalalas)}</strong></p>
+    {['cancelled', 'rejected'].includes(order.status) && order.paymentStatus === 'paid' && <p className="staff-notice">Refund review required: payment remains paid. No refund was issued by this system. Arrange any applicable refund in Stripe and verify its status separately.</p>}
     {order.rejectedReason && <p className="staff-error">Rejection reason: {order.rejectedReason}</p>}
     {order.readyEstimateMinAt && order.readyEstimateMaxAt && <p className="staff-notice">Approximate ready window: {showTime(order.readyEstimateMinAt)} – {showTime(order.readyEstimateMaxAt)}. Not guaranteed.</p>}
     {order.canAdjustReadyEstimate && <ReadyEstimate order={order} disabled={disabled} onSaved={onSaved} />}

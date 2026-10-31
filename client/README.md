@@ -211,3 +211,9 @@ Open `/account` after signing in. The existing Clerk session token is sent throu
 ### Homepage slide images
 
 Slides 01–04 use `Hero01.png`–`Hero04.png`. MongoDB menu records carry optional `heroSlide` and `heroImageUrl` fields; the menu card `imageUrl` is preserved. Public copies are in `public/hero-images/`. Deploy both frontend and backend to expose the stored mapping; the frontend uses the same bundled images as a fallback while the backend update rolls out.
+
+### Website content administration
+
+Open `/admin/content` with a verified Clerk admin account, or choose **Website content** in the admin overview. Select a page/section, edit text or editorial image URLs, and choose **Publish changes**. Use **Discard changes** to abandon drafts or **Restore section defaults** followed by Publish to remove overrides. A search field helps find individual text blocks. Contact and Privacy have separate body fields. Menu dishes/prices and real address/hours continue to use their existing admin tools. Order, payment, reservation, and customer data remain API-owned.
+
+Published content is read from `/api/v1/content`; authenticated admin reads/writes use `/api/v1/admin/content`. Publishing saves to MongoDB. Public pages refresh on tab focus, reconnect, and once a minute. The current page keeps working built-in copy if the content service is temporarily unavailable. Image editing accepts HTTPS URLs or existing `/content-images/`, `/hero-images/`, and `/menu-images/` paths; file uploading is not included. Existing image loading placeholders and error fallbacks are retained. Redeploy both frontend and backend for this feature; no new environment variables are needed.

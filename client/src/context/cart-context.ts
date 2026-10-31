@@ -8,6 +8,7 @@ export type CartContextValue = {
   increaseQuantity: (itemId: MenuItem["id"]) => void;
   decreaseQuantity: (itemId: MenuItem["id"]) => void;
   removeItem: (itemId: MenuItem["id"]) => void;
+  clearPurchasedItems: (items: { menuItemId: string; quantity: number }[]) => void;
   totalQuantity: number;
   subtotal: number;
 };

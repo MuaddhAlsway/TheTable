@@ -32,7 +32,11 @@ function ScopedCartProvider({ children, storageKey }: { children: ReactNode; sto
     setCartItems(current => current.flatMap(line => line.item.id !== itemId ? [line] : line.quantity > 1 ? [{ ...line, quantity: line.quantity - 1 }] : []));
   }, []);
   const removeItem = useCallback((itemId: MenuItem['id']) => { setCartItems(current => current.filter(line => line.item.id !== itemId)); }, []);
-  const value = useMemo(() => ({ cartItems, addToCart, increaseQuantity, decreaseQuantity, removeItem, totalQuantity: cartItems.reduce((total, line) => total + line.quantity, 0), subtotal: cartItems.reduce((total, line) => total + line.item.price * line.quantity, 0) }), [cartItems, addToCart, increaseQuantity, decreaseQuantity, removeItem]);
+  const clearPurchasedItems = useCallback((items: { menuItemId: string; quantity: number }[]) => {
+    // Only clear the matching checkout bag; preserve any bag edited since checkout.
+    setCartItems(current => current.length === items.length && current.every(line => items.some(item => item.menuItemId === line.item.id && item.quantity === line.quantity)) ? [] : current);
+  }, []);
+  const value = useMemo(() => ({ cartItems, addToCart, increaseQuantity, decreaseQuantity, removeItem, clearPurchasedItems, totalQuantity: cartItems.reduce((total, line) => total + line.quantity, 0), subtotal: cartItems.reduce((total, line) => total + line.item.price * line.quantity, 0) }), [cartItems, addToCart, increaseQuantity, decreaseQuantity, removeItem, clearPurchasedItems]);
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 export function CartProvider({ children }: { children: ReactNode }) {

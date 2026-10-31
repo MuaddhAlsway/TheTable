@@ -1,5 +1,40 @@
-import RoutePage from "./RoutePage";
-import LocationsSection from "../components/sections/LocationsSection";
+import SiteText from "../components/content/SiteText";
+import { Link } from "react-router-dom";
+import { ArrowDown, ArrowUpRight, Clock3, MapPin, Navigation, Utensils } from "lucide-react";
+import LoadingImage from "../components/common/LoadingImage";
+import { usePublicSettings } from "../hooks/usePublicSettings";
+import diningImage from "../assets/ReservationDining.png";
+import "../styles/Locations.css";
+
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+function clock(value: string) {
+  if (value === '00:00') return 'Midnight';
+  const [hours, minutes] = value.split(':').map(Number);
+  return `${hours % 12 || 12}${minutes ? ':' + String(minutes).padStart(2, '0') : ''} ${hours >= 12 ? 'PM' : 'AM'}`;
+}
+function safeMapUrl(value?: string) {
+  try { const url = new URL(value || ''); return url.protocol === 'https:' ? url.href : null; } catch { return null; }
+}
 export default function Locations() {
-  return <RoutePage title="Come on over." description="Plan your next meal at The Table in Jeddah."><LocationsSection /></RoutePage>;
+  const { settings, loading, error, refresh } = usePublicSettings();
+  const location = settings?.location;
+  const schedule = settings?.schedule;
+  const mapsUrl = safeMapUrl(location?.mapsUrl);
+  const confirmedHours = schedule?.daysConfirmed && schedule.weekdays.length > 0;
+  const openDays = schedule ? schedule.weekdays.length === 7 ? 'Every day · Monday–Sunday' : schedule.weekdays.map(day => days[day]).join(', ') : '';
+  return <main className="find-us">
+    <header className="find-us__opening find-us__container"><div className="find-us__chapter"><span><SiteText contentKey="Locations-text-161pi20" fallback={"THE TABLE / FIND US"} /></span><span><SiteText contentKey="Locations-text-100vlk5" fallback={"A LITTLE CLOSER TO A GOOD EVENING"} /></span></div><div className="find-us__heading"><div><p className="find-us__eyebrow"><SiteText contentKey="Locations-text-3e96od" fallback={"GOOD FOOD HAS A GATHERING PLACE"} /></p><h1 tabIndex={-1}><SiteText contentKey="Locations-text-k4n0ux" fallback={"Your people."} /><br /><em><SiteText contentKey="Locations-text-11rzvzx" fallback={"Your place."} /></em></h1></div><div className="find-us__intro"><span className="find-us__compass" aria-hidden="true"><Navigation size={35} strokeWidth={1} /></span><p><SiteText contentKey="Locations-text-1e3wkue" fallback={"Bring an appetite."} /><br /><SiteText contentKey="Locations-text-scq6jf" fallback={"We’ll make room for the moment."} /></p><a href="#visit-details"><SiteText contentKey="Locations-text-a2qhwq" fallback={"Plan your visit "} /><ArrowDown size={16} aria-hidden="true" /></a></div></div></header>
+    <section className="find-us__destination find-us__container" aria-labelledby="visit-title">
+      <figure className="find-us__portrait"><LoadingImage src={diningImage} alt="Warm lighting and tables set for a relaxed meal" contentKey="Locations-image-diningImage" /><div className="find-us__portrait-top"><span><SiteText contentKey="Locations-text-1yxa7su" fallback={"COME AS YOU ARE"} /></span><Utensils size={22} strokeWidth={1.2} aria-hidden="true" /></div><figcaption><span><SiteText contentKey="Locations-text-40244g" fallback={"A SEAT. A STORY. SOMETHING DELICIOUS."} /></span><p><SiteText contentKey="Locations-text-1v6pw8b" fallback={"See you"} /><br /><em><SiteText contentKey="Locations-text-1wqb40n" fallback={"at the table."} /></em></p></figcaption><span className="find-us__image-index" aria-hidden="true">01 / A PLACE TO GATHER</span></figure>
+      <article className="find-us__visit" id="visit-details" aria-labelledby="visit-title"><div className="find-us__visit-label"><span><SiteText contentKey="Locations-text-17qi4gz" fallback={"YOUR NEXT DESTINATION"} /></span><span>01</span></div><p className="find-us__eyebrow"><SiteText contentKey="Locations-text-14e04gv" fallback={"SAUDI ARABIA"} /></p><h2 id="visit-title">{location?.city || 'Jeddah'}<span>.</span></h2><p className="find-us__welcome"><SiteText contentKey="Locations-text-1uqnibp" fallback={"For the catch-ups, the celebrations,"} /><br /><SiteText contentKey="Locations-text-6e5toa" fallback={"and the “let’s go out” evenings."} /></p>
+        {loading && <p className="find-us__message" role="status"><SiteText contentKey="Locations-text-bhl1ho" fallback={"Updating visiting details…"} /></p>}
+        {error && <div className="find-us__message" role="alert"><p>{error}</p><button type="button" onClick={refresh}><SiteText contentKey="Locations-text-982hh6" fallback={"Try again"} /></button></div>}
+        {!loading && !error && <dl className="find-us__facts"><div><dt><MapPin size={17} aria-hidden="true" /> <SiteText contentKey="Locations-text-1e3lyl0" fallback={"THE ADDRESS"} /></dt><dd>{location?.displayAddress ? <address>{location.displayAddress}</address> : <p><SiteText contentKey="Locations-text-10f7h9b" fallback={"Address details are being updated."} /></p>}{location?.area && <span className="find-us__detail">{location.area}</span>}{location && !location.exactAddressConfirmed && <small><SiteText contentKey="Locations-text-x9nwsm" fallback={"The exact street address is still being confirmed. Check the saved map location before travelling."} /></small>}</dd></div><div><dt><Clock3 size={17} aria-hidden="true" /> <SiteText contentKey="Locations-text-181a60s" fallback={"MAKE TIME"} /></dt><dd>{confirmedHours && schedule ? <><span>{openDays}</span><strong>{clock(schedule.opens)} — {clock(schedule.closes)}</strong><small><SiteText contentKey="Locations-text-18hdl9a" fallback={"Restaurant time · "} />{schedule.timeZone}</small></> : <p><SiteText contentKey="Locations-text-9ychlh" fallback={"Opening days and hours are awaiting confirmation."} /></p>}</dd></div></dl>}
+        <div className="find-us__visit-actions">{mapsUrl && <a className="find-us__primary" href={mapsUrl} target="_blank" rel="noopener noreferrer"><span><SiteText contentKey="Locations-text-1wy6wvf" fallback={"Get directions"} /><small><SiteText contentKey="Locations-text-uu42m" fallback={"Open the saved map location · new tab"} /></small></span><ArrowUpRight size={23} aria-hidden="true" /></a>}<Link className="find-us__reservation" to="/reservations"><SiteText contentKey="Locations-text-1t4y9oc" fallback={"Make time for a table "} /><ArrowUpRight size={17} aria-hidden="true" /></Link></div>
+        <div className="find-us__ticket-bottom" aria-hidden="true"><span>GOOD FOOD / YOUR PEOPLE</span><span>THE TABLE.</span></div>
+      </article>
+    </section>
+    <section className="find-us__plan find-us__container" aria-labelledby="visit-plan-title"><header><p className="find-us__eyebrow"><SiteText contentKey="Locations-text-1aopqrl" fallback={"A LITTLE PLANNING. A LOT TO LOOK FORWARD TO."} /></p><h2 id="visit-plan-title"><SiteText contentKey="Locations-text-npe9kq" fallback={"Make an evening"} /><br /><em><SiteText contentKey="Locations-text-1gg824h" fallback={"of it."} /></em></h2></header><div className="find-us__plan-links"><Link to="/menu"><span className="find-us__link-number">01</span><div><small><SiteText contentKey="Locations-text-k7cbqa" fallback={"FIRST, SOMETHING DELICIOUS"} /></small><h3><SiteText contentKey="Locations-text-wkw5rb" fallback={"Find your favorite."} /></h3><p><SiteText contentKey="Locations-text-8lzes8" fallback={"Take a look at the menu before you arrive."} /></p></div><ArrowUpRight size={22} aria-hidden="true" /></Link><Link to="/reservations"><span className="find-us__link-number">02</span><div><small><SiteText contentKey="Locations-text-1fu9jbs" fallback={"THEN, BRING YOUR PEOPLE"} /></small><h3><SiteText contentKey="Locations-text-1wzdt78" fallback={"A table for your plans."} /></h3><p><SiteText contentKey="Locations-text-1b3u8vx" fallback={"Send a reservation request for your next gathering."} /></p></div><ArrowUpRight size={22} aria-hidden="true" /></Link></div></section>
+    <div className="find-us__closing find-us__container"><span><SiteText contentKey="Locations-text-w82h5r" fallback={"NO SPECIAL OCCASION NECESSARY."} /></span><p><SiteText contentKey="Locations-text-hyimww" fallback={"Just a reason "} /><em><SiteText contentKey="Locations-text-15cvbvs" fallback={"to come together."} /></em></p><Link to="/about"><SiteText contentKey="Locations-text-1b8qcc8" fallback={"Get to know The Table "} /><ArrowUpRight size={16} aria-hidden="true" /></Link></div>
+  </main>;
 }
