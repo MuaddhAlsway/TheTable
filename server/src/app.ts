@@ -27,6 +27,7 @@ app.disable('x-powered-by');
 // Render has one trusted reverse proxy; do not blindly trust all forwarded IPs.
 if (env.NODE_ENV === 'production') app.set('trust proxy', 1);
 app.use(helmet());
+app.get('/', (_req, res) => res.json({ data: { service: 'The Table API', api: '/api/v1', health: '/health' } }));
 app.use(cors({ origin(origin, callback) { if (!origin || clientOrigins.includes(origin)) callback(null, true); else callback(new AppError(403, 'ORIGIN_FORBIDDEN', 'Origin is not allowed.')); }, methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], allowedHeaders: ['Authorization', 'Content-Type', 'Idempotency-Key'], credentials: false }));
 app.get('/health', (_req, res) => { const connected = mongoose.connection.readyState === 1; res.status(connected ? 200 : 503).json({ data: { status: connected ? 'ok' : 'unavailable', database: connected ? 'connected' : 'disconnected' } }); });
 // Raw signed webhook must precede JSON parsing and Clerk authentication.
