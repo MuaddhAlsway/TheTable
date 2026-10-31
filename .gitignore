@@ -7,3 +7,6 @@ client/.env.*
 node_modules/
 dist/
 *.log
+
+# Vercel local project metadata
+.vercel/

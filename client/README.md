@@ -1,3 +1,67 @@
+# The Table frontend: Vercel deployment
+
+The frontend is the existing React + Vite + TypeScript application in client. Deploy it as its own Vercel project; the Express backend stays on Render. No Vercel project or public frontend URL has been created by this local configuration change.
+
+## Vercel import settings
+
+Import the Git repository in Vercel and choose these settings before deploying:
+
+| Setting | Value |
+| --- | --- |
+| Framework Preset | Vite |
+| Root Directory | client |
+| Node.js Version | 24.x |
+| Install Command | npm ci --include=dev |
+| Build Command | npm run build |
+| Output Directory | dist |
+
+client/vercel.json configures the framework, install/build commands, output directory and SPA route rewrite. The root directory must still be selected as client in the Vercel project settings. Do not set it to server or run npm start for this static frontend. If importing only the contents of client as a separate repository, use that repository root instead.
+
+## Environment variables in Vercel
+
+Set these in Project Settings > Environment Variables for the intended Production/Preview environments before building:
+
+| Name | Configuration |
+| --- | --- |
+| VITE_API_URL | https://thetable-50sf.onrender.com/api/v1 |
+| VITE_CLERK_PUBLISHABLE_KEY | Public key from the same Clerk application used by the Render backend. |
+| VITE_STRIPE_PUBLISHABLE_KEY | Optional existing Stripe public key; hosted payment sessions are created by the backend, not with a browser secret. |
+
+Keys must be entered through Vercel settings; no real key values are committed or copied from local files. Never configure server database credentials, Clerk secrets or Stripe secrets as frontend variables. Vite embeds public configuration at build time, so redeploy after environment changes. The Vercel build now reports missing/invalid VITE_API_URL or VITE_CLERK_PUBLISHABLE_KEY by name only, rather than publishing a disconnected preview. Local development keeps its existing optional preview behavior.
+
+.env files and Vercel local metadata are ignored. .vercelignore additionally excludes local environment files for CLI uploads. Existing server/.env and client/.env.local values remain untouched.
+
+## Connect the generated frontend URL
+
+After Vercel generates the actual frontend URL:
+
+1. Set CLIENT_ORIGINS in Render to that exact HTTPS frontend origin, without a trailing slash or path. Preserve any other explicitly approved frontend origins as a comma-separated list. Save/restart the Render service.
+2. Configure that frontend domain and permitted redirects in the existing Clerk application. Keep the same application identity and trusted role metadata unless deliberately migrating accounts.
+3. Confirm VITE_API_URL includes /api/v1. The Render backend hostname alone is not the API prefix.
+4. Refresh the deployed frontend. If the browser reports an unreachable restaurant service while Render health works, check CORS first: the request Origin must exactly match Render CLIENT_ORIGINS.
+
+Individual Vercel preview domains must also be explicitly allowlisted in Render/Clerk if they should access authenticated APIs. Do not use an unrestricted wildcard. Localhost is not automatically authorized against the production backend.
+
+## Routes and assets
+
+React Router deep links, including /menu, /checkout, /account, /admin/fulfillment and Clerk /login/* and /signup/* paths, fall back to index.html. Public folders assets, fonts, icons, images and menu-images are excluded from the SPA fallback so missing asset URLs do not return HTML. Vite copies existing public assets into dist during the build. This preserves the MongoDB menu image paths under /menu-images/.
+
+The frontend calls the Render API directly; Vercel hosts the frontend files. Stripe webhooks remain on Render, never on the Vercel frontend hostname. No CORS proxy, authentication bypass or payment-success simulation was added.
+
+## Existing local verification commands
+
+From the repository root:
+
+    npm run --prefix client typecheck
+    npm run --prefix client build
+    npm run --prefix client lint
+
+No test suites should be run unless requested. Build success does not verify Vercel deployment, provider configuration or end-to-end payments. A large-bundle warning may still be reported by Vite.
+
+Official reference: https://vercel.com/docs/frameworks/frontend/vite.
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

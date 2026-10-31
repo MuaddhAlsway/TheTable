@@ -1,0 +1,8 @@
+# Local files and generated output never need to be uploaded to Vercel.
+.env
+.env.*
+!.env.example
+.vercel/
+node_modules/
+dist/
+*.log
