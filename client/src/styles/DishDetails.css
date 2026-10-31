@@ -46,3 +46,12 @@
 .menu-card:hover .menu-card__image { transform: scale(1.045); }
 .menu-card:hover .menu-card__arrow { background: var(--olive, #292e24); color: #fffaf2; }
 @media (prefers-reduced-motion: reduce) { .menu-card:hover .menu-card__image { transform: none; } }
+/* Popup-only scrollbar; system contrast settings keep native colors. */
+.dish-details { scrollbar-width: thin; scrollbar-color: #a26748 #ece3d5; scrollbar-gutter: stable; }
+.dish-details::-webkit-scrollbar { width: 10px; height: 10px; }
+.dish-details::-webkit-scrollbar-track { background: #ece3d5; border-radius: 999px; }
+.dish-details::-webkit-scrollbar-thumb { background: #a26748; border: 2px solid #ece3d5; border-radius: 999px; }
+.dish-details::-webkit-scrollbar-thumb:hover { background: #805035; }
+.dish-details::-webkit-scrollbar-thumb:active { background: #292e24; }
+.dish-details::-webkit-scrollbar-corner { background: #ece3d5; }
+@media (forced-colors: active) { .dish-details { scrollbar-color: auto; } }
