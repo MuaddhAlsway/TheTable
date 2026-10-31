@@ -20,22 +20,19 @@ const schema = z.object({
   RESERVATION_CREATION_ENABLED: z.enum(['true', 'false']).default('false').describe('Reservation requests use the saved restaurant schedule and party limit.'),
 }).superRefine((value, ctx) => {
   if (value.NODE_ENV !== 'production') return;
-  for (const name of ['CLERK_PUBLISHABLE_KEY', 'CLIENT_ORIGINS'] as const) {
+  for (const name of ['CLERK_PUBLISHABLE_KEY'] as const) {
     if (!value[name]?.trim()) ctx.addIssue({ code: 'custom', path: [name], message: 'Required for production.' });
   }
-  if (value.ORDER_CREATION_ENABLED === 'true') {
-    for (const name of ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'] as const) {
-      if (!value[name]?.trim()) ctx.addIssue({ code: 'custom', path: [name], message: 'Required when production ordering is enabled.' });
-    }
-  }
+  // Missing optional integration settings disable their features, not API health.
+  // Payment readiness still requires both Stripe credentials at request time.
 });
 const parsed = schema.safeParse(process.env);
 // Only field names are included. Zod issues and process.env are never logged.
 if (!parsed.success) throw new Error('Missing or invalid server configuration: ' + [...new Set(parsed.error.issues.map(issue => issue.path.join('.')))].join(', '));
 export const env = parsed.data;
-const origins = env.CLIENT_ORIGINS ?? 'http://localhost:5173,http://127.0.0.1:5173';
+const origins = env.CLIENT_ORIGINS?.trim() || (env.NODE_ENV === 'production' ? '' : 'http://localhost:5173,http://127.0.0.1:5173');
 export const clientOrigins = [...new Set(origins.split(',').map(value => value.trim()).filter(Boolean))];
-if (!clientOrigins.length || clientOrigins.some(origin => {
+if (clientOrigins.some(origin => {
   try {
     const url = new URL(origin);
     if (!['http:', 'https:'].includes(url.protocol) || url.origin !== origin || origin.includes('*') || url.username || url.password) return true;

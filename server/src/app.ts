@@ -36,7 +36,7 @@ app.use('/api/v1', apiLimit);
 app.use('/api/v1', (_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
 app.get('/api/v1/settings', async (_req, res) => res.json({ data: await publicSettings() }));
 app.use('/api/v1/menu', menuRoutes);
-if (serverPublishableKey) app.use(clerkMiddleware({ secretKey: env.CLERK_SECRET_KEY, publishableKey: serverPublishableKey, authorizedParties: clientOrigins }));
+if (serverPublishableKey && clientOrigins.length) app.use(clerkMiddleware({ secretKey: env.CLERK_SECRET_KEY, publishableKey: serverPublishableKey, authorizedParties: clientOrigins }));
 app.use('/api/v1/users', authenticate, userRoutes);
 app.use('/api/v1/orders', authenticate, orderRoutes);
 app.use('/api/v1/reservations', authenticate, reservationRoutes);

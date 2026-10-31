@@ -25,4 +25,5 @@ services:
 
 # Ordering defaults to disabled for the initial deploy.
 # After Render generates the URL, add the webhook secrets in Render Environment.
-# Payment-enabled production startup requires both Stripe keys.
+# Configure CLIENT_ORIGINS after the frontend URL is known; browser access is denied until then.
+# Payment requests require both Stripe keys; missing keys do not stop API health.

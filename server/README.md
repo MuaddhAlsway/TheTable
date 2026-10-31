@@ -1,5 +1,16 @@
 # The Table API and restaurant operations
 
+## Render startup fix: optional setup must not crash the API
+
+The reported startup errors for CLIENT_ORIGINS and STRIPE_WEBHOOK_SECRET are fixed. Push/redeploy the updated server code. No local environment values were modified.
+
+In production, an absent or empty CLIENT_ORIGINS produces an empty allowlist. Requests from browser origins are denied; authenticated API routes return AUTH_SETUP_REQUIRED until a frontend origin is configured. Clerk middleware is not started with an empty authorized-parties list. Originless Render health checks and signed provider webhooks can still reach their respective routes. An invalid nonempty origin is still rejected by validation.
+
+An absent Stripe server key or webhook signing secret keeps payment readiness false, even if ORDER_CREATION_ENABLED is true. Order creation and payment sessions remain blocked, and unsigned/unconfigured webhook requests are never acknowledged as verified payments. Missing Stripe setup no longer stops server startup. Fixed startup warnings explain disabled features without logging values.
+
+MongoDB and core authentication settings remain required. Startup still waits for MongoDB and index initialization before binding Render's port on 0.0.0.0. GET /health reports database availability.
+
+
 ## Deploy this backend to Render
 
 No backend hostname is assumed or configured in source. Push this project to your Git provider, deploy it to Render, and use the backend URL Render generates afterward. The root render.yaml is an optional Blueprint template; for an existing service, enter the same settings manually instead of creating a duplicate service. The template service name is only a suggestion and does not guarantee a particular hostname.
@@ -16,7 +27,7 @@ No backend hostname is assumed or configured in source. Push this project to you
 
 The build explicitly installs development dependencies so the TypeScript compiler is present even when NODE_ENV is production. It compiles src into dist; npm start runs node dist/server.js. The server binds 0.0.0.0 using the validated process.env.PORT supplied by Render. If PORT is absent locally, it uses the development fallback. Do not hardcode a Render port or a generated public hostname.
 
-Production startup validates the required environment variables and stops before listening if an active feature is missing required configuration. Initial deployment is allowed with ordering disabled so Render can generate the backend URL before webhook registration. Validation reports field names only, never values. Render environment variables take precedence over local server/.env. The local file is optional on Render and must not be committed, uploaded or copied into the deployment.
+Production startup validates core database/authentication configuration. Missing optional browser/payment setup disables those features without crashing API health, so Render can generate the backend URL before webhook registration. Validation reports field names only, never values. Render environment variables take precedence over local server/.env. The local file is optional on Render and must not be committed, uploaded or copied into the deployment.
 
 | Required production variable name | Purpose |
 | --- | --- |
@@ -25,11 +36,11 @@ Production startup validates the required environment variables and stops before
 | CLERK_SECRET_KEY | Server-side Clerk authentication. |
 | CLERK_PUBLISHABLE_KEY | Also required by this Express Clerk integration; configure separately from the Vite public variable. |
 | CLERK_WEBHOOK_SECRET | Required for the Clerk webhook; add after registering its actual generated URL. Until configured, the endpoint returns 503. |
-| STRIPE_SECRET_KEY | Required when production ORDER_CREATION_ENABLED is enabled; server-only Stripe API access. |
+| STRIPE_SECRET_KEY | Required for payment/order requests; missing configuration blocks those requests without stopping API startup; server-only Stripe API access. |
 | STRIPE_WEBHOOK_SECRET | Required when production ORDER_CREATION_ENABLED is enabled; add the actual endpoint signing secret after Render generates its URL. |
-| CLIENT_ORIGINS | Comma-separated exact HTTPS Vercel/frontend origins. No paths, trailing slash or wildcard. |
+| CLIENT_ORIGINS | Required for browser/authenticated access. Missing means an empty production allowlist; no localhost or wildcard fallback. No paths or trailing slash. |
 
-Render supplies PORT automatically. Set MONGODB_DB_NAME explicitly when the application database is not selected in the URI. Optional operational names are ORDER_CREATION_ENABLED and RESERVATION_CREATION_ENABLED; omitted switches default to disabled in a fresh deployment. Set them deliberately only after the corresponding restaurant/payment setup is complete. MONGODB_DNS_SERVERS is a local diagnostic override and should normally remain unset on Render. Do not copy local operating switches or DNS overrides blindly. The Blueprint prompts for core database/authentication settings and origins through sync:false entries; it contains no copied environment values. It omits webhook secrets and creation switches for the first deployment. Missing webhook secrets leave their endpoints unavailable and food ordering disabled, rather than blocking a core API/health deployment.
+Render supplies PORT automatically. Set MONGODB_DB_NAME explicitly when the application database is not selected in the URI. Optional operational names are ORDER_CREATION_ENABLED and RESERVATION_CREATION_ENABLED; omitted switches default to disabled in a fresh deployment. Set them deliberately only after the corresponding restaurant/payment setup is complete. MONGODB_DNS_SERVERS is a local diagnostic override and should normally remain unset on Render. Do not copy local operating switches or DNS overrides blindly. The Blueprint prompts for core database/authentication settings and origins through sync:false entries; it contains no copied environment values. It omits frontend origins, webhook secrets and creation switches for the first deployment. Missing origins block browser and authenticated access; missing webhook secrets leave those endpoints unavailable and food ordering disabled. Neither blocks core API/health deployment.
 
 The API connects to MongoDB and initializes collections/indexes before opening the HTTP listener. Configure Atlas network access and database-user permissions for Render. GET /health returns 200 when MongoDB is connected and 503 when disconnected. A failed startup never pretends the database is available. The existing graceful shutdown handles Render termination. Production trusts one reverse proxy for request IPs; retain that setting for this topology.
 

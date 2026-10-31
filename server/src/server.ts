@@ -8,11 +8,14 @@ import { Reservation } from './modules/reservations/reservation.model.js';
 import { UserProfile } from './modules/users/user.model.js';
 import mongoose from 'mongoose';
 import { app } from './app.js';
-import { env } from './config/env.js';
+import { env, clientOrigins } from './config/env.js';
+import { paymentReadiness } from './config/payments.js';
 import { connectDatabase } from './config/database.js';
 import { startupDiagnostic } from './utils/startupDiagnostic.js';
 let startupStage = 'database connection';
 async function start() {
+  if (!clientOrigins.length) console.warn('CLIENT_ORIGINS is not configured: browser access and authenticated APIs are disabled. Health and signed webhook routes remain available.');
+  if (!paymentReadiness().ready) console.warn('Stripe setup is incomplete: payment sessions and new orders are disabled. API startup can continue.');
   await connectDatabase();
   startupStage = 'database index initialization';
   const models: { createCollection(): Promise<unknown>; createIndexes(): Promise<unknown> }[] = [Menu, Order, Reservation, UserProfile, Operations, WebhookReceipt, Fulfillment];
