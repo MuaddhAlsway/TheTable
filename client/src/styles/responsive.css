@@ -1,0 +1,101 @@
+/* Shared responsive refinements. Section-specific desktop styles stay in their own files. */
+:root { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+img { max-width: 100%; }
+:is(.hero-copy, .hero-visual, .featured-menu__intro, .why-dine__story, .why-dine__reasons, .locations__visit, .reservation-cta__story, .reservation-cta__invitation, .site-footer__directory) { min-width: 0; }
+:is(.hero-editorial, .why-dine__inner, .locations__destination, .reservation-cta__inner, .site-footer__top, .navbar-main) > * { min-width: 0; }
+:is(.route-page__header h1, .featured-menu__intro h2, .why-dine__title, .locations__headline-row h2) { overflow-wrap: break-word; }
+@media (max-width: 1100px) {
+  .navbar-main { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .navbar-mobile { max-height: calc(100dvh - 122px); }
+  .hero-photo-controls button { width: 44px; height: 44px; }
+  .featured-menu__filter { min-height: 44px; }
+  .featured-menu__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .featured-menu__header { gap: 24px; }
+  .featured-menu__intro h2 { font-size: clamp(3rem, 5.5vw, 4.8rem); }
+  .hero-dish-picker { min-width: 0; }
+  .hero-dish-picker button { min-width: 0; }
+  .hero-dish-picker button > svg { flex-shrink: 0; }
+  .site-footer__hello, .site-footer__visit-link { min-height: 44px; }
+}
+@media (min-width: 701px) and (max-width: 850px) {
+  .hero-editorial { grid-template-columns: 1fr; }
+  .hero-copy { padding: 40px 24px 32px; }
+  .hero h1 { font-size: clamp(5rem, 11vw, 6.5rem); }
+  .hero-intro { max-width: 480px; }
+  .hero-visual { min-height: 560px; }
+  .why-dine__inner { grid-template-columns: 1fr; }
+  .why-dine__story { padding: 44px; }
+  .why-dine__title { font-size: 4.7rem; }
+  .why-dine__intro { max-width: 440px; }
+  .why-dine__reasons { padding: 36px 44px; }
+  .reservation-cta__inner { grid-template-columns: 1fr; gap: 30px; }
+  .reservation-cta__story h2 { font-size: 6rem; }
+  .reservation-cta__description { max-width: 460px; }
+  .reservation-cta__invitation { width: min(100% - 24px, 480px); justify-self: center; }
+  .locations__destination { grid-template-columns: 1fr; }
+  .locations__scene { min-height: 540px; }
+  .locations__visit { padding: 38px; }
+  .locations__facts > div { grid-template-columns: 110px 1fr; }
+  .locations__facts dd { margin-left: 0; }
+  .locations__booking { margin-top: 0; }
+}
+@media (max-width: 700px) {
+  .navbar-main { min-height: 82px; }
+  .navbar-mobile { max-height: calc(100dvh - 122px); }
+  .hero h1 { font-size: clamp(3.6rem, 14vw, 6rem); }
+  .hero-dish-title { flex-wrap: wrap; gap: 10px; }
+  .hero-dish-caption { bottom: 102px; }
+  .hero-visual-top span { max-width: 220px; line-height: 1.8; }
+  .hero-dish-picker { flex-basis: 100%; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .hero-dish-picker button { gap: 4px; font-size: .8rem; padding: 12px 4px; }
+  .hero-dish-picker button > svg { display: none; }
+  .hero-flavor-note { font-size: .8rem; }
+  .featured-menu__intro h2 { font-size: clamp(2.8rem, 10vw, 4rem); }
+  .menu-card__title-row { flex-wrap: wrap; }
+  .menu-card__description, .why-dine__description, .locations__welcome, .reservation-cta__description { font-size: .9rem; }
+  .why-dine__title { font-size: clamp(3rem, 11vw, 4.5rem); }
+  .why-dine__closing { flex-wrap: wrap; row-gap: 10px; }
+  .why-dine__signature p { font-size: 1.2rem; }
+  .locations__header-note p { font-size: .85rem; }
+  .locations__facts dd { font-size: .85rem; }
+  .locations__facts dd a { min-height: 44px; font-size: .75rem; }
+  .locations__map { font-size: .75rem; flex-wrap: wrap; line-height: 1.7; }
+  .reservation-cta__story h2 { font-size: clamp(3.8rem, 14vw, 6rem); }
+  .reservation-cta__card-copy { font-size: .85rem; }
+  .reservation-cta__contact { min-height: 44px; font-size: .7rem; text-align: center; }
+  .reservation-cta__bottom { gap: 12px; }
+  .reservation-cta__bottom a { font-size: .75rem; }
+  .site-footer__explore a { font-size: .8rem; min-height: 48px; }
+  .site-footer__hours p { font-size: .8rem; }
+  .site-footer__visit address { font-size: .85rem; }
+  .site-footer__bottom { font-size: .7rem; }
+  .route-page__header h1 { font-size: clamp(2.5rem, 11vw, 4rem); }
+}
+@media (max-width: 480px) {
+  .featured-menu__grid { grid-template-columns: 1fr; }
+  .hero-visual { min-height: 450px; }
+  .hero-visual-top { left: 20px; right: 20px; }
+  .hero-visual-top span { max-width: 180px; }
+  .hero-dish-title h2 { font-size: 2rem; }
+  .navbar-toggle span { display: none; }
+  .navbar-toggle { width: 44px; justify-content: center; padding: 0; }
+  .navbar-mobile__intro p { font-size: 2.25rem; }
+  .navbar-mobile__footer { font-size: .75rem; }
+  .navbar-mobile__links > a { font-size: 1.6rem; }
+  .site-footer__directory { grid-template-columns: 1fr; gap: 30px; }
+  .site-footer__visit { border-top: 1px solid #eee8da26; padding-top: 22px; }
+  .site-footer__heading { font-size: .6rem; }
+  .site-footer__hours > span { font-size: .55rem; }
+}
+@media (max-height: 500px) and (max-width: 1100px) {
+  .navbar-mobile { grid-template-columns: 1fr; padding: 16px 24px; gap: 12px; }
+  .navbar-mobile__intro { display: none; }
+  .navbar-mobile__links > a { min-height: 48px; font-size: 1.4rem; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* Route headings receive focus for screen readers without a decorative focus ring. */
+main h1[tabindex="-1"]:focus { outline: none; }
+@media (max-width: 1100px) {
+  .menu-page__category, .menu-item-card__add { min-height: 44px; }
+  .menu-item-card__heading { flex-wrap: wrap; }
+}

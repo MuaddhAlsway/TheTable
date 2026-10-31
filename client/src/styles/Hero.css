@@ -1,0 +1,93 @@
+.hero { max-width: 1600px; margin: 0 auto; padding: 0 clamp(16px, 2.2vw, 32px); }
+.hero-editorial { display: grid; grid-template-columns: .95fr 1.05fr; min-height: 650px; border-top: 1px solid #d9cfc0; }
+.hero-copy { padding: clamp(35px, 4.5vw, 72px) 30px 32px clamp(8px, 3vw, 48px); display: flex; flex-direction: column; align-items: start; }
+.hero-eyebrow { display: flex; align-items: center; gap: 10px; font-size: .63rem; letter-spacing: .18em; font-weight: 600; color: #875236; margin: 0 0 30px; }
+.hero-eyebrow > span { height: 7px; width: 7px; background: #875236; border-radius: 50%; }
+.hero h1 { font-size: clamp(4.5rem, 7.7vw, 8rem); line-height: .86; letter-spacing: -.055em; font-weight: 500; margin: 0; }
+.hero h1 em { color: #875236; font-weight: 400; }
+.hero-intro { max-width: 330px; font-size: .88rem; line-height: 1.8; color: #69685f; margin: 28px 0; }
+.hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 22px; }
+.hero-primary, .hero-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 20px; text-decoration: none; font-size: .75rem; font-weight: 500; }
+.hero-primary { background: var(--olive); color: #fffaf2; min-height: 50px; padding: 0 22px; transition: background-color 180ms ease; }
+.hero-primary:hover { background: #875236; }
+.hero-secondary { padding: 12px 0; border-bottom: 1px solid #a69c8d; gap: 10px; }
+.hero-secondary:hover { color: #875236; }
+.hero-location { display: flex; align-items: center; gap: 8px; font-size: .65rem; color: #69685f; margin-top: auto; padding-top: 32px; }
+.hero-visual { position: relative; overflow: hidden; background: #171a15; color: #fffaf2; min-height: 650px; }
+.hero-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 68% center; opacity: 0; transform: scale(1.035); transition: opacity 550ms ease, transform 900ms ease; }
+.hero-photo.is-active { opacity: 1; transform: scale(1); }
+.hero-photo-shade { position: absolute; inset: 0; background: linear-gradient(180deg, #0005, transparent 28%, #0001 48%, #000d); pointer-events: none; }
+.hero-visual-top { position: absolute; top: 28px; left: 28px; right: 28px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.hero-visual-top span { font-size: .55rem; letter-spacing: .16em; }
+.hero-stamp { position: absolute; right: 24px; top: 80px; width: 116px; height: 116px; border-radius: 50%; background: #e2b781; color: #322b22; display: flex; align-items: center; justify-content: center; flex-direction: column; transform: rotate(12deg); border: 1px solid #322b22; outline: 4px solid #e2b781; text-align: center; }
+.hero-stamp span { font-size: .5rem; letter-spacing: .07em; }
+.hero-stamp strong { font-family: var(--font-display); font-size: 1.75rem; line-height: .85; font-weight: 600; font-style: italic; margin: 7px 0; }
+.hero-dish-caption { position: absolute; left: 32px; right: 32px; bottom: 88px; }
+.hero-dish-category { color: #e2b781; font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; }
+.hero-dish-title { display: flex; justify-content: space-between; align-items: baseline; gap: 18px; margin-top: 10px; }
+.hero-dish-title h2 { font-size: clamp(2rem, 3vw, 3rem); font-weight: 500; letter-spacing: -.025em; line-height: 1; margin: 0; }
+.hero-dish-price { white-space: nowrap; font-size: 1.15rem; }
+.hero-dish-price small { font-size: .6rem; }
+.hero-dish-caption p { font-size: .75rem; color: #ded8cf; margin: 12px 0 0; }
+.hero-photo-controls { position: absolute; bottom: 22px; left: 32px; right: 32px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #fff4; padding-top: 15px; }
+.hero-counter { font-size: .75rem; font-variant-numeric: tabular-nums; }
+.hero-counter > span { color: #c2bbb1; margin-left: 6px; }
+.hero-photo-controls > div { display: flex; gap: 8px; }
+.hero-photo-controls button { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid #fff6; background: transparent; border-radius: 50%; color: #fffaf2; cursor: pointer; }
+.hero-photo-controls button:hover { background: #fff2; }
+.hero-tasting { display: flex; align-items: stretch; border-block: 1px solid #d9cfc0; margin-top: 24px; }
+.hero-tasting-label { padding: 23px 30px 23px clamp(8px, 3vw, 48px); flex: 0 0 28%; }
+.hero-tasting-label > span { font-size: .55rem; letter-spacing: .16em; color: #875236; }
+.hero-tasting-label p { font-family: var(--font-display); font-size: 1.65rem; margin: 5px 0 0; }
+.hero-dish-picker { display: grid; grid-template-columns: repeat(4, 1fr); flex: 1; }
+.hero-dish-picker button { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 88px; border: 0; border-left: 1px solid #d9cfc0; background: transparent; color: var(--olive); cursor: pointer; font-size: .85rem; transition: background-color 180ms ease; }
+.hero-picker-number { font-size: .55rem; color: #875236; }
+.hero-dish-picker button > svg { opacity: 0; }
+.hero-dish-picker button[aria-pressed="true"] { background: #e8dfd0; }
+.hero-dish-picker button[aria-pressed="true"] > svg { opacity: 1; }
+.hero-dish-picker button:hover { background: #ede6db; }
+.hero-discover { display: grid; place-items: center; width: 70px; border-left: 1px solid #d9cfc0; }
+.hero-discover:hover { color: #875236; }
+.hero-flavor-note { min-height: 32px; font-size: .7rem; color: #69685f; text-align: center; margin: 18px 12px 0; line-height: 1.6; }
+.hero :is(a, button):focus-visible { outline: 2px solid #875236; outline-offset: 4px; }
+.hero-visual button:focus-visible { outline-color: #fffaf2; }
+@media (min-width: 1600px) { .hero-editorial, .hero-visual { min-height: 750px; } }
+@media (max-width: 1000px) {
+  .hero-editorial { grid-template-columns: 1fr 1fr; }
+  .hero h1 { font-size: clamp(4rem, 8vw, 6rem); }
+  .hero-copy { padding-left: 12px; padding-right: 24px; }
+  .hero-tasting-label { flex-basis: 25%; padding-left: 12px; padding-right: 12px; }
+  .hero-tasting-label p { font-size: 1.3rem; }
+  .hero-dish-picker button { gap: 7px; }
+  .hero-picker-number { display: none; }
+  .hero-discover { width: 45px; }
+}
+@media (max-width: 700px) {
+  .hero-editorial { grid-template-columns: 1fr; }
+  .hero-copy { padding: 34px 10px 30px; }
+  .hero h1 { font-size: clamp(4.5rem, 15vw, 6.5rem); }
+  .hero h1 em br { display: none; }
+  .hero-eyebrow { margin-bottom: 25px; }
+  .hero-intro { max-width: 390px; margin: 24px 0; }
+  .hero-location { padding-top: 24px; }
+  .hero-visual { min-height: 490px; }
+  .hero-stamp { width: 96px; height: 96px; top: 70px; }
+  .hero-stamp strong { font-size: 1.5rem; }
+  .hero-visual-top { top: 22px; left: 22px; right: 22px; }
+  .hero-dish-caption, .hero-photo-controls { left: 22px; right: 22px; }
+  .hero-tasting { flex-wrap: wrap; margin-top: 18px; }
+  .hero-tasting-label { flex: 1 0 100%; padding: 18px 10px; }
+  .hero-tasting-label p { font-size: 1.6rem; }
+  .hero-dish-picker { border-top: 1px solid #d9cfc0; }
+  .hero-dish-picker button { min-height: 64px; font-size: .75rem; gap: 6px; }
+  .hero-dish-picker button:first-child { border-left: 0; }
+  .hero-discover { display: none; }
+  .hero-flavor-note { min-height: 45px; }
+}
+@media (prefers-reduced-motion: reduce) { .hero *, .hero *::before, .hero *::after { transition: none; } }
+.hero-menu-status { position: absolute; z-index: 1; inset: 200px 24px 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; font-size: .9rem; line-height: 1.7; }
+.hero-menu-status button { min-height: 44px; padding: 10px 20px; border: 1px solid #fffaf2; background: transparent; color: inherit; cursor: pointer; }
+.hero-photo-controls button:disabled { opacity: .45; cursor: default; }
+.hero-dish-picker button { min-width: 0; padding: 10px; }
+.hero-dish-picker button > span:not(.hero-picker-number) { min-width: 0; overflow-wrap: anywhere; line-height: 1.4; }
+.hero-dish-picker button > svg { flex-shrink: 0; }

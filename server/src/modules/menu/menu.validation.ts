@@ -1,0 +1,10 @@
+import { z } from 'zod';
+import { text, money, pagination } from '../../utils/validation.js';
+export const category = z.enum(['Starters', 'Mains', 'Sides', 'Desserts']);
+const option = z.object({ id: text(60), name: text(120), priceHalalas: money, available: z.boolean().default(true) }).strict();
+const group = z.object({ id: text(60), name: text(120), required: z.boolean().default(false), maxSelections: z.number().int().min(1).max(20), options: z.array(option).min(1).max(30) }).strict().refine(g => g.maxSelections <= g.options.length && new Set(g.options.map(o => o.id)).size === g.options.length, 'Option IDs must be unique and selection limits must fit the options.');
+export const menuInput = z.object({ name: text(120), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(160), description: text(2000), priceHalalas: money, category, imageUrl: z.string().max(2048).refine(value => /^\/menu-images\/[a-zA-Z0-9_%&.()-]+$/.test(value) || (() => { try { return ['http:', 'https:'].includes(new URL(value).protocol); } catch { return false; } })(), 'Use an http(s) image URL or a /menu-images/ asset path'), available: z.boolean().default(true), tags: z.array(text(80)).max(15).default([]), allergens: z.array(text(80)).max(30).default([]), customizationOptions: z.array(group).max(15).default([]) }).strict().refine(value => new Set(value.customizationOptions.map(g => g.id)).size === value.customizationOptions.length, 'Customization group IDs must be unique.');
+export type MenuInput = z.infer<typeof menuInput>;
+export const menuQuery = z.object({ ...pagination, category: category.optional(), search: z.string().trim().max(100).optional(), available: z.enum(['true', 'false']).optional() }).strict();
+export type MenuQuery = z.infer<typeof menuQuery>;
+export const availabilityInput = z.object({ available: z.boolean() }).strict();

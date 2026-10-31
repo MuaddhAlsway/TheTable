@@ -1,0 +1,10 @@
+.route-page { min-height: 55vh; }
+.route-page__header { max-width: 1296px; margin: 0 auto; padding: clamp(48px, 7vw, 100px) clamp(20px, 5vw, 72px) 36px; }
+.route-page__header > p { color: #805035; font-size: .65rem; letter-spacing: .15em; margin: 0 0 22px; }
+.route-page__header h1 { font-size: clamp(3rem, 6vw, 6rem); font-weight: 500; letter-spacing: -.045em; line-height: 1; margin: 0 0 24px; }
+.route-page__description { max-width: 560px; color: #696458; line-height: 1.8; }
+.route-page__notice { max-width: 1152px; padding: 20px clamp(20px, 5vw, 72px) 80px; margin: 0 auto; line-height: 1.8; color: #696458; }
+.route-page__notice a { display: inline-flex; align-items: center; min-height: 44px; color: #805035; text-underline-offset: 4px; margin-right: 24px; }
+.route-page a:focus-visible { outline: 2px solid #805035; outline-offset: 5px; }
+.navbar-desktop a[aria-current="page"], .navbar-mobile__links a[aria-current="page"] { color: #805035; }
+.navbar-desktop a[aria-current="page"]::after { transform: scaleX(1); }

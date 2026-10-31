@@ -1,0 +1,11 @@
+import type { RequestHandler } from 'express';
+import { input } from '../../middleware/validateRequest.js';
+import { userId } from '../../middleware/authenticate.js';
+import { requestKey } from '../orders/order.validation.js';
+import type { ReservationInput, ReservationQuery } from './reservation.validation.js';
+import * as service from './reservation.service.js';
+export const create: RequestHandler = async (req, res) => { const result = await service.createReservation(userId(req), input<ReservationInput>(res), requestKey.parse(req.header('Idempotency-Key'))); res.status(result.replay ? 200 : 201).json({ data: result.reservation, message: 'Reservation request saved. It is not confirmed until staff review it.' }); };
+export const mine: RequestHandler = async (req, res) => { res.json(await service.listReservations(input<ReservationQuery>(res, 'query'), userId(req))); };
+export const myDetail: RequestHandler = async (req, res) => { res.json({ data: await service.reservationDetail(input<{ id: string }>(res, 'params').id, userId(req)) }); };
+export const adminList: RequestHandler = async (_req, res) => { res.json(await service.listReservations(input<ReservationQuery>(res, 'query'))); };
+export const status: RequestHandler = async (req, res) => { res.json({ data: await service.updateReservationStatus(input<{ id: string }>(res, 'params').id, input<{ status: service.ReservationStatus }>(res).status, userId(req)) }); };

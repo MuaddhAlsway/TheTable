@@ -1,0 +1,16 @@
+import { Router } from 'express';
+import { z } from 'zod';
+import { objectId } from '../../utils/validation.js';
+import { validateRequest as validate } from '../../middleware/validateRequest.js';
+import { menuInput, menuQuery, availabilityInput } from './menu.validation.js';
+import * as controller from './menu.controller.js';
+const id = validate(z.object({ id: objectId }), 'params');
+export const menuRoutes = Router();
+menuRoutes.get('/', validate(menuQuery, 'query'), controller.listPublic);
+menuRoutes.get('/:id', id, controller.detail);
+export const adminMenuRoutes = Router();
+adminMenuRoutes.get('/', validate(menuQuery, 'query'), controller.listAdmin);
+adminMenuRoutes.post('/', validate(menuInput), controller.create);
+adminMenuRoutes.put('/:id', id, validate(menuInput), controller.update);
+adminMenuRoutes.patch('/:id/availability', id, validate(availabilityInput), controller.availability);
+adminMenuRoutes.delete('/:id', id, controller.remove);

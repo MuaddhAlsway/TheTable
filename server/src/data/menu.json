@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Roasted Tomato Soup",
+    "slug": "roasted-tomato-soup",
+    "description": "Slow-roasted tomatoes, fresh basil, and toasted sourdough.",
+    "category": "Starters",
+    "priceHalalas": 2800,
+    "imageUrl": "/menu-images/RoastedTomatoSoup.png",
+    "available": true,
+    "tags": [],
+    "assetFile": "RoastedTomatoSoup.png"
+  },
+  {
+    "name": "Burrata & Garden Greens",
+    "slug": "burrata-salad",
+    "description": "Creamy burrata, seasonal greens, and a bright herb dressing.",
+    "category": "Starters",
+    "priceHalalas": 4200,
+    "imageUrl": "/menu-images/BurrataGardenGreens.png",
+    "available": true,
+    "tags": [
+      "A guest favorite"
+    ],
+    "assetFile": "Burrata&GardenGreens.png"
+  },
+  {
+    "name": "House Tomato Pasta",
+    "slug": "house-pasta",
+    "description": "Hand-finished pasta with ripe tomatoes, basil, and parmesan.",
+    "category": "Mains",
+    "priceHalalas": 5400,
+    "imageUrl": "/menu-images/HouseTomatoPasta.png",
+    "available": true,
+    "tags": [
+      "Popular"
+    ],
+    "assetFile": "HouseTomatoPasta.png"
+  },
+  {
+    "name": "The Table Burger",
+    "slug": "table-burger",
+    "description": "Grilled beef, aged cheese, house sauce, and crisp lettuce.",
+    "category": "Mains",
+    "priceHalalas": 5900,
+    "imageUrl": "/menu-images/TheTableBurger.png",
+    "available": true,
+    "tags": [],
+    "assetFile": "TheTableBurger.png"
+  },
+  {
+    "name": "Golden Fries",
+    "slug": "golden-fries",
+    "description": "Crisp fries, lightly seasoned and served with house dip.",
+    "category": "Sides",
+    "priceHalalas": 1800,
+    "imageUrl": "/menu-images/FriedGolden.png",
+    "available": true,
+    "tags": [],
+    "assetFile": "FriedGolden.png"
+  },
+  {
+    "name": "Seasonal Cake",
+    "slug": "seasonal-cake",
+    "description": "A daily slice from our kitchen, made with seasonal ingredients.",
+    "category": "Desserts",
+    "priceHalalas": 3200,
+    "imageUrl": "/menu-images/SeasonalCake.png",
+    "available": true,
+    "tags": [],
+    "assetFile": "SeasonalCake.png"
+  }
+]

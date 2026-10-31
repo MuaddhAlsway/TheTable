@@ -1,0 +1,28 @@
+# Deployment configuration only. Supply credentials in Render; no .env is copied.
+services:
+  - type: web
+    name: thetable-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "24"
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB_NAME
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: CLIENT_ORIGINS
+        sync: false
+
+# Ordering defaults to disabled for the initial deploy.
+# After Render generates the URL, add the webhook secrets in Render Environment.
+# Payment-enabled production startup requires both Stripe keys.

@@ -1,0 +1,11 @@
+import type { RequestHandler } from 'express';
+import { input } from '../../middleware/validateRequest.js';
+import type { MenuInput, MenuQuery } from './menu.validation.js';
+import * as service from './menu.service.js';
+export const listPublic: RequestHandler = async (_req, res) => { res.json(await service.listMenu(input<MenuQuery>(res, 'query'))); };
+export const listAdmin: RequestHandler = async (_req, res) => { res.json(await service.listMenu(input<MenuQuery>(res, 'query'), true)); };
+export const detail: RequestHandler = async (_req, res) => { res.json({ data: await service.menuDetail(input<{ id: string }>(res, 'params').id) }); };
+export const create: RequestHandler = async (_req, res) => { res.status(201).json({ data: await service.createMenu(input<MenuInput>(res)) }); };
+export const update: RequestHandler = async (_req, res) => { res.json({ data: await service.updateMenu(input<{ id: string }>(res, 'params').id, input<MenuInput>(res)) }); };
+export const availability: RequestHandler = async (_req, res) => { res.json({ data: await service.updateMenu(input<{ id: string }>(res, 'params').id, input<{ available: boolean }>(res)) }); };
+export const remove: RequestHandler = async (_req, res) => { await service.archiveMenu(input<{ id: string }>(res, 'params').id); res.status(204).end(); };

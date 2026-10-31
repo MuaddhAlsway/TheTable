@@ -1,0 +1,3 @@
+import { Schema, model } from 'mongoose';
+const schema = new Schema({ _id: { type: String, default: 'operations' }, settings: { cashierEnabled: Boolean, kitchenEnabled: Boolean, pickupHandoffEnabled: Boolean, pickupHandoffInstructions: String, deliveryDispatchEnabled: Boolean, deliveryCompletionEnabled: Boolean, deliveryProcessNotes: String, pollIntervalSeconds: Number, staleAfterSeconds: Number, urgencyWarningMinutes: { type: Number, default: null }, urgencyCriticalMinutes: { type: Number, default: null } }, revision: { type: Number, required: true, default: 1 }, updatedBy: { type: String, required: true } }, { timestamps: true });
+export const Operations = model('OperationsSettings', schema);

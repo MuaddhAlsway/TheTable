@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap");
+
+:root {
+  font-family: var(--font-body);
+  color: #292e24;
+  background-color: #f5f0e7;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --font-body: "DM Sans", sans-serif;
+  --font-display: "Cormorant Garamond", serif;
+
+  --canvas: #f5f0e7;
+  --olive: #292e24;
+  --terracotta: #a26748;
+  --sandstone: #d9c9b6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+}

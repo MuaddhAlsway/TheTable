@@ -1,0 +1,15 @@
+import { Router } from 'express';
+import { z } from 'zod';
+import { objectId } from '../../utils/validation.js';
+import { validateRequest as validate } from '../../middleware/validateRequest.js';
+import { creationLimit } from '../../middleware/rateLimits.js';
+import { reservationInput, reservationQuery, reservationStatusInput } from './reservation.validation.js';
+import * as controller from './reservation.controller.js';
+const id = validate(z.object({ id: objectId }), 'params');
+export const reservationRoutes = Router();
+reservationRoutes.post('/', creationLimit, validate(reservationInput), controller.create);
+reservationRoutes.get('/', validate(reservationQuery, 'query'), controller.mine);
+reservationRoutes.get('/:id', id, controller.myDetail);
+export const adminReservationRoutes = Router();
+adminReservationRoutes.get('/', validate(reservationQuery, 'query'), controller.adminList);
+adminReservationRoutes.patch('/:id/status', id, validate(reservationStatusInput), controller.status);
