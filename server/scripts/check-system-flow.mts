@@ -214,9 +214,11 @@ try {
   assert.equal((await applyStaffEmailAccess(structuredClone(pending))).publicMetadata.role,'kitchen');
   assert.equal((await callTeam('/email-access','PUT',{...emailBody,role:'cashier',revision:1})).status,200);
   assert.equal(fakeUsers.get(pending.id).publicMetadata.role,'cashier');
+  assert.equal((await UserProfile.findOne({clerkId:pending.id}))?.role,'cashier');
   assert.equal((await callTeam('/email-access','PUT',{...emailBody,enabled:false,revision:2})).status,200);
   assert.equal((await applyStaffEmailAccess(structuredClone(fakeUsers.get(pending.id)))).publicMetadata.role,'customer');
-  pass('verified email workspace assignment, role changes and revocation');
+  assert.equal((await UserProfile.findOne({clerkId:pending.id}))?.role,'customer');
+  pass('verified email workspace assignment, immediate MongoDB role sync and revocation');
 
   let member=await callTeam('/','POST',{email:'staff@example.invalid',displayName:'TEST COOK',role:'kitchen',phone:''}); assert.equal(member.status,200);let staff=(await member.json()).data;assert.equal(staff.role,'kitchen');
   member=await callTeam('/'+staff.id,'PATCH',{displayName:'TEST CASHIER',role:'cashier',phone:'',expectedUpdatedAt:staff.updatedAt});assert.equal(member.status,200);staff=(await member.json()).data;

@@ -1,3 +1,4 @@
+import { syncClerkUser } from '../users/user.service.js';
 import { clerk } from '../../config/clerk.js';
 import { env } from '../../config/env.js';
 import { StaffEmailAccess } from './emailAccess.model.js';
@@ -37,7 +38,7 @@ export async function saveEmailAccess(data:{email:string;role:'cashier'|'kitchen
  if(data.revision===0){try{record=await StaffEmailAccess.create({...data,revision:1,updatedBy:actorId});}catch(error){if((error as {code?:number}).code===11000)throw new AppError(409,'ACCESS_CHANGED','This email is already saved. Edit its existing row.');throw error;}}
  else{record=await StaffEmailAccess.findOneAndUpdate({email:data.email,revision:data.revision},{$set:{role:data.role,enabled:data.enabled,updatedBy:actorId},$inc:{revision:1}},{returnDocument:'after',runValidators:true});if(!record)throw new AppError(409,'ACCESS_CHANGED','This assignment changed. Reload before saving.');}
  await TeamAudit.create({actorId,targetId:record.id,action:data.enabled?'save_email_access':'disable_email_access',nextRole:data.enabled?data.role:'customer'});
- if(user&&user.emailAddresses.find(entry=>entry.id===user.primaryEmailAddressId)?.verification?.status==='verified')await applyStaffEmailAccess(user);
+ if(user&&user.emailAddresses.find(entry=>entry.id===user.primaryEmailAddressId)?.verification?.status==='verified')await syncClerkUser(await applyStaffEmailAccess(user));
  return StaffEmailAccess.findById(record.id).lean();
 }
 /** An explicit advanced-team change supersedes any email-based assignment. */

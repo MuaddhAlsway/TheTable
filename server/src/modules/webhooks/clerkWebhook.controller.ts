@@ -1,3 +1,5 @@
+import { clerk } from '../../config/clerk.js';
+import { syncClerkUser } from '../users/user.service.js';
 import type { RequestHandler } from 'express';
 import { createHash, randomUUID } from 'node:crypto';
 import { trusted } from 'mongoose';
@@ -28,6 +30,7 @@ export const clerkWebhook: RequestHandler = async (req, res) => {
   }
   try {
     // Deletion is itself idempotent; a crash before receipt completion is safe to retry.
+    if (['user.created', 'user.updated'].includes(event.type) && event.data.id) await syncClerkUser(await clerk.users.getUser(event.data.id));
     if (event.type === 'user.deleted' && event.data.id) await UserProfile.deleteOne({ clerkId: event.data.id });
     const completed = await WebhookReceipt.updateOne({ _id: key, leaseToken: token, state: 'processing' }, { $set: { state: 'completed', completedAt: new Date() } });
     if (!completed.modifiedCount) throw new AppError(503, 'WEBHOOK_RETRY_REQUIRED', 'Webhook processing needs a retry.');
