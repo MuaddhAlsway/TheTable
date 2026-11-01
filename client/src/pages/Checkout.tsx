@@ -1,3 +1,4 @@
+import '../styles/Delivery.css';
 import { checkoutRequestKey, bindCheckoutOrder, finishCheckoutRequest } from "../lib/checkoutRequest";
 import ActionDialog from "../components/common/ActionDialog";
 import SiteText from "../components/content/SiteText";
@@ -20,7 +21,7 @@ import RoutePage from "./RoutePage";
 import "../styles/Checkout.css";
 
 const formatPrice = (value: number) => `${previewConfig.currency} ${value.toFixed(2)}`;
-const initialValues = { name: "", email: "", phone: "", recipientName: "", recipientPhone: "", city: "", neighborhood: "", postalCode: "", street: "", buildingUnit: "", instructions: "", preparationNotes: "" };
+const initialValues = { name: "", email: "", phone: "", recipientName: "", recipientPhone: "", city: "", neighborhood: "", postalCode: "", street: "", buildingUnit: "", latitude: "", longitude: "", instructions: "", preparationNotes: "" };
 type FieldName = keyof typeof initialValues;
 type Errors = Partial<Record<FieldName | "fulfillment" | "timing", string>>;
 type CheckoutDraft = { values: typeof initialValues; fulfillment: FulfillmentMethod | null; pickupTiming: string };
@@ -71,7 +72,7 @@ function Checkout() {
   const request = useRef({ fingerprint: "", key: "" });
   const [fulfillmentChoice, setFulfillment] = useState<FulfillmentMethod | null>(draft?.fulfillment ?? null);
   const fulfillment = fulfillmentChoice ?? (isFulfillmentAvailable(config, "delivery") ? "delivery" : isFulfillmentAvailable(config, "pickup") ? "pickup" : null);
-  const [values, setValues] = useState(draft?.values ?? initialValues);
+  const [values, setValues] = useState({ ...initialValues, ...draft?.values });
   const [pickupTiming, setPickupTiming] = useState(draft?.pickupTiming ?? "");
   const [errors, setErrors] = useState<Errors>({});
   const [paymentNotice, setPaymentNotice] = useState(false);
@@ -114,6 +115,16 @@ function Checkout() {
     setErrors((current) => ({ ...current, [name]: undefined, ...(name === "city" || name === "neighborhood" || name === "postalCode" ? { neighborhood: undefined, postalCode: undefined } : {}) }));
     setPaymentNotice(false);
   }
+  const [locationMessage, setLocationMessage] = useState('');
+  function useCurrentLocation() {
+    if (!navigator.geolocation) { setLocationMessage('Location is unavailable. Enter coordinates manually or provide clear street and entrance details.'); return; }
+    setLocationMessage('Finding your location…');
+    navigator.geolocation.getCurrentPosition(position => {
+      setValues(current => ({ ...current, latitude: position.coords.latitude.toFixed(6), longitude: position.coords.longitude.toFixed(6) }));
+      setErrors(current => ({ ...current, latitude: undefined, longitude: undefined }));
+      setLocationMessage('Location saved. Check the map: use this only if you are at the delivery entrance. Approximate accuracy: ' + Math.round(position.coords.accuracy) + ' metres.');
+    }, () => setLocationMessage('Could not obtain location. Allow browser location access or enter coordinates manually.'), { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+  }
   function validatePhoneField(name: "phone" | "recipientPhone") {
     const normalized = normalizeSaudiMobile(values[name]);
     setErrors((current) => ({ ...current, [name]: normalized ? undefined : SAUDI_MOBILE_ERROR }));
@@ -147,6 +158,10 @@ function Checkout() {
     if (!normalizedPhone) next.phone = SAUDI_MOBILE_ERROR;
     if (fulfillment === "pickup" && pickupTiming !== "asap") next.timing = "Choose the available pickup timing.";
     if (fulfillment === "delivery") {
+      if (values.latitude.trim() || values.longitude.trim()) {
+        if (!values.latitude.trim() || !Number.isFinite(Number(values.latitude)) || Math.abs(Number(values.latitude)) > 90) next.latitude = 'Enter a latitude between -90 and 90.';
+        if (!values.longitude.trim() || !Number.isFinite(Number(values.longitude)) || Math.abs(Number(values.longitude)) > 180) next.longitude = 'Enter a longitude between -180 and 180.';
+      }
       const required: [FieldName, string][] = [["recipientName", "recipient name"], ["city", "city"], ["neighborhood", "neighborhood"], ["street", "street address"], ["buildingUnit", "building and unit details"]];
       required.forEach(([name, label]) => { if (!values[name].trim()) next[name] = `Enter the ${label}.`; });
       if (!normalizedRecipientPhone) next.recipientPhone = SAUDI_MOBILE_ERROR;
@@ -171,7 +186,7 @@ function Checkout() {
     if (cartItems.some(line => !/^[a-fA-F0-9]{24}$/.test(line.item.id))) { setOrderError("Your bag contains preview menu items. Remove them and add current dishes from the connected menu."); return; }
     const payload = {
       customer: { name: values.name.trim(), email: values.email.trim(), phone: normalizedPhone! }, fulfillment,
-      ...(fulfillment === "delivery" ? { deliveryAddress: { recipientName: values.recipientName.trim(), recipientPhone: normalizedRecipientPhone!, city: values.city.trim(), neighborhood: values.neighborhood.trim(), postalCode: values.postalCode.trim(), street: values.street.trim(), buildingUnit: values.buildingUnit.trim(), instructions: values.instructions.trim() } } : { pickupTiming: "asap" }),
+      ...(fulfillment === "delivery" ? { deliveryAddress: { recipientName: values.recipientName.trim(), recipientPhone: normalizedRecipientPhone!, city: values.city.trim(), neighborhood: values.neighborhood.trim(), postalCode: values.postalCode.trim(), street: values.street.trim(), buildingUnit: values.buildingUnit.trim(), instructions: values.instructions.trim(), ...(values.latitude.trim() && values.longitude.trim() ? { coordinates: { latitude: Number(values.latitude), longitude: Number(values.longitude) } } : {}) } } : { pickupTiming: "asap" }),
       preparationNotes: values.preparationNotes.trim(),
       items: cartItems.map(line => ({ menuItemId: line.item.id, quantity: line.quantity, selectedOptions: [] })),
     };
@@ -199,7 +214,7 @@ function Checkout() {
       }
     } finally { setSubmitting(false); }
   }
-  const field = (name: FieldName, label: string, options: { type?: "email" | "tel"; autoComplete?: string; wide?: boolean; required?: boolean; hint?: string } = {}) => <CheckoutField key={name} name={name} label={label} value={values[name]} onChange={(event) => updateField(name, event.target.value)} error={errors[name]} required={options.required ?? true} {...options} fixedPrefix={options.type === "tel" ? "Saudi Arabia · +966" : undefined} inputMode={options.type === "tel" ? "tel" : undefined} onBlur={name === "phone" || name === "recipientPhone" ? () => validatePhoneField(name) : undefined} hint={options.type === "tel" ? "Saudi mobiles only: 05XXXXXXXX, 5XXXXXXXX, or +9665XXXXXXXX. Spaces, dashes, and parentheses are allowed." : options.hint} />;
+  const field = (name: FieldName, label: string, options: { type?: "email" | "tel" | "number"; step?: string; min?: number; max?: number; autoComplete?: string; wide?: boolean; required?: boolean; hint?: string } = {}) => <CheckoutField key={name} name={name} label={label} value={values[name]} onChange={(event) => updateField(name, event.target.value)} error={errors[name]} required={options.required ?? true} {...options} fixedPrefix={options.type === "tel" ? "Saudi Arabia · +966" : undefined} inputMode={options.type === "tel" ? "tel" : undefined} onBlur={name === "phone" || name === "recipientPhone" ? () => validatePhoneField(name) : undefined} hint={options.type === "tel" ? "Saudi mobiles only: 05XXXXXXXX, 5XXXXXXXX, or +9665XXXXXXXX. Spaces, dashes, and parentheses are allowed." : options.hint} />;
 
   return (
     <RoutePage title="A little closer to delicious." description="Review your favorites and choose how you'd like to enjoy them. Review the fulfillment details before continuing.">
@@ -245,6 +260,11 @@ function Checkout() {
                   {field("postalCode", postalRequired ? "Postal code" : "Postal code (optional)", { autoComplete: "section-delivery shipping postal-code", required: postalRequired, wide: true })}
                   {field("street", "Street address", { autoComplete: "section-delivery shipping address-line1", wide: true })}
                   {field("buildingUnit", "Building / unit details", { autoComplete: "section-delivery shipping address-line2", wide: true, hint: "Include the building and unit number, or state that it is a standalone property." })}
+                  <div className="checkout-page__field checkout-page__field--wide delivery-location"><h3>Exact delivery entrance</h3><p>Add a map location to help your driver find you. This does not replace the address or confirm delivery coverage.</p><button type="button" onClick={useCurrentLocation}>Use my current location</button>{locationMessage && <p role="status">{locationMessage}</p>}</div>
+                  {field("latitude", "Latitude (optional)", { type: "number", step: "any", min: -90, max: 90, required: false, hint: "Copy coordinates from your map or use current location." })}
+                  {field("longitude", "Longitude (optional)", { type: "number", step: "any", min: -180, max: 180, required: false })}
+                  {values.latitude.trim() && values.longitude.trim() && Number.isFinite(Number(values.latitude)) && Number.isFinite(Number(values.longitude)) && Math.abs(Number(values.latitude)) <= 90 && Math.abs(Number(values.longitude)) <= 180 && <a className="checkout-page__field--wide" href={'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(values.latitude+','+values.longitude)} target="_blank" rel="noopener noreferrer">Check this delivery location on the map (new tab)</a>}
+
                   <div className="checkout-page__field checkout-page__field--wide"><label htmlFor="checkout-instructions"><SiteText contentKey="Checkout-text-4l1lu1" fallback={"Delivery instructions (optional)"} /></label><textarea id="checkout-instructions" value={values.instructions} onChange={(event) => updateField("instructions", event.target.value)} rows={3} maxLength={500} /></div>
                 </div>
                 {areaError && <p className="checkout-page__error" role="status">{areaError}</p>}

@@ -13,6 +13,7 @@ const { StaffEmailAccess } = await import('../src/modules/team/emailAccess.model
 const { applyStaffEmailAccess } = await import('../src/modules/team/emailAccess.service.js');
 const { TeamAudit } = await import('../src/modules/team/team.model.js');
 const { teamRoutes } = await import('../src/modules/team/team.routes.js');
+const { updateDeliveryProgress, resolveDeliveryIssue } = await import('../src/modules/delivery/delivery.progress.js');
 const { driverRoutes } = await import('../src/modules/delivery/delivery.routes.js');
 const { Menu } = await import('../src/modules/menu/menu.model.js');
 const { Order } = await import('../src/modules/orders/order.model.js');
@@ -64,7 +65,7 @@ try {
   const dish = await Menu.create({ name: 'TEST Dish', slug: 'test-dish', description: 'Isolated test fixture', priceHalalas: 4000, category: 'Mains', imageUrl: '/menu-images/fixture.png', available: true, archived: false, customizationOptions: [{ id: 'extra', name: 'Extra', required: false, maxSelections: 1, options: [{ id: 'one', name: 'TEST Extra', priceHalalas: 500, available: true }] }] });
   const user = 'fixture_customer', other = 'fixture_other';
   const customer = { name: 'TEST CUSTOMER', email: 'fixture@example.invalid', phone: '+966512345678' };
-  const address = { recipientName: 'TEST RECIPIENT', recipientPhone: '+966512345678', city: 'Fixture City', neighborhood: 'Fixture Area', street: 'TEST STREET', buildingUnit: 'TEST UNIT', postalCode: '', instructions: '' };
+  const address = { coordinates: {latitude:21.75,longitude:39.1}, recipientName: 'TEST RECIPIENT', recipientPhone: '+966512345678', city: 'Fixture City', neighborhood: 'Fixture Area', street: 'TEST STREET', buildingUnit: 'TEST UNIT', postalCode: '', instructions: '' };
   const payload = (method: 'pickup' | 'delivery', quantity = 3) => orderInput.parse({ customer, fulfillment: method, ...(method === 'delivery' ? { deliveryAddress: address } : { pickupTiming: 'asap' }), preparationNotes: 'TEST KITCHEN NOTE', items: [{ menuItemId: dish.id, quantity, selectedOptions: [] }] });
   const query = orderQuery.parse({});
   const fakeUsers = new Map<string, any>();
@@ -164,6 +165,17 @@ try {
   await rejects(action(deliveryStored.id, 'complete_delivery', cashier), 'ACTION_NOT_ALLOWED');
   await rejects(action(deliveryStored.id, 'dispatch_delivery', cashier), 'DRIVER_REQUIRED');
   assert.equal((await action(deliveryStored.id, 'dispatch_delivery', cashier, '', { driverId: 'user_fixtureDriver' })).status, 'out_for_delivery');
+  assert.equal((await orderDetail(deliveryStored.id)).deliveryAddress?.coordinates?.latitude,21.75);
+  async function progress(kind:'acknowledge'|'collect'|'arrive'|'report_issue',driver='user_fixtureDriver') {const current=await orderDetail(deliveryStored.id);return updateDeliveryProgress(current.id,{kind,expectedUpdatedAt:current.updatedAt.toISOString(),category:'address_problem',note:'TEST ENTRANCE ISSUE'},driver);}
+  await rejects(action(deliveryStored.id,'complete_delivery',cashier,'',{handoffCode:'000000'}),'DELIVERY_CHECKLIST_REQUIRED');
+  await rejects(progress('acknowledge','user_otherDriver'),'NOT_FOUND');
+  await rejects(progress('arrive'),'INVALID_DELIVERY_PROGRESS');
+  await progress('acknowledge');await progress('collect');await progress('arrive');await progress('report_issue');
+  await rejects(action(deliveryStored.id,'complete_delivery',cashier,'',{handoffCode:'000000'}),'DELIVERY_ISSUE_OPEN');
+  await rejects(resolveDeliveryIssue(deliveryStored.id,{expectedUpdatedAt:'2000-01-01T00:00:00.000Z',resolution:'TEST RESOLVED'},cashier.userId),'STALE_ORDER');
+  await resolveDeliveryIssue(deliveryStored.id,{expectedUpdatedAt:(await orderDetail(deliveryStored.id)).updatedAt.toISOString(),resolution:'TEST ENTRANCE CONFIRMED BY PHONE'},cashier.userId);
+  assert.ok((await orderDetail(deliveryStored.id)).deliveryProgress?.arrivedAt);
+
   assert.equal((await fetch(base+'/driver/orders', { headers: { 'x-test-role':'driver','x-test-user':'user_otherDriver' } }).then(result=>result.json())).data.length,0);
   const assigned=await fetch(base+'/driver/orders', { headers: { 'x-test-role':'driver','x-test-user':'user_fixtureDriver' } }).then(result=>result.json()); assert.equal(assigned.data.length,1); assert.equal('deliveryHandoffCode' in assigned.data[0],false);
   await rejects(action(deliveryStored.id, 'complete_delivery', { userId:'user_otherDriver',role:'driver' } as any, '', { handoffCode:'000000' }), 'FORBIDDEN');
@@ -218,7 +230,14 @@ try {
   assert.equal((await callTeam('/email-access','PUT',{...emailBody,enabled:false,revision:2})).status,200);
   assert.equal((await applyStaffEmailAccess(structuredClone(fakeUsers.get(pending.id)))).publicMetadata.role,'customer');
   assert.equal((await UserProfile.findOne({clerkId:pending.id}))?.role,'customer');
-  pass('verified email workspace assignment, immediate MongoDB role sync and revocation');
+  assert.equal((await callTeam('/email-access','PUT',{...emailBody,role:'driver',revision:3})).status,422);
+  assert.equal((await callTeam('/email-access','PUT',{...emailBody,role:'driver',phone:'0512345678',revision:3})).status,200);
+  assert.equal(fakeUsers.get(pending.id).publicMetadata.role,'driver');
+  assert.equal(fakeUsers.get(pending.id).publicMetadata.staffPhone,'+966512345678');
+  assert.equal((await UserProfile.findOne({clerkId:pending.id}))?.role,'driver');
+  assert.equal((await callTeam('/email-access','PUT',{...emailBody,role:'driver',phone:'0512345678',enabled:false,revision:4})).status,200);
+  assert.equal((await applyStaffEmailAccess(structuredClone(fakeUsers.get(pending.id)))).publicMetadata.role,'customer');
+  pass('verified email workspace/driver assignment, Saudi phone normalization, immediate MongoDB role sync and revocation');
 
   let member=await callTeam('/','POST',{email:'staff@example.invalid',displayName:'TEST COOK',role:'kitchen',phone:''}); assert.equal(member.status,200);let staff=(await member.json()).data;assert.equal(staff.role,'kitchen');
   member=await callTeam('/'+staff.id,'PATCH',{displayName:'TEST CASHIER',role:'cashier',phone:'',expectedUpdatedAt:staff.updatedAt});assert.equal(member.status,200);staff=(await member.json()).data;

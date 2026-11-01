@@ -1,14 +1,16 @@
 import SiteText from "../components/content/SiteText";
 import { SignIn, SignUp } from '@clerk/react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, Navigate } from 'react-router-dom';
 import { useBackendAuth } from '../hooks/useBackendAuth';
 import RoutePage from './RoutePage';
 import '../styles/Dashboard.css';
 export default function Login({ signup = false }: { signup?: boolean }) {
   const auth = useBackendAuth(); const [params] = useSearchParams();
   const desired = params.get('redirect');
-  const redirect = desired?.startsWith('/') && !desired.startsWith('//') && !desired.includes('\\') ? desired : '/account';
+  const redirect = desired?.startsWith('/') && !desired.startsWith('//') && !desired.includes('\\') ? desired : '/account?staff=1';
   const retryUrl = `${signup ? '/signup' : '/login'}?redirect=${encodeURIComponent(redirect)}`;
+  if(auth.signedIn && auth.profile?.role==='driver') return <Navigate to="/driver" replace />;
+  if(auth.signedIn && auth.profile && redirect!=='/account') return <Navigate to={redirect} replace />;
   return <RoutePage title={signup ? 'A seat for you.' : 'Welcome back.'} description="Your orders, reservations, and a little more of The Table."><div className="dashboard-page">{!auth.configured ? <p><SiteText contentKey="Login-text-l9seoj" fallback={"Sign-in setup is required. Add your Clerk publishable key as VITE_CLERK_PUBLISHABLE_KEY in the frontend environment. Never add a secret key here."} /></p> : auth.signedIn ? <p><SiteText contentKey="Login-text-7jpft1" fallback={"You're signed in. "} /><Link to={redirect}><SiteText contentKey="Login-text-ornghz" fallback={"Open your account"} /></Link></p> : <>
     {signup ? <SignUp path="/signup" routing="path" oauthFlow="redirect" signInUrl="/login" forceRedirectUrl={redirect} fallback={<p role="status"><SiteText contentKey="Login-text-1fo26jx" fallback={"Loading secure sign-up…"} /></p>} /> : <SignIn path="/login" routing="path" oauthFlow="redirect" signUpUrl="/signup" forceRedirectUrl={redirect} signUpForceRedirectUrl={redirect} fallback={<p role="status"><SiteText contentKey="Login-text-108m0hj" fallback={"Loading secure sign-in…"} /></p>} />}
     <details className="auth-help"><summary><SiteText contentKey="Login-text-mg788s" fallback={"Having trouble with Google sign-in?"} /></summary>

@@ -1,3 +1,4 @@
+import { phone } from '../../utils/validation.js';
 import { Router } from 'express';
 import { z } from 'zod';
 import { StaffEmailAccess } from './emailAccess.model.js';
@@ -5,7 +6,7 @@ import { saveEmailAccess } from './emailAccess.service.js';
 import { validateRequest,input } from '../../middleware/validateRequest.js';
 import { staffMutationLimit } from '../../middleware/rateLimits.js';
 import { actor } from '../../utils/roles.js';
-const schema=z.object({email:z.string().trim().email().toLowerCase(),role:z.enum(['cashier','kitchen']),enabled:z.boolean().default(true),revision:z.number().int().min(0)}).strict();
+const schema=z.object({email:z.string().trim().email().toLowerCase(),role:z.enum(['cashier','kitchen','driver']),phone:z.union([z.literal(''),phone]).default(''),enabled:z.boolean().default(true),revision:z.number().int().min(0)}).strict().refine(data=>data.role!=='driver'||!!data.phone,{path:['phone'],message:'Drivers need a Saudi mobile number.'});
 export const emailAccessRoutes=Router();
-emailAccessRoutes.get('/',async(_req,res)=>res.json({data:await StaffEmailAccess.find().sort({updatedAt:-1}).limit(250).select('email role enabled revision appliedRevision boundClerkId updatedAt').lean()}));
+emailAccessRoutes.get('/',async(_req,res)=>res.json({data:await StaffEmailAccess.find().sort({updatedAt:-1}).limit(250).select('email role phone enabled revision appliedRevision boundClerkId updatedAt').lean()}));
 emailAccessRoutes.put('/',staffMutationLimit,validateRequest(schema),async(_req,res)=>res.json({data:await saveEmailAccess(input<z.infer<typeof schema>>(res),actor(res).userId),message:'Email access saved. It applies only after verified sign-in with this primary email.'}));
