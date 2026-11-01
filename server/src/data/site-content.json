@@ -2198,13 +2198,6 @@
     "defaultValue": "FIND US"
   },
   {
-    "key": "LocationsSection-text-mf2pbj",
-    "page": "Home · LocationsSection",
-    "label": "Jeddah, Saudi Arabia",
-    "type": "text",
-    "defaultValue": "Jeddah, Saudi Arabia"
-  },
-  {
     "key": "LocationsSection-text-xbvqcw",
     "page": "Home · LocationsSection",
     "label": "Contact us for the street address",
@@ -2217,27 +2210,6 @@
     "label": "JOIN US",
     "type": "text",
     "defaultValue": "JOIN US"
-  },
-  {
-    "key": "LocationsSection-text-86uajf",
-    "page": "Home · LocationsSection",
-    "label": "Monday — Sunday",
-    "type": "text",
-    "defaultValue": "Monday — Sunday"
-  },
-  {
-    "key": "LocationsSection-text-1q5puev",
-    "page": "Home · LocationsSection",
-    "label": "12:00 PM",
-    "type": "text",
-    "defaultValue": "12:00 PM"
-  },
-  {
-    "key": "LocationsSection-text-14gfhgu",
-    "page": "Home · LocationsSection",
-    "label": "11:00 PM",
-    "type": "text",
-    "defaultValue": "11:00 PM"
   },
   {
     "key": "LocationsSection-text-gfn71y",
@@ -2819,27 +2791,6 @@
     "label": "A LITTLE TIME TOGETHER",
     "type": "text",
     "defaultValue": "A LITTLE TIME TOGETHER"
-  },
-  {
-    "key": "Footer-text-171bs7a",
-    "page": "Shared · Footer",
-    "label": "Every day",
-    "type": "text",
-    "defaultValue": "Every day"
-  },
-  {
-    "key": "Footer-text-1q5puev",
-    "page": "Shared · Footer",
-    "label": "12:00 PM",
-    "type": "text",
-    "defaultValue": "12:00 PM"
-  },
-  {
-    "key": "Footer-text-14gfhgu",
-    "page": "Shared · Footer",
-    "label": "11:00 PM",
-    "type": "text",
-    "defaultValue": "11:00 PM"
   },
   {
     "key": "Footer-text-a2qhwq",

@@ -1,6 +1,6 @@
 import type { Response } from 'express';
 import { AppError } from './errors.js';
-export const staffRoles = ['admin', 'cashier', 'kitchen'] as const;
+export const staffRoles = ['admin', 'cashier', 'kitchen', 'driver'] as const;
 export type StaffRole = typeof staffRoles[number];
 export type UserRole = StaffRole | 'customer';
 export type Actor = { userId: string; role: UserRole };

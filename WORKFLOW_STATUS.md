@@ -36,3 +36,7 @@ Deploy the updated backend to Render and frontend to Vercel together before veri
 - Unsigned `POST /api/webhooks/stripe`: HTTP 400.
 - Public readiness reports online ordering enabled and Stripe configuration present; both fulfillment methods are currently closed under the saved 08:00-midnight Riyadh schedule.
 - Frontend build/type-check/lint and backend type-check/build passed during this audit. No test suite was run.
+
+## Automated verification update — 1 November 2026
+
+The user subsequently requested full system testing. All six frontend test suites and the isolated backend integration suite now pass, including browser-level checkout/cashier/kitchen/handoff fixtures and real MongoDB service integration. See `SYSTEM_TEST_REPORT.md` for exact scope, isolation, results and external-integration limits. This supersedes the earlier statement that no test suite had been run; real Clerk OAuth and Stripe-to-Render payment verification remain untested end to end.

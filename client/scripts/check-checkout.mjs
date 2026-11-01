@@ -1,4 +1,4 @@
-import { createServer } from "vite";
+import { createPreviewServer as createServer } from "./test-server.mjs";
 import { chromium, expect } from "@playwright/test";
 import assert from "node:assert/strict";
 
@@ -121,9 +121,12 @@ try {
   await p.getByLabel("Available pickup timing").selectOption("asap");
   await submit.click(); await expect(p.locator(".checkout-page__status")).toContainText("No order has been placed");
   await p.getByRole("radio", { name: /Delivery/ }).check();
-  for (const [label, value] of [["Recipient name", "Test Recipient"], ["Recipient phone", "(05) 000-00001"], ["City", "Test City"], ["Neighborhood", "Outside"], ["Street address", "TEST ONLY street"], ["Building / unit details", "TEST ONLY unit"]]) await p.getByLabel(label, { exact: true }).fill(value);
+  for (const [label, value] of [["Recipient name", "Test Recipient"], ["Recipient phone", "(05) 000-00001"], ["Street address", "TEST ONLY street"], ["Building / unit details", "TEST ONLY unit"]]) await p.getByLabel(label, { exact: true }).fill(value);
+  await p.getByLabel("City", { exact: true }).selectOption("Test City");
+  await p.getByLabel("Neighborhood", { exact: true }).evaluate(el => el.add(new Option("Outside", "Outside")));
+  await p.getByLabel("Neighborhood", { exact: true }).selectOption("Outside");
   await submit.click(); await expect(p.getByLabel("Neighborhood", { exact: true })).toHaveAttribute("aria-invalid", "true");
-  await p.getByLabel("Neighborhood", { exact: true }).fill("Test Neighborhood");
+  await p.getByLabel("Neighborhood", { exact: true }).selectOption("Test Neighborhood");
   await p.getByLabel("Postal code", { exact: true }).fill("WRONG");
   await submit.click(); await expect(p.getByLabel("Postal code", { exact: true })).toHaveAttribute("aria-invalid", "true");
   await p.getByLabel("Postal code", { exact: true }).fill("TEST-001");

@@ -1,3 +1,5 @@
+import TeamPage from "../pages/admin/Team";
+import DriverDashboard from "../pages/driver/DriverDashboard";
 import WebsiteContent from "../pages/admin/WebsiteContent";
 import FulfillmentSettingsPage from "../pages/admin/FulfillmentSettings";
 import CashierDashboard, { CashierOrderDetail } from "../pages/staff/CashierDashboard";
@@ -37,6 +39,8 @@ export const routes: RouteObject[] = [{
     { path: "admin/orders", element: <RequireAuth admin><AdminOrders /></RequireAuth> },
     { path: "admin/orders/:id", element: <RequireAuth admin><AdminOrderDetail /></RequireAuth> },
     { path: "admin/reservations", element: <RequireAuth admin><AdminReservations /></RequireAuth> },
+    { path: "admin/team", element: <RequireAuth admin><TeamPage /></RequireAuth> },
+    { path: "driver", element: <RequireAuth roles={["driver"]}><DriverDashboard /></RequireAuth> },
     { path: "cashier", element: <RequireAuth roles={["admin", "cashier"]}><CashierDashboard /></RequireAuth> },
     { path: "cashier/orders/:id", element: <RequireAuth roles={["admin", "cashier"]}><CashierOrderDetail /></RequireAuth> },
     { path: "kitchen", element: <RequireAuth roles={["admin", "kitchen"]}><KitchenDashboard /></RequireAuth> },

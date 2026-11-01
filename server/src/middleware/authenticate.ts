@@ -12,6 +12,8 @@ export const authenticate: RequestHandler = async (req, res, next) => {
     const auth = getAuth(req);
     if (!auth.userId || !auth.sessionId) throw new AppError(401, 'UNAUTHENTICATED', 'Sign in to continue.');
     const user = await clerk.users.getUser(auth.userId);
+    const primary = user.emailAddresses.find(entry => entry.id === user.primaryEmailAddressId);
+    if (verifiedRole(user.publicMetadata.role) !== 'customer' && primary?.verification?.status !== 'verified') throw new AppError(403, 'STAFF_EMAIL_UNVERIFIED', 'Verify the primary email before using staff access.');
     res.locals.actor = { userId: user.id, role: verifiedRole(user.publicMetadata.role) };
     res.locals.clerkUser = user;
     try { res.locals.userProfile = await syncClerkUser(user); }

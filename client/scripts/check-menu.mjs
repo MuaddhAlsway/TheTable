@@ -1,4 +1,4 @@
-import { createServer } from "vite";
+import { createPreviewServer as createServer } from "./test-server.mjs";
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 const server = await createServer({ server: { host: "127.0.0.1", port: 0 } });
@@ -30,7 +30,7 @@ try {
   await page.getByRole("button", { name: "Add Roasted Tomato Soup to your order" }).click();
   assert.ok((await page.locator(".menu-page__notice").innerText()).includes("Roasted Tomato Soup added to your bag"));
   await page.getByRole("button", { name: "Dismiss selection notice" }).click();
-  for (const image of await page.locator(".menu-item-card__image").all()) {
+  for (const image of await page.locator(".menu-item-card__image img").all()) {
     await image.scrollIntoViewIfNeeded();
     await image.evaluate(img => img.decode());
   }

@@ -11,6 +11,9 @@ export async function syncClerkUser(user: ClerkUser) {
     email: email?.emailAddress.toLowerCase() || '',
     emailVerified: email?.verification?.status === 'verified',
     role: verifiedRole(user.publicMetadata.role),
+    staffName: String(user.publicMetadata.staffDisplayName || ''),
+    staffPhone: String(user.publicMetadata.staffPhone || ''),
+    staffManaged: user.publicMetadata.staffManaged === true,
     clerkUpdatedAt: new Date(user.updatedAt),
     lastSignInAt: user.lastSignInAt ? new Date(user.lastSignInAt) : null,
   };

@@ -1,4 +1,6 @@
 import './config/database.js';
+import { initializeWebsiteContent } from './modules/content/content.service.js';
+import { TeamAudit } from './modules/team/team.model.js';
 import { WebsiteContent } from './modules/content/content.model.js';
 import { Fulfillment } from './modules/fulfillment/fulfillment.model.js';
 import { WebhookReceipt } from './modules/webhooks/webhookReceipt.model.js';
@@ -19,8 +21,9 @@ async function start() {
   if (!paymentReadiness().ready) console.warn('Stripe setup is incomplete: payment sessions and new orders are disabled. API startup can continue.');
   await connectDatabase();
   startupStage = 'database index initialization';
-  const models: { createCollection(): Promise<unknown>; createIndexes(): Promise<unknown> }[] = [Menu, Order, Reservation, UserProfile, Operations, WebhookReceipt, Fulfillment, WebsiteContent];
+  const models: { createCollection(): Promise<unknown>; createIndexes(): Promise<unknown> }[] = [Menu, Order, Reservation, UserProfile, Operations, WebhookReceipt, Fulfillment, WebsiteContent, TeamAudit];
   await Promise.all(models.map(async model => { await model.createCollection(); await model.createIndexes(); }));
+  await initializeWebsiteContent();
   startupStage = 'HTTP listener';
   const server = app.listen(env.PORT, '0.0.0.0', () => console.log(`The Table API listening on 0.0.0.0:${env.PORT}`));
   server.on('error', error => { console.error(startupDiagnostic('HTTP listener', error)); void mongoose.disconnect().finally(() => process.exit(1)); });

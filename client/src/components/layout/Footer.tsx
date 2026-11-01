@@ -1,3 +1,5 @@
+import { usePublicSettings } from "../../hooks/usePublicSettings";
+import { restaurantHours } from "../../utils/restaurantHours";
 import SiteText from "../content/SiteText";
 import { Link } from "react-router-dom";
 import { ArrowUp, ArrowUpRight, MapPin } from "lucide-react";
@@ -11,6 +13,8 @@ const exploreLinks = [
 ];
 
 function Footer() {
+  const { settings } = usePublicSettings();
+  const hours = restaurantHours(settings?.schedule);
   return (
     <footer className="site-footer" aria-label="The Table footer">
       <div className="site-footer__inner">
@@ -30,7 +34,7 @@ function Footer() {
             <div className="site-footer__visit">
               <h2 className="site-footer__heading"><SiteText contentKey="Footer-text-mhrrmw" fallback={"COME ON OVER"} /></h2>
               <address><MapPin size={16} strokeWidth={1.3} aria-hidden="true" /><span><SiteText contentKey="Footer-text-bypzbr" fallback={"Jeddah,"} /><br /><SiteText contentKey="Footer-text-pccj5r" fallback={"Saudi Arabia"} /></span></address>
-              <div className="site-footer__hours"><span><SiteText contentKey="Footer-text-uotgz5" fallback={"A LITTLE TIME TOGETHER"} /></span><p><SiteText contentKey="Footer-text-171bs7a" fallback={"Every day"} /><br /><time dateTime="12:00"><SiteText contentKey="Footer-text-1q5puev" fallback={"12:00 PM"} /></time> — <time dateTime="23:00"><SiteText contentKey="Footer-text-14gfhgu" fallback={"11:00 PM"} /></time></p></div>
+              <div className="site-footer__hours"><span><SiteText contentKey="Footer-text-uotgz5" fallback="A LITTLE TIME TOGETHER" /></span>{hours && settings?.schedule ? <p>{hours.days}<br /><time dateTime={settings.schedule.opens}>{hours.opens}</time> — <time dateTime={settings.schedule.closes}>{hours.closes}</time></p> : <p>See Find Us for confirmed hours.</p>}</div>
               <Link className="site-footer__visit-link" to="/locations"><SiteText contentKey="Footer-text-a2qhwq" fallback={"Plan your visit "} /><ArrowUpRight size={14} aria-hidden="true" /></Link>
             </div>
           </div>

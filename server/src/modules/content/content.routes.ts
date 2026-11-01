@@ -1,3 +1,4 @@
+import { contentDefaults } from './content.service.js';
 import { Router } from 'express';
 import { z } from 'zod';
 import catalog from '../../data/site-content.json' with { type: 'json' };
@@ -10,7 +11,7 @@ type Values = Record<string, string>;
 const fields = new Map(catalog.map(field => [field.key, field]));
 async function read() {
   const doc = await WebsiteContent.findById('website').lean();
-  const values = Object.fromEntries(Object.entries((doc?.values || {}) as Values).filter(([key, value]) => fields.has(key) && typeof value === 'string'));
+  const values = Object.fromEntries(Object.entries({ ...contentDefaults, ...((doc?.values || {}) as Values) }).filter(([key, value]) => fields.has(key) && typeof value === 'string'));
   return { values, revision: doc?.revision || 0, updatedAt: doc?.updatedAt || null };
 }
 export const publicContentRoutes = Router();
@@ -26,7 +27,7 @@ adminContentRoutes.put('/', staffMutationLimit, validateRequest(updateInput), as
   for (const [key, value] of Object.entries(body.changes)) {
     const field = fields.get(key);
     if (!field) throw new AppError(422, 'UNKNOWN_CONTENT_FIELD', 'This content field is not editable. Refresh the editor.');
-    if (value === null || value === field.defaultValue) { delete values[key]; continue; }
+    if (value === null || value === field.defaultValue) { values[key] = field.defaultValue; continue; }
     if (!value.trim()) throw new AppError(422, 'EMPTY_CONTENT', 'Content cannot be blank. Use Restore defaults to reset it.');
     if (field.type === 'image') {
       let allowed = /^\/(?:content-images|hero-images|menu-images)\/[a-zA-Z0-9_%&.()-]+$/.test(value);

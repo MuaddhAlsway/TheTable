@@ -13,7 +13,8 @@
     "test:menu": "node scripts/check-menu.mjs",
     "test:cart": "node scripts/check-cart.mjs",
     "test:checkout": "node scripts/check-checkout.mjs",
-    "typecheck": "tsc -b --pretty false"
+    "typecheck": "tsc -b --pretty false",
+    "test:flow": "node scripts/check-system-flow.mjs"
   },
   "dependencies": {
     "@clerk/react": "^6.18.4",

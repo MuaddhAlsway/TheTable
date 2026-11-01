@@ -1,3 +1,5 @@
+import { usePublicSettings } from "../../hooks/usePublicSettings";
+import { restaurantHours } from "../../utils/restaurantHours";
 import SiteText from "../content/SiteText";
 import { Link } from "react-router-dom";
 import { ArrowDownRight, ArrowUpRight, Clock3, MapPin } from "lucide-react";
@@ -43,6 +45,8 @@ function DiningRoomIllustration() {
 }
 
 function LocationsSection() {
+  const { settings } = usePublicSettings();
+  const hours = restaurantHours(settings?.schedule);
   return (
     <section className="locations" id="locations" aria-labelledby="locations-title">
       <header className="locations__header">
@@ -65,8 +69,8 @@ function LocationsSection() {
           <h3 id="locations-city"><SiteText contentKey="LocationsSection-text-13vjwzl" fallback={"Jeddah"} /><span>.</span></h3>
           <p className="locations__welcome"><SiteText contentKey="LocationsSection-text-1uqnibp" fallback={"For the catch-ups, the celebrations,"} /><br /><SiteText contentKey="LocationsSection-text-mehl0u" fallback={"and the “let's just go out” evenings."} /></p>
           <dl className="locations__facts">
-            <div><dt><MapPin size={17} strokeWidth={1.5} aria-hidden="true" /> <SiteText contentKey="LocationsSection-text-16t62ja" fallback={"FIND US"} /></dt><dd><address><SiteText contentKey="LocationsSection-text-mf2pbj" fallback={"Jeddah, Saudi Arabia"} /></address><Link to="/contact"><SiteText contentKey="LocationsSection-text-xbvqcw" fallback={"Contact us for the street address "} /><ArrowUpRight size={13} aria-hidden="true" /></Link></dd></div>
-            <div><dt><Clock3 size={17} strokeWidth={1.5} aria-hidden="true" /> <SiteText contentKey="LocationsSection-text-3sbejf" fallback={"JOIN US"} /></dt><dd><span><SiteText contentKey="LocationsSection-text-86uajf" fallback={"Monday — Sunday"} /></span><strong><time dateTime="12:00"><SiteText contentKey="LocationsSection-text-1q5puev" fallback={"12:00 PM"} /></time> — <time dateTime="23:00"><SiteText contentKey="LocationsSection-text-14gfhgu" fallback={"11:00 PM"} /></time></strong></dd></div>
+            <div><dt><MapPin size={17} strokeWidth={1.5} aria-hidden="true" /> <SiteText contentKey="LocationsSection-text-16t62ja" fallback={"FIND US"} /></dt><dd><address>{settings?.location?.displayAddress || "Location details are being updated."}</address><Link to="/contact"><SiteText contentKey="LocationsSection-text-xbvqcw" fallback={"Contact us for the street address "} /><ArrowUpRight size={13} aria-hidden="true" /></Link></dd></div>
+            <div><dt><Clock3 size={17} strokeWidth={1.5} aria-hidden="true" /> <SiteText contentKey="LocationsSection-text-3sbejf" fallback={"JOIN US"} /></dt><dd>{hours && settings?.schedule ? <><span>{hours.days}</span><strong><time dateTime={settings.schedule.opens}>{hours.opens}</time> — <time dateTime={settings.schedule.closes}>{hours.closes}</time></strong></> : <Link to="/locations">See confirmed visiting hours</Link>}</dd></div>
           </dl>
           <Link className="locations__booking" to="/reservations"><span><SiteText contentKey="LocationsSection-text-gfn71y" fallback={"Reserve your table"} /><small><SiteText contentKey="LocationsSection-text-1qk5l9a" fallback={"A good evening starts here."} /></small></span><ArrowUpRight size={24} strokeWidth={1.3} aria-hidden="true" /></Link>
           <a className="locations__map" href="https://www.google.com/maps/search/?api=1&query=Jeddah%2C%20Saudi%20Arabia" target="_blank" rel="noopener noreferrer"><SiteText contentKey="LocationsSection-text-cq25vh" fallback={"Explore Jeddah on Google Maps "} /><ArrowUpRight size={15} aria-hidden="true" /><span className="locations__sr-only"> <SiteText contentKey="LocationsSection-text-1lc8zzo" fallback={"(opens in a new tab)"} /></span></a>

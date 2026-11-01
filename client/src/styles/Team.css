@@ -1,0 +1,22 @@
+.team-editor,.team-list { margin: 26px 0; background: #fffcf6; border: 1px solid #ded8cc; border-radius: 10px; padding: clamp(20px,3vw,32px); }
+.team-editor h2,.team-list h2 { font-family: var(--font-body); font-size: 1.15rem; font-weight: 600; margin: 0 0 22px; }
+.team-editor { scroll-margin-top: 150px; }
+.team-editor fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.team-editor label { display: flex; flex-direction: column; gap: 8px; font-size: .8rem; }
+.team-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 20px; }
+.team-list article { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; padding: 22px 0; border-top: 1px solid #ded8cc; overflow-wrap: anywhere; }
+.team-list h3 { font-family: var(--font-body); font-size: .9rem; margin: 0; }
+.team-list p { font-size: .8rem; line-height: 1.8; }
+.team-list .team-actions { margin-top: 0; font-size: .7rem; color: #6b705f; }
+.team-role { display: inline-flex; padding: 5px 10px; background: #e6eadc; border-radius: 4px; font-size: .65rem; text-transform: capitalize; }
+.driver-deliveries { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 22px; margin-top: 24px; }
+.driver-ticket { padding: 25px; background: #fffcf6; border: 1px solid #ded8cc; border-radius: 10px; overflow-wrap: anywhere; }
+.driver-ticket h2 { font-size: 1.1rem; font-family: var(--font-body); margin: 0 0 18px; }
+.driver-ticket address,.driver-ticket p,.driver-ticket li { font-style: normal; font-size: .85rem; line-height: 1.9; }
+.driver-ticket ul { padding-left: 20px; }
+.driver-ticket a { display: inline-flex; align-items: center; min-height: 44px; font-size: .8rem; }
+.driver-ticket > button { display: flex; width: 100%; background: #34412b; color: #fff6e7; margin-top: 20px; }
+.delivery-code { padding: 22px; margin-block: 20px; border: 1px solid #b2bda1; background: #e8eddf; }
+.delivery-code > strong { display: block; font-size: 2rem; letter-spacing: .3em; margin-block: 10px; font-variant-numeric: tabular-nums; }
+.delivery-code p { margin: 0; }
+@media(max-width:750px){.driver-deliveries{grid-template-columns:1fr;}}

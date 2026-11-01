@@ -30,3 +30,6 @@ dist-ssr
 
 # Vercel local project metadata
 .vercel/
+
+# Generated browser test screenshots and failure artifacts
+/test-results/

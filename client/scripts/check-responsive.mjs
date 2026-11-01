@@ -1,5 +1,5 @@
 import { chromium } from "@playwright/test";
-import { createServer } from "vite";
+import { createPreviewServer as createServer } from "./test-server.mjs";
 import { mkdir, mkdtemp } from "node:fs/promises";
 import path from "node:path";
 import assert from "node:assert/strict";
@@ -44,12 +44,12 @@ try {
   }
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(baseURL);
-  await page.getByRole("button", { name: "Next dish" }).click();
-  assert.ok((await page.locator(".hero-dish-caption").innerText()).includes("Margherita Pizza"));
-  await page.getByRole("button", { name: "Pizza", exact: true }).last().click();
-  assert.equal(await page.locator(".menu-card").count(), 1);
+  await page.getByRole("button", { name: "Next slide" }).click();
+  assert.ok((await page.locator(".hero-dish-caption").innerText()).includes("Share a slice."));
+  await page.getByRole("button", { name: "Mains", exact: true }).last().click();
+  assert.equal(await page.locator(".menu-card").count(), 2);
   await page.getByRole("button", { name: "All dishes", exact: true }).click();
-  for (const image of await page.locator(".menu-card__image").all()) {
+  for (const image of await page.locator(".menu-card__image img").all()) {
     await image.scrollIntoViewIfNeeded();
     await image.evaluate((img) => img.decode());
   }

@@ -1,4 +1,4 @@
-import { createServer } from "vite";
+import { createPreviewServer as createServer } from "./test-server.mjs";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { MemoryRouter, useRoutes } from "react-router-dom";
@@ -9,9 +9,9 @@ try {
   const { routes } = await server.ssrLoadModule("/src/app/router.tsx");
   function TestRoutes() { return useRoutes(routes); }
   const cases = [
-    ["/", "Life tastes"], ["/about", "A little about The Table."],
-    ["/menu", "made for sharing."], ["/locations", "Come on over."],
-    ["/reservations", "A table for you."], ["/contact", "Let&#x27;s talk."],
+    ["/", "Good pasta."], ["/about", "More than"],
+    ["/menu", "made for sharing."], ["/locations", "Your people."],
+    ["/reservations", "Account setup required."], ["/contact", "Let&#x27;s talk."],
     ["/login", "Welcome back."], ["/cart", "Your shopping bag."], ["/checkout", "A little closer to delicious."],
     ["/privacy", "Your privacy."], ["/missing-page", "This table isn&#x27;t here."],
   ];

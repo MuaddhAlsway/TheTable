@@ -15,7 +15,9 @@
     "setup:admin": "tsx src/scripts/setupAdmin.ts",
     "setup:service": "tsx src/scripts/setupService.ts",
     "seed:menu": "tsx src/scripts/seedMenu.ts",
-    "setup:hero": "tsx src/scripts/setupHero.ts"
+    "setup:hero": "tsx src/scripts/setupHero.ts",
+    "test:flow": "tsx scripts/check-system-flow.mts",
+    "setup:content": "tsx src/scripts/setupContent.ts"
   },
   "dependencies": {
     "@clerk/express": "^2.1.86",

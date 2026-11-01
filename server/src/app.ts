@@ -1,3 +1,5 @@
+import { teamRoutes } from './modules/team/team.routes.js';
+import { driverRoutes, driverDirectoryRoutes } from './modules/delivery/delivery.routes.js';
 import { publicContentRoutes, adminContentRoutes } from './modules/content/content.routes.js';
 import { fulfillmentRoutes } from './modules/fulfillment/fulfillment.routes.js';
 import { cashierRoutes, kitchenRoutes } from './modules/orders/order.staff.routes.js';
@@ -43,12 +45,15 @@ if (serverPublishableKey && clientOrigins.length) app.use(clerkMiddleware({ secr
 app.use('/api/v1/users', authenticate, userRoutes);
 app.use('/api/v1/orders', authenticate, orderRoutes);
 app.use('/api/v1/reservations', authenticate, reservationRoutes);
+app.use('/api/v1/driver/orders', authenticate, driverRoutes);
+app.use('/api/v1/staff/drivers', authenticate, driverDirectoryRoutes);
 app.use('/api/v1/staff/orders', authenticate, cashierRoutes);
 app.use('/api/v1/kitchen/orders', authenticate, kitchenRoutes);
 app.use('/api/v1/admin', authenticate, authorizeAdmin);
 app.use('/api/v1/admin/operations-settings', operationsSettingsRoutes);
 app.use('/api/v1/admin/fulfillment-settings', fulfillmentRoutes);
 app.get('/api/v1/admin/overview', async (_req, res) => { const [orders, reservations, menuItems, recentOrders] = await Promise.all([Order.countDocuments(), Reservation.countDocuments(), Menu.countDocuments({ archived: false }), Order.find().sort({ createdAt: -1 }).limit(5).select('orderNumber customer.name status totalHalalas createdAt')]); res.json({ data: { orders, reservations, menuItems, recentOrders } }); });
+app.use('/api/v1/admin/team', teamRoutes);
 app.use('/api/v1/admin/content', adminContentRoutes);
 app.use('/api/v1/admin/menu', adminMenuRoutes);
 app.use('/api/v1/admin/orders', adminOrderRoutes);

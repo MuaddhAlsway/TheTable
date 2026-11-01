@@ -1,4 +1,4 @@
-import { createServer } from "vite";
+import { createPreviewServer as createServer } from "./test-server.mjs";
 import { chromium, expect } from "@playwright/test";
 import assert from "node:assert/strict";
 
@@ -55,10 +55,11 @@ try {
   await page.getByRole("link", { name: "Explore the menu", exact: true }).click();
   await add("The Table Burger").click(); await count(1); await bag.click(); await subtotal(59);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1), false);
-  await page.reload(); await count(0);
-  await expect(page.getByRole("heading", { name: "Your bag is empty." })).toBeVisible();
+  await page.reload(); await count(1);
+  await subtotal(59);
+  await expect(page.getByLabel("The Table Burger quantity", { exact: true })).toHaveText("1");
   assert.deepEqual(errors, []);
-  console.log("PASS mobile cart layout, in-memory reset on refresh, and no runtime errors");
+  console.log("PASS mobile cart layout, cart persistence on refresh, and no runtime errors");
 } finally {
   await browser?.close();
   await server.close();
