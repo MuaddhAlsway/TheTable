@@ -394,3 +394,6 @@ New delivery dispatches snapshot the actual driver name/phone/ID plus timestamps
 ### Persisted website defaults
 
 Startup calls `initializeWebsiteContent` after database/index initialization. It inserts the current catalog defaults if no website record exists and backfills only missing fields using revision checks. Existing custom values are preserved. `npm run setup:content` can perform this initialization explicitly and refuses any database other than `thetable`. Public GET responses include effective defaults and published edits, while admin writes remain role-protected. No new environment variables are required for these features.
+
+### Assign kitchen and cashier access by email
+In `/admin/team`, enter an email, choose Kitchen or Cashier, and save email access. An account need not exist yet. Assignments are stored in MongoDB and applied by the authenticated backend only after Clerk verifies the exact primary email. Existing verified accounts receive changes immediately; signed-in frontend profiles refresh on focus and periodically. Edit or disable assignments in the same list. Administrator accounts are protected. Advanced controls remain available for registered staff, drivers and optional invitations. This simple assignment does not send an email or create a password. Deploy both server and client for these controls.

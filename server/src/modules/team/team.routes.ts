@@ -1,3 +1,5 @@
+import { emailAccessRoutes } from './emailAccess.routes.js';
+import { supersedeEmailAccess } from './emailAccess.service.js';
 import { Router } from 'express';
 import { z } from 'zod';
 import { trusted } from 'mongoose';
@@ -26,6 +28,7 @@ async function protect(user: Awaited<ReturnType<typeof clerk.users.getUser>>, ac
   if (await Order.exists({ 'deliveryAssignment.driverId': user.id, status: 'out_for_delivery' })) throw new AppError(409, 'ACTIVE_DELIVERIES', 'This driver has active deliveries. Complete those deliveries before changing access.');
 }
 export const teamRoutes = Router();
+teamRoutes.use('/email-access',emailAccessRoutes);
 teamRoutes.get('/', async (_req, res) => {
   const profiles = await UserProfile.find(trusted({ $or: [{ staffManaged: true }, { role: { $in: ['admin','cashier','kitchen','driver'] } }] })).limit(100).lean();
   const users = await Promise.all(profiles.map(profile => clerk.users.getUser(profile.clerkId)));
@@ -37,7 +40,8 @@ teamRoutes.post('/', staffMutationLimit, validateRequest(entry), async (_req, re
   const matches = await clerk.users.getUserList({ emailAddress: [data.email], limit: 10 });
   if (matches.data.length !== 1) throw new AppError(422, 'ACCOUNT_REQUIRED', 'No unique registered account was found. Use Send invitation for a new teammate.');
   const user = matches.data[0]; if (user.emailAddresses.find(email => email.id === user.primaryEmailAddressId)?.emailAddress.toLowerCase() !== data.email) throw new AppError(422, 'VERIFIED_PRIMARY_REQUIRED', 'Use the teammate’s verified primary email.'); await protect(user, current.userId);
-  const updated = await clerk.users.updateUserMetadata(user.id, { publicMetadata: { role: data.role, staffDisplayName: data.displayName, staffPhone: data.phone, staffManaged: true } });
+  await supersedeEmailAccess(user.id);
+  const updated = await clerk.users.updateUserMetadata(user.id, { publicMetadata: { role: data.role, staffDisplayName: data.displayName, staffPhone: data.phone, staffManaged: true, staffEmailGrantId: null } });
   await syncClerkUser(updated); await TeamAudit.create({ actorId: current.userId, targetId: user.id, action: 'assign_staff', previousRole: verifiedRole(user.publicMetadata.role), nextRole: data.role });
   res.json({ data: safe(updated) });
 });
@@ -45,14 +49,16 @@ teamRoutes.patch('/:id', staffMutationLimit, validateRequest(idInput, 'params'),
   const data = input<z.infer<typeof update>>(res), id = input<{ id: string }>(res,'params').id, current = actor(res);
   const user = await clerk.users.getUser(id); await protect(user, current.userId);
   if (user.updatedAt !== data.expectedUpdatedAt) throw new AppError(409, 'STAFF_CHANGED', 'Staff details changed. Refresh before editing.');
-  const updated = await clerk.users.updateUserMetadata(id, { publicMetadata: { role: data.role, staffDisplayName: data.displayName, staffPhone: data.phone, staffManaged: true } });
+  await supersedeEmailAccess(id);
+  const updated = await clerk.users.updateUserMetadata(id, { publicMetadata: { role: data.role, staffDisplayName: data.displayName, staffPhone: data.phone, staffManaged: true, staffEmailGrantId: null } });
   await syncClerkUser(updated); await TeamAudit.create({ actorId: current.userId, targetId: id, action: 'edit_staff', previousRole: verifiedRole(user.publicMetadata.role), nextRole: data.role });
   res.json({ data: safe(updated) });
 });
 teamRoutes.delete('/:id', staffMutationLimit, validateRequest(idInput, 'params'), validateRequest(z.object({ expectedUpdatedAt: z.number().int() }).strict()), async (_req,res) => {
   const id = input<{id:string}>(res,'params').id, current = actor(res), user = await clerk.users.getUser(id); await protect(user,current.userId);
   if (user.updatedAt !== input<{expectedUpdatedAt:number}>(res).expectedUpdatedAt) throw new AppError(409,'STAFF_CHANGED','Staff details changed. Refresh before removing access.');
-  const updated = await clerk.users.updateUserMetadata(id,{publicMetadata:{role:'customer',staffManaged:true}}); await syncClerkUser(updated);
+  await supersedeEmailAccess(id);
+  const updated = await clerk.users.updateUserMetadata(id,{publicMetadata:{role:'customer',staffManaged:true,staffEmailGrantId:null}}); await syncClerkUser(updated);
   await TeamAudit.create({actorId:current.userId,targetId:id,action:'remove_staff',previousRole:verifiedRole(user.publicMetadata.role),nextRole:'customer'});
   res.json({data:safe(updated),message:'Staff access removed. The account and its customer records are preserved.'});
 });

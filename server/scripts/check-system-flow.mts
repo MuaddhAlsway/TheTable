@@ -9,6 +9,8 @@ Object.assign(process.env, { NODE_ENV: 'test', MONGODB_DB_NAME: databaseName, ST
 const { connectDatabase } = await import('../src/config/database.js');
 const { clerk } = await import('../src/config/clerk.js');
 const { UserProfile } = await import('../src/modules/users/user.model.js');
+const { StaffEmailAccess } = await import('../src/modules/team/emailAccess.model.js');
+const { applyStaffEmailAccess } = await import('../src/modules/team/emailAccess.service.js');
 const { TeamAudit } = await import('../src/modules/team/team.model.js');
 const { teamRoutes } = await import('../src/modules/team/team.routes.js');
 const { driverRoutes } = await import('../src/modules/delivery/delivery.routes.js');
@@ -48,7 +50,7 @@ const admin = { userId: 'fixture_admin', role: 'admin' as const }, cashier = { u
 try {
   await connectDatabase(); connected = true;
   assert.equal(mongoose.connection.name, databaseName);
-  for (const model of [Menu, Order, Fulfillment, Operations, Reservation, WebsiteContent, WebhookReceipt, UserProfile, TeamAudit]) { await model.createCollection(); await model.createIndexes(); }
+  for (const model of [Menu, Order, Fulfillment, Operations, Reservation, WebsiteContent, WebhookReceipt, UserProfile, TeamAudit, StaffEmailAccess]) { await model.createCollection(); await model.createIndexes(); }
   const hour = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Riyadh', hour: '2-digit', hourCycle: 'h23' }).format(new Date()));
   const hh = (value: number) => String((value + 24) % 24).padStart(2, '0') + ':00';
   const settings = structuredClone(defaultFulfillment);
@@ -202,6 +204,20 @@ try {
   pass('content admin authorization, publication, conflict protection, unsafe-image rejection and reset');
   const callTeam=async(path:string,method='GET',body?:any)=>fetch(base+'/admin/team'+path,{method,headers:{'Content-Type':'application/json','x-test-role':'admin',Origin:'https://restaurant.test'},...(body?{body:JSON.stringify(body)}:{})});
   assert.equal((await fetch(base+'/admin/team',{headers:{'x-test-role':'customer'}})).status,403);
+  const emailBody={email:'pending@example.invalid',role:'kitchen',enabled:true,revision:0};
+  assert.equal((await callTeam('/email-access','PUT',emailBody)).status,200);
+  assert.equal((await callTeam('/email-access','PUT',emailBody)).status,409);
+  const pending=fixtureUser('user_emailPending','pending@example.invalid','customer');
+  pending.emailAddresses[0].verification.status='unverified';
+  assert.equal((await applyStaffEmailAccess(structuredClone(pending))).publicMetadata.role,'customer');
+  pending.emailAddresses[0].verification.status='verified';
+  assert.equal((await applyStaffEmailAccess(structuredClone(pending))).publicMetadata.role,'kitchen');
+  assert.equal((await callTeam('/email-access','PUT',{...emailBody,role:'cashier',revision:1})).status,200);
+  assert.equal(fakeUsers.get(pending.id).publicMetadata.role,'cashier');
+  assert.equal((await callTeam('/email-access','PUT',{...emailBody,enabled:false,revision:2})).status,200);
+  assert.equal((await applyStaffEmailAccess(structuredClone(fakeUsers.get(pending.id)))).publicMetadata.role,'customer');
+  pass('verified email workspace assignment, role changes and revocation');
+
   let member=await callTeam('/','POST',{email:'staff@example.invalid',displayName:'TEST COOK',role:'kitchen',phone:''}); assert.equal(member.status,200);let staff=(await member.json()).data;assert.equal(staff.role,'kitchen');
   member=await callTeam('/'+staff.id,'PATCH',{displayName:'TEST CASHIER',role:'cashier',phone:'',expectedUpdatedAt:staff.updatedAt});assert.equal(member.status,200);staff=(await member.json()).data;
   assert.equal((await callTeam('/'+staff.id,'PATCH',{displayName:'TEST',role:'kitchen',phone:'',expectedUpdatedAt:0})).status,409);

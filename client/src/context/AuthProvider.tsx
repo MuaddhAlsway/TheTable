@@ -9,6 +9,8 @@ function ClerkBridge({ children }: { children: ReactNode }) {
   const { signOut: clerkSignOut } = useClerk();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileError, setProfileError] = useState('');
+  const [profileVersion, setProfileVersion] = useState(0);
+  useEffect(() => { if (!isSignedIn || !API_CONFIGURED) return; const refresh = () => { if (!document.hidden && navigator.onLine) setProfileVersion(value => value + 1); }; const timer = setInterval(refresh, 60000); window.addEventListener('focus', refresh); window.addEventListener('online', refresh); return () => { clearInterval(timer); window.removeEventListener('focus', refresh); window.removeEventListener('online', refresh); }; }, [isSignedIn]);
   const getToken = useCallback(() => clerkGetToken(), [clerkGetToken]);
   const signOut = useCallback(async () => { try { await clerkSignOut({ redirectUrl: '/' }); } catch { setProfileError('Unable to sign out. Please try again.'); } }, [clerkSignOut]);
   useEffect(() => {
@@ -19,7 +21,7 @@ function ClerkBridge({ children }: { children: ReactNode }) {
       catch (error) { if (active) { setProfile(null); setProfileError(error instanceof Error ? error.message : 'Unable to load profile.'); } }
     }
     void load(); return () => { active = false; };
-  }, [isLoaded, isSignedIn, userId, getToken]);
+  }, [isLoaded, isSignedIn, userId, getToken, profileVersion]);
   return <AuthContext.Provider value={{ configured: true, loaded: isLoaded, signedIn: !!isSignedIn, userId: isSignedIn ? userId || null : null, profile: profile?.id === userId ? profile : null, profileError, getToken, signOut }}>{children}</AuthContext.Provider>;
 }
 export function AuthProvider({ children }: { children: ReactNode }) {

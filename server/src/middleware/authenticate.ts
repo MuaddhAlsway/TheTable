@@ -2,6 +2,7 @@ import type { RequestHandler, Request } from 'express';
 import { getAuth } from '@clerk/express';
 import { AppError } from '../utils/errors.js';
 import { serverPublishableKey, clientOrigins } from '../config/env.js';
+import { applyStaffEmailAccess } from '../modules/team/emailAccess.service.js';
 import { clerk } from '../config/clerk.js';
 import { verifiedRole } from '../utils/roles.js';
 import { syncClerkUser } from '../modules/users/user.service.js';
@@ -11,7 +12,8 @@ export const authenticate: RequestHandler = async (req, res, next) => {
     if (!clientOrigins.length) throw new AppError(503, 'AUTH_SETUP_REQUIRED', 'Configure CLIENT_ORIGINS before enabling authenticated frontend access.');
     const auth = getAuth(req);
     if (!auth.userId || !auth.sessionId) throw new AppError(401, 'UNAUTHENTICATED', 'Sign in to continue.');
-    const user = await clerk.users.getUser(auth.userId);
+    let user = await clerk.users.getUser(auth.userId);
+    user = await applyStaffEmailAccess(user);
     const primary = user.emailAddresses.find(entry => entry.id === user.primaryEmailAddressId);
     if (verifiedRole(user.publicMetadata.role) !== 'customer' && primary?.verification?.status !== 'verified') throw new AppError(403, 'STAFF_EMAIL_UNVERIFIED', 'Verify the primary email before using staff access.');
     res.locals.actor = { userId: user.id, role: verifiedRole(user.publicMetadata.role) };

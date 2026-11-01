@@ -1,5 +1,5 @@
 import { createPreviewServer } from './test-server.mjs';
-export const state={role:'customer',user:'fixture_customer',orders:new Map(),requests:[],content:{},revision:0,orderKeys:new Map(),failFirstOrderReply:true,team:[]};
+export const state={role:'customer',user:'fixture_customer',orders:new Map(),requests:[],content:{},revision:0,orderKeys:new Map(),failFirstOrderReply:true,team:[],emailAccess:[]};
 const dish={id:'a'.repeat(24),slug:'fixture-pasta',name:'TEST Pasta',description:'Isolated dish description',category:'Mains',priceHalalas:4000,imageUrl:'/hero-images/hero01.png',available:true,tags:['Fixture'],allergens:['TEST Milk'],customizationOptions:[],heroSlide:1,heroImageUrl:'/hero-images/hero01.png'};
 let clock=Date.now();export const stamp=()=>new Date(clock+=1000).toISOString();
 export function transition(order,status,action){const before=order.status;order.status=status;order.updatedAt=stamp();order.statusHistory.push({status,previousStatus:before,newStatus:status,changedAt:order.updatedAt,actorRole:state.role,changedBy:'fixture_staff',action});if(status==='confirmed'){order.acceptedAt=order.updatedAt;order.readyEstimateMinAt=new Date(Date.now()+25*60000).toISOString();order.readyEstimateMaxAt=new Date(Date.now()+35*60000).toISOString();}}
@@ -22,6 +22,7 @@ export async function installRoutes(page){
  if(path==='/content')return reply({values:state.content,revision:state.revision});
  if(path==='/users/me')return reply({id:state.user,name:'TEST CUSTOMER',email:'fixture@example.invalid',role:state.role,preferences:{language:'en'}});
  if(path==='/reservations')return reply([{_id:'b'.repeat(24),dateTime:new Date(Date.now()+86400000).toISOString(),partySize:3,status:'requested',notes:'',customer:{name:'TEST CUSTOMER'}}],200,{pagination:{page:1,pages:1,total:1,limit:10}});
+ if(path==='/admin/team/email-access'){if(request.method()==='GET')return reply(state.emailAccess);const body=request.postDataJSON();let entry=state.emailAccess.find(item=>item.email===body.email);if(entry)Object.assign(entry,body,{revision:entry.revision+1});else{entry={...body,_id:'email_fixture',revision:1,appliedRevision:0,boundClerkId:null};state.emailAccess.push(entry);}return reply(entry);}
  if(path==='/admin/team'&&request.method()==='GET')return reply({users:state.team,invitations:[]});
  if(path==='/admin/team'&&request.method()==='POST'){const body=request.postDataJSON();state.team.push({id:'user_fixtureTeammate',name:body.displayName,email:body.email,role:body.role,phone:body.phone,updatedAt:Date.now(),protected:false});return reply(state.team.at(-1));}
  const teammate=path.match(/^\/admin\/team\/(user_[A-Za-z0-9]+)$/);if(teammate){const person=state.team.find(item=>item.id===teammate[1]),body=request.postDataJSON();if(request.method()==='DELETE')person.role='customer';else Object.assign(person,{name:body.displayName,role:body.role,phone:body.phone});person.updatedAt++;return reply(person);}
