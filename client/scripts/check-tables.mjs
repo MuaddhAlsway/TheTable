@@ -2,6 +2,7 @@ import { chromium, expect } from '@playwright/test';
 import assert from 'node:assert/strict';
 import jsQR from 'jsqr';
 import { fixtureServer, installRoutes, state, transition } from './flow-fixture.mjs';
+process.env.VITE_PUBLIC_SITE_URL = 'https://table-qr.example.invalid';
 const server = await fixtureServer();
 let browser;
 try {
@@ -22,13 +23,15 @@ try {
   const pixels = await image.evaluate(async image => { await image.decode(); const canvas = document.createElement('canvas'); canvas.width = image.naturalWidth; canvas.height = image.naturalHeight; const context = canvas.getContext('2d'); context.drawImage(image, 0, 0); return { width: canvas.width, height: canvas.height, data: Array.from(context.getImageData(0, 0, canvas.width, canvas.height).data) }; });
   const decoded = jsQR(new Uint8ClampedArray(pixels.data), pixels.width, pixels.height);
   assert.ok(decoded, 'Generated QR must actually decode');
-  assert.equal(decoded.data, new URL('/table/' + state.tables[0].token, base).href);
+  assert.equal(decoded.data, new URL('/table/' + state.tables[0].token, process.env.VITE_PUBLIC_SITE_URL).href);
   await expect(page.getByRole('link', { name: 'Download QR image', exact: true })).toHaveAttribute('download', 'thetable-TEST-TABLE-7-qr.png');
   await page.getByRole('button', { name: 'Print table QR', exact: true }).click();
   await expect.poll(() => page.evaluate(() => window.__tablePrintRequested)).toBe(true);
   for (const width of [320, 768, 1440]) { await page.setViewportSize({ width, height: 1000 }); assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1), false, 'Admin table layout overflow at ' + width); }
   console.log('PASS admin table creation, valid decodable QR/download and mobile/tablet/desktop layout');
-  await role('customer'); await page.goto(decoded.data);
+  await expect(page.getByRole('link', { name: 'Open table ordering link', exact: true })).toHaveAttribute('href', decoded.data);
+  // Exercise the same decoded table path against the isolated local API fixture.
+  await role('customer'); await go(new URL(decoded.data).pathname);
   await expect(page.getByRole('heading', { name: 'TEST TABLE 7', exact: true })).toBeVisible();
   await page.getByRole('link', { name: 'Browse menu & order here', exact: true }).click();
   await expect(page.getByRole('complementary', { name: 'Current dining table' })).toContainText('TEST TABLE 7');
@@ -65,7 +68,7 @@ try {
   await role('cashier'); await go('/cashier'); await page.getByRole('button', { name: 'Serve to table', exact: true }).click(); await page.getByRole('button', { name: 'Confirm serve to table', exact: true }).click(); assert.equal(order.status, 'completed');
   await role('customer'); await go('/account/orders/' + order._id); await expect(page.getByRole('heading', { name: 'Your dining table', exact: true })).toBeVisible();
   await go('/checkout'); await page.getByRole('button', { name: 'Leave table ordering', exact: true }).click(); await expect(page.getByRole('heading', { name: 'Good food, right here.', exact: true })).toHaveCount(0);
-  state.tables[0].enabled = false; await page.goto(decoded.data); await expect(page.getByText('This table QR code is invalid or disabled.', { exact: false })).toBeVisible();
+  state.tables[0].enabled = false; await go(new URL(decoded.data).pathname); await expect(page.getByText('This table QR code is invalid or disabled.', { exact: false })).toBeVisible();
   assert.deepEqual(errors, []);
   console.log('PASS QR -> menu -> persistent cart/table -> validated checkout -> Stripe redirect fixture -> cashier -> kitchen -> served, table exit and disabled code');
 } finally { await browser?.close(); await server.close(); }
