@@ -61,3 +61,7 @@ Source specifications verified against Infobip's current SMS docs and official G
 `npm run --prefix server test:infobip` tests the HTTP adapter without network sends: authentication, payload, custom ID, validity, log status mapping and error handling.
 
 `npm run --prefix server test:sms` tests the isolated MongoDB queue, consent, limits and ambiguous-send/provider-switch behavior. `npm run --prefix client test:sms` tests the admin and consent UI with fixtures. No real SMS is sent by these checks.
+
+## Connection check returns 403
+
+The read-only check calls GET /sms/3/logs. The API key needs `sms:logs:read`; sending separately needs `sms:message:send`. In Infobip Developer Tools > API Keys, grant these scopes, or ask your account administrator. Check key IP restrictions and account access if scopes are already present. If replacing the key, update the private API_KEY on each connected backend and restart/redeploy. Do not remove the log check or treat 403 as success: delivery tracking and ambiguous-send reconciliation require log access. The check sends no SMS.
