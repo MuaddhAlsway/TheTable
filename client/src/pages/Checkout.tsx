@@ -1,4 +1,5 @@
 import { checkoutRequestKey, bindCheckoutOrder, finishCheckoutRequest } from "../lib/checkoutRequest";
+import ActionDialog from "../components/common/ActionDialog";
 import SiteText from "../components/content/SiteText";
 import LoadingImage from "../components/common/LoadingImage";
 import { openStripeCheckout } from "../lib/payments";
@@ -19,7 +20,7 @@ import RoutePage from "./RoutePage";
 import "../styles/Checkout.css";
 
 const formatPrice = (value: number) => `${previewConfig.currency} ${value.toFixed(2)}`;
-const initialValues = { name: "", email: "", phone: "", recipientName: "", recipientPhone: "", city: "", neighborhood: "", postalCode: "", street: "", buildingUnit: "", instructions: "" };
+const initialValues = { name: "", email: "", phone: "", recipientName: "", recipientPhone: "", city: "", neighborhood: "", postalCode: "", street: "", buildingUnit: "", instructions: "", preparationNotes: "" };
 type FieldName = keyof typeof initialValues;
 type Errors = Partial<Record<FieldName | "fulfillment" | "timing", string>>;
 type CheckoutDraft = { values: typeof initialValues; fulfillment: FulfillmentMethod | null; pickupTiming: string };
@@ -63,6 +64,8 @@ function Checkout() {
   const config = remoteSettings.settings?.fulfillment ?? previewConfig;
   const [draft] = useState(readDraft);
   const [submitting, setSubmitting] = useState(false);
+  const [paymentReview, setPaymentReview] = useState(false);
+  const paymentReviewConfirmed = useRef(false);
   const [orderError, setOrderError] = useState("");
   const [createdOrder, setCreatedOrder] = useState<OrderRecord | null>(null);
   const request = useRef({ fingerprint: "", key: "" });
@@ -130,6 +133,8 @@ function Checkout() {
   }
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const reviewed = paymentReviewConfirmed.current;
+    paymentReviewConfirmed.current = false;
     setPaymentNotice(false);
     setOrderError("");
     if (submitting || createdOrder) return;
@@ -167,8 +172,10 @@ function Checkout() {
     const payload = {
       customer: { name: values.name.trim(), email: values.email.trim(), phone: normalizedPhone! }, fulfillment,
       ...(fulfillment === "delivery" ? { deliveryAddress: { recipientName: values.recipientName.trim(), recipientPhone: normalizedRecipientPhone!, city: values.city.trim(), neighborhood: values.neighborhood.trim(), postalCode: values.postalCode.trim(), street: values.street.trim(), buildingUnit: values.buildingUnit.trim(), instructions: values.instructions.trim() } } : { pickupTiming: "asap" }),
+      preparationNotes: values.preparationNotes.trim(),
       items: cartItems.map(line => ({ menuItemId: line.item.id, quantity: line.quantity, selectedOptions: [] })),
     };
+    if (!reviewed) { setPaymentReview(true); return; }
     const fingerprint = JSON.stringify(payload);
     setSubmitting(true);
     let savedOrderId: string | null = null;
@@ -220,7 +227,7 @@ function Checkout() {
               <fieldset className="checkout-page__section" disabled={submitting || !!createdOrder}>
                 <legend><span>02</span> <SiteText contentKey="Checkout-text-1lnn6sg" fallback={"A little about you."} /></legend>
                 <p className="checkout-page__hint"><SiteText contentKey="Checkout-text-1pk7u5o" fallback={"All fields are required unless marked optional."} /></p>
-                <div className="checkout-page__fields">{field("name", "Full name", { autoComplete: "section-customer name", wide: true })}{field("email", "Email address", { type: "email", autoComplete: "section-customer email" })}{field("phone", "Phone number", { type: "tel", autoComplete: "section-customer tel", hint: "Saudi mobile numbers only." })}</div>
+                <div className="checkout-page__fields">{field("name", "Full name", { autoComplete: "section-customer name", wide: true })}{field("email", "Email address", { type: "email", autoComplete: "section-customer email" })}{field("phone", "Phone number", { type: "tel", autoComplete: "section-customer tel", hint: "Saudi mobile numbers only." })}<div className="checkout-page__field checkout-page__field--wide"><label htmlFor="checkout-preparation-notes">Kitchen notes (optional)</label><textarea id="checkout-preparation-notes" maxLength={1000} value={values.preparationNotes} onChange={event => updateField("preparationNotes", event.target.value)} placeholder="Any preparation requests for the kitchen?" aria-describedby="checkout-preparation-notes-hint" /><small id="checkout-preparation-notes-hint">Requests are reviewed by the restaurant. Contact the team directly about food allergies.</small></div></div>
               </fieldset>
               {fulfillment === "pickup" && <fieldset className="checkout-page__section" disabled={submitting || !!createdOrder}>
                 <legend><span>03</span> <SiteText contentKey="Checkout-text-j2nopr" fallback={"Collect from the restaurant."} /></legend>
@@ -260,6 +267,7 @@ function Checkout() {
               {Object.values(errors).some(Boolean) && <p className="checkout-page__error" role="alert"><SiteText contentKey="Checkout-text-1h1zwpb" fallback={"Please correct the highlighted fields before continuing."} /></p>}
             </aside>
           </form>
+          {paymentReview && <ActionDialog title="Ready to continue?" description="Review your bag before saving the order and opening Stripe. Final prices and availability are checked by the server. Opening this review does not place an order or take payment." onClose={() => setPaymentReview(false)}><dl className="action-dialog__summary"><div><dt>Fulfillment</dt><dd>{fulfillment === "delivery" ? "Delivery" : "Pickup"}</dd></div><div><dt>Items</dt><dd>{totalQuantity}</dd></div><div><dt>Customer</dt><dd>{values.name}</dd></div><div><dt>Estimated total</dt><dd><strong>{totals.total !== null ? formatPrice(totals.total + estimatedTax) : "Unavailable"}</strong></dd></div></dl><div className="action-dialog__actions"><button type="button" onClick={() => setPaymentReview(false)}>Keep reviewing</button><button className="action-dialog__primary" type="button" onClick={() => { paymentReviewConfirmed.current = true; setPaymentReview(false); requestAnimationFrame(() => formRef.current?.requestSubmit()); }}>Save order & continue to Stripe</button></div></ActionDialog>}
         </>}
       </div>
     </RoutePage>

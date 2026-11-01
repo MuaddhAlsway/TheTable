@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../styles/RoutePage.css";
 
-type RoutePageProps = { title: string; description: string; children?: ReactNode };
-export default function RoutePage({ title, description, children }: RoutePageProps) {
-  return <main className="route-page"><header className="route-page__header"><p>THE TABLE / JEDDAH</p><h1 tabIndex={-1}><SiteText namespace="heading" fallback={title} /></h1><div className="route-page__description"><SiteText namespace="heading" fallback={description} /></div></header>{children}</main>;
+type RoutePageProps = { title: string; description: string; children?: ReactNode; workspace?: boolean };
+export default function RoutePage({ title, description, children, workspace = false }: RoutePageProps) {
+  return <main className={`route-page${workspace ? " route-page--workspace" : ""}`}><header className="route-page__header"><p>THE TABLE / JEDDAH</p><h1 tabIndex={-1}><SiteText namespace="heading" fallback={title} /></h1><div className="route-page__description"><SiteText namespace="heading" fallback={description} /></div></header>{children}</main>;
 }
 
 export function StarterPage({ title, description }: Omit<RoutePageProps, "children">) {
