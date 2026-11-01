@@ -12,9 +12,9 @@ export async function cashierQueue(query: OrderQuery, actor: Actor) {
 }
 export async function kitchenQueue(query: OrderQuery, actor: Actor) {
   const settings = await getOperations();
-  const statuses: OrderStatus[] = ['confirmed', 'preparing', 'ready_for_pickup', 'ready_for_delivery'];
+  const statuses: OrderStatus[] = ['confirmed', 'preparing', 'ready_for_pickup', 'ready_for_table', 'ready_for_delivery'];
   const filter = { ...orderFilter(query), paymentStatus: 'paid' as const, status: query.status || trusted({ $in: statuses }) };
-  const projection = 'orderNumber fulfillment status acceptedAt readyEstimateMinAt readyEstimateMaxAt updatedAt paymentStatus preparationNotes items.name items.quantity items.selectedOptions.name items.selectedOptions.options.name';
+  const projection = 'orderNumber fulfillment table status acceptedAt readyEstimateMinAt readyEstimateMaxAt updatedAt paymentStatus preparationNotes items.name items.quantity items.selectedOptions.name items.selectedOptions.options.name';
   const [records, total] = await Promise.all([Order.find(filter).select(projection).sort({ acceptedAt: 1, createdAt: 1, _id: 1 }).skip((query.page - 1) * query.limit).limit(query.limit), Order.countDocuments(filter)]);
   return { data: records.map(order => kitchenOrderDTO(order, actor.role, settings)), pagination: { page: query.page, limit: query.limit, total, pages: Math.ceil(total / query.limit) }, operations: kitchenSettings(settings), serverTime: new Date().toISOString() };
 }

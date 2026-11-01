@@ -1,6 +1,6 @@
 import type { RestaurantSettings } from '../modules/fulfillment/fulfillment.service.js';
 /** Compare restaurant-local wall minutes; Riyadh has no DST transitions. */
-export function openingAvailability(config: RestaurantSettings, method: 'pickup' | 'delivery', now = new Date()) {
+export function openingAvailability(config: RestaurantSettings, method: 'pickup' | 'delivery' | 'dine_in', now = new Date()) {
   const schedule = config.schedule;
   if (!schedule.daysConfirmed) return { available: false, reason: 'Restaurant operating days must be confirmed by an administrator.', code: 'SCHEDULE_SETUP_REQUIRED' };
   const parts = new Intl.DateTimeFormat('en-US', { timeZone: schedule.timeZone, weekday: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).formatToParts(now);
@@ -16,7 +16,7 @@ export function openingAvailability(config: RestaurantSettings, method: 'pickup'
     else if (schedule.weekdays.includes((day + 6) % 7) && minute < end) remaining = end - minute;
   }
   if (!remaining) return { available: false, reason: `Ordering is closed. Restaurant hours are ${config.pickup.openingHours}.`, code: 'OUTSIDE_OPENING_HOURS' };
-  const required = config[method].estimatedMinutes.max + schedule.acceptanceBufferMinutes;
+  const required = config[method === 'dine_in' ? 'pickup' : method].estimatedMinutes.max + schedule.acceptanceBufferMinutes;
   if (remaining < required) return { available: false, reason: `Ordering has closed for ${method} so the approximate ${required}-minute fulfillment window can finish before closing.`, code: 'TOO_CLOSE_TO_CLOSING' };
   return { available: true, reason: '', code: 'OPEN' };
 }

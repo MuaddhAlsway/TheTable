@@ -1,4 +1,5 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
+import { trusted } from 'mongoose';
 import { Reservation, reservationStatuses } from './reservation.model.js';
 import type { ReservationInput, ReservationQuery } from './reservation.validation.js';
 import { getRestaurant, type RestaurantSettings } from '../fulfillment/fulfillment.service.js';
@@ -30,15 +31,19 @@ export async function createReservation(userId: string, data: ReservationInput, 
   if (env.RESERVATION_CREATION_ENABLED !== 'true') throw new AppError(503, 'RESERVATIONS_DISABLED', 'Online reservation requests are not enabled.');
   const restaurant = await getRestaurant();
   const dateTime = new Date(data.dateTime); validateReservationTime(dateTime, data.partySize, restaurant);
-  try { const reservation = await Reservation.create({ userId, requestKey: key, requestHash: hash, ...data, dateTime, status: 'requested', statusHistory: [{ status: 'requested', changedAt: new Date(), changedBy: userId }] }); reservation.set('requestHash', undefined); return { reservation, replay: false }; }
+  try { const reservation = await Reservation.create({ reservationNumber: 'RSV-' + randomUUID().replaceAll('-', '').slice(0, 16).toUpperCase(), userId, requestKey: key, requestHash: hash, ...data, ...(data.smsConsent ? { smsConsentedAt: new Date() } : {}), dateTime, status: 'requested', statusHistory: [{ status: 'requested', changedAt: new Date(), changedBy: userId }] }); reservation.set('requestHash', undefined); return { reservation, replay: false }; }
   catch (error) { if ((error as { code?: number }).code === 11000) { const duplicate = await Reservation.findOne({ userId, requestKey: key }).select('+requestHash'); if (duplicate && duplicate.requestHash === hash) { duplicate.set('requestHash', undefined); return { reservation: duplicate, replay: true }; } } throw error; }
 }
-export async function listReservations(query: ReservationQuery, owner?: string) { const filter = { ...(owner ? { userId: owner } : {}), ...(query.status ? { status: query.status } : {}) }; const [data, total] = await Promise.all([Reservation.find(filter).sort({ dateTime: -1 }).skip((query.page - 1) * query.limit).limit(query.limit).select('-requestKey'), Reservation.countDocuments(filter)]); return { data, pagination: { page: query.page, limit: query.limit, total, pages: Math.ceil(total / query.limit) } }; }
+export async function listReservations(query: ReservationQuery, owner?: string) { const filter = { ...(owner ? { userId: owner } : {}), ...(query.status ? { status: query.status } : {}), ...(query.date ? { dateTime: trusted({ $gte: new Date(query.date + 'T00:00:00+03:00'), $lt: new Date(new Date(query.date + 'T00:00:00+03:00').getTime() + 86400000) }) } : {}) }; const [data, total] = await Promise.all([Reservation.find(filter).sort({ dateTime: owner ? -1 : 1, _id: 1 }).skip((query.page - 1) * query.limit).limit(query.limit).select('-requestKey'), Reservation.countDocuments(filter)]); return { data, pagination: { page: query.page, limit: query.limit, total, pages: Math.ceil(total / query.limit) } }; }
 export async function reservationDetail(id: string, owner?: string) { const reservation = await Reservation.findOne({ _id: id, ...(owner ? { userId: owner } : {}) }).select('-requestKey'); if (!reservation) throw new AppError(404, 'NOT_FOUND', 'Reservation not found.'); return reservation; }
-export async function updateReservationStatus(id: string, status: ReservationStatus, actor: string) {
-  const reservation = await reservationDetail(id);
+export async function updateReservationStatus(id: string, status: ReservationStatus, actor: string, options: { expectedStatus?: ReservationStatus; expectedUpdatedAt?: string; reason?: string; owner?: string } = {}) {
+  const reservation = await reservationDetail(id, options.owner);
+  if (options.owner && status !== 'cancelled') throw new AppError(403, 'FORBIDDEN', 'Customers can only cancel their own reservation.');
+  if ((options.expectedStatus && options.expectedStatus !== reservation.status) || (options.expectedUpdatedAt && new Date(options.expectedUpdatedAt).getTime() !== reservation.updatedAt.getTime())) throw new AppError(409, 'STALE_RESERVATION', 'This reservation changed. Refresh before continuing.');
+  if (status === 'confirmed') validateReservationTime(reservation.dateTime, reservation.partySize, await getRestaurant());
+  if (options.owner && reservation.dateTime <= new Date()) throw new AppError(409, 'INVALID_STATUS_TRANSITION', 'Contact the restaurant about a reservation whose start time has passed.');
   const allowed: Record<ReservationStatus, ReservationStatus[]> = { requested: ['confirmed', 'cancelled'], confirmed: ['cancelled', 'completed'], cancelled: [], completed: [] };
   if (!allowed[reservation.status as ReservationStatus].includes(status)) throw new AppError(409, 'INVALID_STATUS_TRANSITION', 'That reservation status change is not permitted.');
   if (status === 'completed' && reservation.dateTime > new Date()) throw new AppError(409, 'INVALID_STATUS_TRANSITION', 'A future reservation cannot be completed.');
-  const updated = await Reservation.findOneAndUpdate({ _id: id, status: reservation.status }, { $set: { status }, $push: { statusHistory: { status, changedAt: new Date(), changedBy: actor } } }, { new: true, runValidators: true }); if (!updated) throw new AppError(409, 'CONFLICT', 'Reservation changed. Refresh before updating.'); return updated;
+  const updated = await Reservation.findOneAndUpdate({ _id: id, status: reservation.status, updatedAt: reservation.updatedAt, ...(options.owner ? { userId: options.owner } : {}) }, { $set: { status }, $push: { statusHistory: { status, changedAt: new Date(), changedBy: actor, reason: options.reason?.trim() || '' } } }, { returnDocument: 'after', runValidators: true }); if (!updated) throw new AppError(409, 'CONFLICT', 'Reservation changed. Refresh before updating.'); return updated;
 }

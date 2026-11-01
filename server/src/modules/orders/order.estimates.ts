@@ -15,7 +15,8 @@ export async function updateReadyEstimate(id: string, input: z.infer<typeof read
   if (!['confirmed', 'preparing'].includes(order.status) || order.paymentStatus !== 'paid') throw new AppError(409, 'ACTION_NOT_ALLOWED', 'Only accepted paid orders awaiting preparation can have their ready estimate adjusted.');
   const restaurant = await getRestaurant();
   const transport = order.fulfillment === 'delivery' ? Math.max(0, restaurant.delivery.estimatedMinutes.max - restaurant.pickup.estimatedMinutes.max) : 0;
-  const config = { ...restaurant, [order.fulfillment]: { ...restaurant[order.fulfillment], estimatedMinutes: { min: input.minMinutes, max: input.maxMinutes + transport } } };
+  const method = order.fulfillment === 'dine_in' ? 'pickup' : order.fulfillment;
+  const config = { ...restaurant, [method]: { ...restaurant[method], estimatedMinutes: { min: input.minMinutes, max: input.maxMinutes + transport } } };
   const hours = openingAvailability(config, order.fulfillment);
   if (!hours.available) throw new AppError(422, hours.code, hours.reason);
   const now = new Date();

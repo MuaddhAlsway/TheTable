@@ -1,3 +1,9 @@
+import SmsSettings from '../pages/admin/SmsSettings';
+import ReservationDesk from '../pages/staff/ReservationDesk';
+import CustomerReservation from '../pages/CustomerReservation';
+import Tables from '../pages/admin/Tables';
+import TableLanding from '../pages/TableLanding';
+import CheckoutEntry from '../pages/CheckoutEntry';
 import TeamPage from "../pages/admin/Team";
 import DriverDashboard from "../pages/driver/DriverDashboard";
 import WebsiteContent from "../pages/admin/WebsiteContent";
@@ -9,9 +15,8 @@ import RequireAuth from "../components/auth/RequireAuth";
 import Login from "../pages/Login";
 import Reservations from "../pages/Reservations";
 import CustomerDashboard, { CustomerOrderDetail } from "../pages/CustomerDashboard";
-import AdminDashboard, { AdminOrders, AdminOrderDetail, AdminReservations } from "../pages/admin/AdminDashboard";
+import AdminDashboard, { AdminOrders, AdminOrderDetail } from "../pages/admin/AdminDashboard";
 import AdminMenu from "../pages/admin/AdminMenu";
-import Checkout from "../pages/Checkout";
 import Cart from "../pages/Cart";
 import type { RouteObject } from "react-router-dom";
 import App from "./App";
@@ -38,7 +43,9 @@ export const routes: RouteObject[] = [{
     { path: "admin", element: <RequireAuth admin><AdminDashboard /></RequireAuth> },
     { path: "admin/orders", element: <RequireAuth admin><AdminOrders /></RequireAuth> },
     { path: "admin/orders/:id", element: <RequireAuth admin><AdminOrderDetail /></RequireAuth> },
-    { path: "admin/reservations", element: <RequireAuth admin><AdminReservations /></RequireAuth> },
+    { path: "admin/reservations", element: <RequireAuth admin><ReservationDesk /></RequireAuth> },
+    { path: "cashier/reservations", element: <RequireAuth roles={["admin", "cashier"]}><ReservationDesk /></RequireAuth> },
+    { path: "account/reservations/:id", element: <RequireAuth><CustomerReservation /></RequireAuth> },
     { path: "admin/team", element: <RequireAuth admin><TeamPage /></RequireAuth> },
     { path: "driver", element: <RequireAuth roles={["driver"]}><DriverDashboard /></RequireAuth> },
     { path: "cashier", element: <RequireAuth roles={["admin", "cashier"]}><CashierDashboard /></RequireAuth> },
@@ -49,7 +56,10 @@ export const routes: RouteObject[] = [{
     { path: "admin/content", element: <RequireAuth admin><WebsiteContent /></RequireAuth> },
     { path: "admin/menu", element: <RequireAuth admin><AdminMenu /></RequireAuth> },
     { path: "cart", element: <Cart /> },
-    { path: "checkout", element: <Checkout /> },
+    { path: "table/:token", element: <TableLanding /> },
+    { path: "admin/sms", element: <RequireAuth admin><SmsSettings /></RequireAuth> },
+    { path: "admin/tables", element: <RequireAuth admin><Tables /></RequireAuth> },
+    { path: "checkout", element: <CheckoutEntry /> },
     { path: "privacy", element: <StarterPage title="Your privacy." description="Our privacy information will be published here." /> },
     { path: "*", element: <NotFound /> },
   ],

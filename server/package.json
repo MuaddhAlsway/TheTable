@@ -20,7 +20,10 @@
     "setup:content": "tsx src/scripts/setupContent.ts",
     "setup:push": "node dist/scripts/setupPush.js",
     "start:push-worker": "node dist/scripts/pushWorker.js",
-    "test:push": "tsx scripts/check-push-flow.mts"
+    "test:push": "tsx scripts/check-push-flow.mts",
+    "test:sms": "tsx scripts/check-sms-flow.mts",
+    "start:sms-worker": "node dist/scripts/smsWorker.js",
+    "test:infobip": "tsx scripts/check-infobip.mts"
   },
   "dependencies": {
     "@clerk/express": "^2.1.86",

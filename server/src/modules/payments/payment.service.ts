@@ -1,3 +1,4 @@
+import { DiningTable } from '../tables/table.model.js';
 import type Stripe from 'stripe';
 import { Order } from '../orders/order.model.js';
 import { orderDetail } from '../orders/order.service.js';
@@ -15,6 +16,7 @@ export async function createPaymentSession(id: string, userId: string, origin: s
   if (order.paymentStatus !== 'unpaid' || order.status !== 'pending_payment') throw new AppError(409, 'ORDER_NOT_PAYABLE', 'This order is no longer awaiting payment. Refresh its status.');
   const restaurant = await getRestaurant();
   assertCanCreateOrder(restaurant, order.fulfillment);
+  if (order.fulfillment === 'dine_in' && !await DiningTable.exists({ _id: order.table?.id, enabled: true })) throw new AppError(409, 'TABLE_UNAVAILABLE', 'This table is no longer enabled. Ask restaurant staff before paying.');
   const stripe = stripeClient();
   if (order.paymentProviderReference) {
     const existing = await stripe.checkout.sessions.retrieve(order.paymentProviderReference);

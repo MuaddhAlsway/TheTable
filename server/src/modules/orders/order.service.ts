@@ -1,3 +1,4 @@
+import { resolveTable } from '../tables/table.service.js';
 import { randomUUID, createHash } from 'node:crypto';
 import { trusted } from 'mongoose';
 import { Order, orderStatuses } from './order.model.js';
@@ -17,6 +18,7 @@ export async function createOrder(userId: string, data: OrderInput, key: string,
   if (env.ORDER_CREATION_ENABLED !== 'true') throw new AppError(503, 'ORDERING_DISABLED', 'Online order creation is not enabled. No order has been placed.');
   const restaurant = await getRestaurant();
   assertCanCreateOrder(restaurant, data.fulfillment);
+  const table = data.fulfillment === 'dine_in' ? await resolveTable(data.tableToken!) : null;
   const menu = await Menu.find({ _id: trusted({ $in: data.items.map(line => line.menuItemId) }), available: true, archived: false });
   const items = data.items.map(line => {
     const item = menu.find(entry => entry.id === line.menuItemId);
@@ -40,7 +42,7 @@ export async function createOrder(userId: string, data: OrderInput, key: string,
   if (totalHalalas < 1) throw new AppError(422, 'INVALID_PAYMENT_AMOUNT', 'The order total must be positive to continue to Stripe. No order was saved.');
   if (!Number.isSafeInteger(totalHalalas)) throw new AppError(422, 'INVALID_TOTAL', 'Order total is out of range.');
   try {
-    const order = await Order.create({ orderNumber: 'TBL-' + randomUUID().replaceAll('-', '').slice(0, 16).toUpperCase(), userId, requestKey: key, requestHash: hash, customer: data.customer, fulfillment: data.fulfillment, ...(data.fulfillment === 'delivery' ? { deliveryAddress: data.deliveryAddress } : { pickupTiming: data.pickupTiming, pickupDetails: { restaurantAddress: restaurant.pickup.restaurantAddress, openingHours: restaurant.pickup.openingHours, collectionInstructions: restaurant.pickup.collectionInstructions, preparationTimeMinutes: restaurant.pickup.preparationTimeMinutes, estimatedMinutes: restaurant.pickup.estimatedMinutes, mapsUrl: restaurant.location.mapsUrl } }), preparationNotes: data.preparationNotes, items, subtotalHalalas, deliveryFeeHalalas: fee, taxBasisPoints: rate, taxDeliveryFee: restaurant.taxDeliveryFee, taxHalalas, totalHalalas, status: 'pending_payment', paymentStatus: 'unpaid', statusHistory: [{ status: 'pending_payment', previousStatus: null, newStatus: 'pending_payment', changedAt: new Date(), changedBy: userId, actorRole, action: 'create', reason: '' }] });
+    const order = await Order.create({ orderNumber: 'TBL-' + randomUUID().replaceAll('-', '').slice(0, 16).toUpperCase(), userId, requestKey: key, requestHash: hash, customer: data.customer, smsConsent: data.smsConsent, ...(data.smsConsent ? { smsConsentedAt: new Date() } : {}), fulfillment: data.fulfillment, ...(table ? { table: { id: table._id, label: table.label } } : data.fulfillment === 'delivery' ? { deliveryAddress: data.deliveryAddress } : { pickupTiming: data.pickupTiming, pickupDetails: { restaurantAddress: restaurant.pickup.restaurantAddress, openingHours: restaurant.pickup.openingHours, collectionInstructions: restaurant.pickup.collectionInstructions, preparationTimeMinutes: restaurant.pickup.preparationTimeMinutes, estimatedMinutes: restaurant.pickup.estimatedMinutes, mapsUrl: restaurant.location.mapsUrl } }), preparationNotes: data.preparationNotes, items, subtotalHalalas, deliveryFeeHalalas: fee, taxBasisPoints: rate, taxDeliveryFee: restaurant.taxDeliveryFee, taxHalalas, totalHalalas, status: 'pending_payment', paymentStatus: 'unpaid', statusHistory: [{ status: 'pending_payment', previousStatus: null, newStatus: 'pending_payment', changedAt: new Date(), changedBy: userId, actorRole, action: 'create', reason: '' }] });
     order.set('requestHash', undefined); return { order, replay: false };
   } catch (error) { if ((error as { code?: number }).code === 11000) { const duplicate = await Order.findOne({ userId, requestKey: key }).select('+requestHash'); if (duplicate && duplicate.requestHash === hash) { duplicate.set('requestHash', undefined); return { order: duplicate, replay: true }; } } throw error; }
 }

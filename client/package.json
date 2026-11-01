@@ -15,11 +15,15 @@
     "test:checkout": "node scripts/check-checkout.mjs",
     "typecheck": "tsc -b --pretty false",
     "test:flow": "node scripts/check-system-flow.mjs",
-    "test:push": "node scripts/check-push-worker.mjs && node scripts/check-push-ui.mjs"
+    "test:push": "node scripts/check-push-worker.mjs && node scripts/check-push-ui.mjs",
+    "test:tables": "node scripts/check-tables.mjs",
+    "test:reservations": "node scripts/check-reservations.mjs",
+    "test:sms": "node scripts/check-sms.mjs"
   },
   "dependencies": {
     "@clerk/react": "^6.18.4",
     "lucide-react": "^1.65.0",
+    "qrcode": "^1.5.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router-dom": "^7.18.5"
@@ -28,6 +32,7 @@
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.1",
     "@types/node": "^24.19.2",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
@@ -35,6 +40,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.13.0",
+    "jsqr": "^1.4.0",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.0",
     "vite": "^8.3.5"

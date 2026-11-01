@@ -406,3 +406,11 @@ Driver email assignments require a Saudi mobile number, normalized by the API. A
 
 ### Background driver notifications
 See ../WEB_PUSH_SETUP.md for the full flow, private VAPID setup, Render always-running API/background-worker options, driver phone installation and live checks. New settings: VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, WEB_PUSH_SUBJECT, optional DRIVER_ACK_TIMEOUT_SECONDS (default 120). The private key stays on the server. Newly generated server/.env.push.local is ignored; server/.env was preserved. Use npm run start:push-worker for a separate persistent Render worker, or an always-running API instance. The push service accepting a message never acknowledges an order.
+
+## Android/SIM SMS notifications
+
+See [SMS_SETUP.md](../SMS_SETUP.md) for phone setup, Render environment variable names and the admin activation/test flow. Sending defaults to disabled, requires customer consent and uses your own Android SIM through SMSGate. No paid-provider fallback is configured. The API includes the durable SMS worker; an always-running standalone worker can use `npm run start:sms-worker` after build. Test with `npm run test:sms`; its gateway is mocked and its MongoDB database is isolated.
+
+## Infobip SMS provider
+
+See [INFOBIP_SETUP.md](../INFOBIP_SETUP.md). Set SMS_PROVIDER=infobip with INFOBIP_BASE_URL, INFOBIP_API_KEY and INFOBIP_SENDER. SMS_ENABLED and the admin sending switch remain required. No Android gateway is needed for this provider. `npm run test:infobip` uses mocked HTTP and sends no real SMS.

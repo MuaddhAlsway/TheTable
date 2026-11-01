@@ -5,6 +5,18 @@ import { z } from 'zod';
 config({ path: fileURLToPath(new URL('../../.env', import.meta.url)), quiet: true });
 config({ path: fileURLToPath(new URL('../../.env.push.local', import.meta.url)), quiet: true });
 const schema = z.object({
+  SMS_PROVIDER: z.enum(['android', 'infobip']).default('android'),
+  API_KEY: z.string().optional(),
+  INFOBIP_API_KEY: z.string().optional(),
+  INFOBIP_SENDER: z.string().trim().max(50).optional(),
+  INFOBIP_BASE_URL: z.string().refine(value => { try { const url = new URL(value); return url.protocol === 'https:' && (url.hostname === 'api.infobip.com' || /^[a-z0-9-]+\.api\.infobip\.com$/i.test(url.hostname)) && !url.port && !url.username && !url.password && url.pathname === '/' && !url.search && !url.hash; } catch { return false; } }, 'Use the HTTPS Infobip account origin only.').optional(),
+  SMS_ENABLED: z.enum(['true','false']).default('false'),
+  SMS_GATEWAY_TOKEN: z.string().optional(),
+  SMS_GATEWAY_USERNAME: z.string().optional(),
+  SMS_GATEWAY_PASSWORD: z.string().optional(),
+  SMS_GATEWAY_DEVICE_ID: z.string().max(21).optional(),
+  SMS_GATEWAY_SIM_NUMBER: z.coerce.number().int().min(1).max(3).default(1),
+  SMS_DAILY_LIMIT: z.coerce.number().int().min(1).max(500).default(100),
   VAPID_PUBLIC_KEY: z.string().regex(/^[A-Za-z0-9_-]{87}$/).optional(),
   VAPID_PRIVATE_KEY: z.string().regex(/^[A-Za-z0-9_-]{43}$/).optional(),
   WEB_PUSH_SUBJECT: z.string().refine(value => /^mailto:[^\s@]+@[^\s@]+$/.test(value) || (()=>{try{return new URL(value).protocol==='https:';}catch{return false;}})()).optional(),

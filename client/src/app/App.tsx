@@ -1,3 +1,5 @@
+import TableProvider from '../context/TableProvider';
+import TableBanner from '../components/TableBanner';
 import DishDetailsProvider from "../context/DishDetailsProvider";
 import { CartProvider } from "../context/CartContext";
 import { useEffect } from "react";
@@ -23,6 +25,6 @@ function App() {
     return () => cancelAnimationFrame(frame);
   }, [pathname, hash]);
 
-  return <CartProvider><DishDetailsProvider key={pathname}><Navbar key={pathname} /><Outlet /><Footer /></DishDetailsProvider></CartProvider>;
+  return <CartProvider><TableProvider><DishDetailsProvider key={pathname}><Navbar key={pathname} /><TableBanner /><Outlet /><Footer /></DishDetailsProvider></TableProvider></CartProvider>;
 }
 export default App;

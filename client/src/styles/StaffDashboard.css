@@ -81,7 +81,7 @@
 .staff-dashboard .staff-order-list { gap: 18px; }
 .staff-dashboard .staff-order { background: #fffcf6; border-color: #ded8cc; border-radius: 10px; padding: 25px; box-shadow: 0 3px 10px #292e2404; }
 .staff-dashboard .staff-order[data-status="completed"] { border-top: 3px solid #6a8058; }
-.staff-dashboard .staff-order[data-status="ready_for_pickup"], .staff-dashboard .staff-order[data-status="ready_for_delivery"] { border-top: 3px solid #82935f; }
+.staff-dashboard .staff-order[data-status="ready_for_table"], .staff-dashboard .staff-order[data-status="ready_for_pickup"], .staff-dashboard .staff-order[data-status="ready_for_delivery"] { border-top: 3px solid #82935f; }
 .staff-dashboard .staff-order[data-status="preparing"] { border-top: 3px solid #b6813d; }
 .staff-dashboard .staff-order h2 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; }
 .staff-dashboard .staff-order h3 { font-family: var(--font-body); font-size: .8rem; font-weight: 500; }

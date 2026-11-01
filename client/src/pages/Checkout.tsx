@@ -1,3 +1,4 @@
+import SmsConsent from '../components/notifications/SmsConsent';
 import '../styles/Delivery.css';
 import { checkoutRequestKey, bindCheckoutOrder, finishCheckoutRequest } from "../lib/checkoutRequest";
 import ActionDialog from "../components/common/ActionDialog";
@@ -20,11 +21,11 @@ import CheckoutField from "../components/checkout/CheckoutField";
 import RoutePage from "./RoutePage";
 import "../styles/Checkout.css";
 
-const formatPrice = (value: number) => `${previewConfig.currency} ${value.toFixed(2)}`;
+const formatPrice = (value: number | null) => value === null || !Number.isFinite(value) ? "Not configured" : `${previewConfig.currency} ${value.toFixed(2)}`;
 const initialValues = { name: "", email: "", phone: "", recipientName: "", recipientPhone: "", city: "", neighborhood: "", postalCode: "", street: "", buildingUnit: "", latitude: "", longitude: "", instructions: "", preparationNotes: "" };
 type FieldName = keyof typeof initialValues;
 type Errors = Partial<Record<FieldName | "fulfillment" | "timing", string>>;
-type CheckoutDraft = { values: typeof initialValues; fulfillment: FulfillmentMethod | null; pickupTiming: string };
+type CheckoutDraft = { values: typeof initialValues; fulfillment: FulfillmentMethod | null; pickupTiming: string; smsConsent: boolean };
 
 const DRAFT_KEY = "thetable.checkout-draft";
 
@@ -43,6 +44,7 @@ function readDraft(): CheckoutDraft | null {
     }
     return {
       values,
+      smsConsent: parsed.smsConsent === true,
       fulfillment: parsed.fulfillment === "delivery" || parsed.fulfillment === "pickup" ? parsed.fulfillment : null,
       pickupTiming: typeof parsed.pickupTiming === "string" ? parsed.pickupTiming : "",
     };
@@ -64,6 +66,7 @@ function Checkout() {
   const navigate = useNavigate();
   const config = remoteSettings.settings?.fulfillment ?? previewConfig;
   const [draft] = useState(readDraft);
+  const [smsConsent, setSmsConsent] = useState(draft?.smsConsent ?? false);
   const [submitting, setSubmitting] = useState(false);
   const [paymentReview, setPaymentReview] = useState(false);
   const paymentReviewConfirmed = useRef(false);
@@ -136,7 +139,7 @@ function Checkout() {
     setPaymentNotice(false);
   }
   function persistDraft(nextValues: typeof initialValues = values) {
-    writeDraft({ values: nextValues, fulfillment, pickupTiming });
+    writeDraft({ values: nextValues, fulfillment, pickupTiming, smsConsent });
   }
   function goToSignIn(nextValues: typeof initialValues = values) {
     persistDraft(nextValues);
@@ -185,12 +188,13 @@ function Checkout() {
     if (!remoteSettings.settings?.ordersEnabled || !fulfillment) { setOrderError("Online order creation is not enabled. No order has been placed."); return; }
     if (cartItems.some(line => !/^[a-fA-F0-9]{24}$/.test(line.item.id))) { setOrderError("Your bag contains preview menu items. Remove them and add current dishes from the connected menu."); return; }
     const payload = {
-      customer: { name: values.name.trim(), email: values.email.trim(), phone: normalizedPhone! }, fulfillment,
+      smsConsent, customer: { name: values.name.trim(), email: values.email.trim(), phone: normalizedPhone! }, fulfillment,
       ...(fulfillment === "delivery" ? { deliveryAddress: { recipientName: values.recipientName.trim(), recipientPhone: normalizedRecipientPhone!, city: values.city.trim(), neighborhood: values.neighborhood.trim(), postalCode: values.postalCode.trim(), street: values.street.trim(), buildingUnit: values.buildingUnit.trim(), instructions: values.instructions.trim(), ...(values.latitude.trim() && values.longitude.trim() ? { coordinates: { latitude: Number(values.latitude), longitude: Number(values.longitude) } } : {}) } } : { pickupTiming: "asap" }),
       preparationNotes: values.preparationNotes.trim(),
       items: cartItems.map(line => ({ menuItemId: line.item.id, quantity: line.quantity, selectedOptions: [] })),
     };
     if (!reviewed) { setPaymentReview(true); return; }
+    persistDraft(normalizedValues);
     const fingerprint = JSON.stringify(payload);
     setSubmitting(true);
     let savedOrderId: string | null = null;
@@ -251,7 +255,7 @@ function Checkout() {
               </fieldset>}
               {fulfillment === "delivery" && <fieldset className="checkout-page__section" disabled={submitting || !!createdOrder}>
                 <legend><span>03</span> <SiteText contentKey="Checkout-text-1bx7hcy" fallback={"Where are we headed?"} /></legend>
-                <p className="checkout-page__hint"><SiteText contentKey="Checkout-text-1w4pvp5" fallback={"Approximate delivery: "} />{config.delivery.estimatedMinutes?.min}–{config.delivery.estimatedMinutes?.max} <SiteText contentKey="Checkout-text-ggxdi5" fallback={"minutes after restaurant acceptance, not guaranteed. "} />{config.delivery.estimateConfirmed === false && "Proposed estimate awaiting restaurant confirmation. "} <SiteText contentKey="Checkout-text-1v3gs07" fallback={"Minimum items subtotal: "} />{formatPrice(config.delivery.minimumOrder!)}.</p>
+                <p className="checkout-page__hint"><SiteText contentKey="Checkout-text-1w4pvp5" fallback={"Approximate delivery: "} />{config.delivery.estimatedMinutes?.min}–{config.delivery.estimatedMinutes?.max} <SiteText contentKey="Checkout-text-ggxdi5" fallback={"minutes after restaurant acceptance, not guaranteed. "} />{config.delivery.estimateConfirmed === false && "Proposed estimate awaiting restaurant confirmation. "} <SiteText contentKey="Checkout-text-1v3gs07" fallback={"Minimum items subtotal: "} />{formatPrice(config.delivery.minimumOrder)}.</p>
                 <div className="checkout-page__fields">
                   {field("recipientName", "Recipient name", { autoComplete: "section-delivery shipping name", wide: true })}
                   {field("recipientPhone", "Recipient phone", { type: "tel", autoComplete: "section-delivery shipping tel", wide: true })}
@@ -274,11 +278,11 @@ function Checkout() {
               <div className="checkout-page__summary-heading"><span><SiteText contentKey="Checkout-text-1ozvb9n" fallback={"GOOD THINGS, TOGETHER"} /></span><h2 id="checkout-summary-title"><SiteText contentKey="Checkout-text-ahhg7c" fallback={"Your order."} /></h2><p>{totalQuantity} {totalQuantity === 1 ? "item" : "items"} · {fulfillment ? fulfillment === "delivery" ? "Delivery" : "Pickup" : "Fulfillment not available"}</p><Link to="/cart"><SiteText contentKey="Checkout-text-125pf0y" fallback={"Edit your bag "} /><ArrowUpRight size={14} aria-hidden="true" /></Link></div>
               <ul className="checkout-page__items" aria-label="Order items">{cartItems.map(({ item, quantity }) => <li key={item.id} className="checkout-page__item"><LoadingImage src={item.image} alt="" loading="lazy" /><div><h3>{item.name}</h3><p><SiteText contentKey="Checkout-text-bgee09" fallback={"Qty "} />{quantity} · {formatPrice(item.price)} <SiteText contentKey="Checkout-text-5ok4rs" fallback={"each"} /></p></div><strong>{formatPrice(item.price * quantity)}</strong></li>)}</ul>
               <dl className="checkout-page__totals"><div><dt><SiteText contentKey="Checkout-text-1mnez65" fallback={"Subtotal"} /></dt><dd>{formatPrice(subtotal)}</dd></div><div><dt><SiteText contentKey="Checkout-text-a2dh0d" fallback={"Delivery fee"} /></dt><dd>{totals.deliveryFee === null ? "Not configured" : fulfillment === "pickup" ? "Not applicable (pickup)" : formatPrice(totals.deliveryFee)}</dd></div><div><dt><SiteText contentKey="Checkout-text-1nxs6fi" fallback={"Tax "} />{taxRate === null ? "(not configured)" : ""}</dt><dd>{formatPrice(estimatedTax)}</dd></div><div className="checkout-page__total"><dt><SiteText contentKey="Checkout-text-cf4vwb" fallback={"Estimated total"} /></dt><dd>{totals.total === null ? "Unavailable" : formatPrice(totals.total + estimatedTax)}</dd></div></dl>
-              {totals.minimumShortfall > 0 && <p className="checkout-page__error" role="status"><SiteText contentKey="Checkout-text-13okvdo" fallback={"Add "} />{formatPrice(totals.minimumShortfall)} <SiteText contentKey="Checkout-text-1ikb2aw" fallback={"more in items to meet the "} />{formatPrice(config.delivery.minimumOrder!)} <SiteText contentKey="Checkout-text-qipbuf" fallback={"delivery minimum. "} /><Link to="/menu"><SiteText contentKey="Checkout-text-1l9l37e" fallback={"Explore the menu"} /></Link></p>}
+              {totals.minimumShortfall > 0 && <p className="checkout-page__error" role="status"><SiteText contentKey="Checkout-text-13okvdo" fallback={"Add "} />{formatPrice(totals.minimumShortfall)} <SiteText contentKey="Checkout-text-1ikb2aw" fallback={"more in items to meet the "} />{formatPrice(config.delivery.minimumOrder)} <SiteText contentKey="Checkout-text-qipbuf" fallback={"delivery minimum. "} /><Link to="/menu"><SiteText contentKey="Checkout-text-1l9l37e" fallback={"Explore the menu"} /></Link></p>}
               {!available && <p className="checkout-page__hint"><SiteText contentKey="Checkout-text-h4d2bx" fallback={"No fully configured fulfillment option is currently selected. Review the availability details above."} /></p>}
               <p className="checkout-page__hint"><SiteText contentKey="Checkout-text-1qacba7" fallback={"After your order is saved, its TBL order number appears here and in your account. The kitchen receives it after verified payment and restaurant acceptance."} /></p>
               {serverAvailability && !serverAvailability.available && <div id="checkout-availability-reason" className="checkout-page__availability" role="status"><strong>{fulfillment ? availabilityLabel(fulfillment) : "Ordering paused"}</strong>{serverAvailability.reasons.map(reason => <p key={reason}>{reason}</p>)}<p><SiteText contentKey="Checkout-text-10kbeto" fallback={"Your bag stays saved. Availability refreshes automatically; you can return during opening hours."} /></p></div>}
-              <button aria-describedby={serverAvailability?.available === false ? "checkout-availability-reason" : undefined} className="checkout-page__primary" type="submit" disabled={!available || remoteSettings.loading || !!remoteSettings.error || (API_CONFIGURED && serverAvailability?.available === false) || totals.minimumShortfall > 0 || submitting || !!createdOrder || (API_CONFIGURED && !remoteSettings.settings?.ordersEnabled)}>{checkoutLabel} <ArrowUpRight size={18} aria-hidden="true" /></button>
+              <SmsConsent checked={smsConsent} onChange={setSmsConsent}/><button aria-describedby={serverAvailability?.available === false ? "checkout-availability-reason" : undefined} className="checkout-page__primary" type="submit" disabled={!available || remoteSettings.loading || !!remoteSettings.error || (API_CONFIGURED && serverAvailability?.available === false) || totals.minimumShortfall > 0 || submitting || !!createdOrder || (API_CONFIGURED && !remoteSettings.settings?.ordersEnabled)}>{checkoutLabel} <ArrowUpRight size={18} aria-hidden="true" /></button>
               <p className="checkout-page__payment-note">{API_CONFIGURED ? "Prices and fulfillment rules are checked again by the server. Payment takes place on Stripe. Orders remain unpaid until a signed payment event is verified, and restaurant acceptance is still required." : "Demo only. Backend order creation and payment integration are not connected. No order will be placed and no payment will be taken."}</p>
               {API_CONFIGURED && !remoteSettings.settings?.ordersEnabled && <p className="checkout-page__hint">{remoteSettings.settings?.payment?.ready === false ? remoteSettings.settings.payment.reason : "Online order creation is paused in the server settings."}</p>}
               {orderError && <p className="checkout-page__error" role="alert">{orderError}</p>}

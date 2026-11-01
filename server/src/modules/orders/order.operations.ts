@@ -19,15 +19,16 @@ export function allowedActions(order: StoredOrder, role: Actor['role'], settings
   const result: OrderAction[] = [];
   if (front && pending) result.push('reject');
   if (front && !terminal.includes(order.status)) result.push('cancel');
-  if (front && pending && paid && openingAvailability(settings.restaurant, order.fulfillment).available && settings.cashierEnabled && settings.kitchenEnabled && (order.fulfillment === 'pickup' ? pickupReady(settings.restaurant) : deliveryReady(settings.restaurant))) result.unshift('accept');
+  if (front && pending && paid && openingAvailability(settings.restaurant, order.fulfillment).available && settings.cashierEnabled && settings.kitchenEnabled && (order.fulfillment === 'dine_in' ? settings.restaurant.pickup.estimateConfirmed : order.fulfillment === 'pickup' ? pickupReady(settings.restaurant) : deliveryReady(settings.restaurant))) result.unshift('accept');
   if (kitchen && paid && settings.kitchenEnabled && order.status === 'confirmed') result.push('start_preparation');
   if (kitchen && paid && settings.kitchenEnabled && order.status === 'preparing') result.push('mark_ready');
   if (front && paid && settings.cashierEnabled && settings.pickupHandoffEnabled && settings.pickupHandoffInstructions.trim() && pickupReady(settings.restaurant) && order.fulfillment === 'pickup' && order.status === 'ready_for_pickup') result.push('complete_pickup');
+  if (front && paid && settings.cashierEnabled && order.fulfillment === 'dine_in' && order.status === 'ready_for_table') result.push('complete_dine_in');
   if (front && paid && settings.cashierEnabled && settings.deliveryDispatchEnabled && settings.deliveryProcessNotes.trim() && deliveryReady(settings.restaurant) && order.fulfillment === 'delivery' && order.status === 'ready_for_delivery') result.push('dispatch_delivery');
   if ((front || role === 'driver') && paid && settings.cashierEnabled && settings.deliveryDispatchEnabled && settings.deliveryCompletionEnabled && settings.deliveryProcessNotes.trim() && deliveryReady(settings.restaurant) && order.fulfillment === 'delivery' && order.status === 'out_for_delivery') result.push('complete_delivery');
   return result;
 }
-const nextStatus = (action: OrderAction, order: StoredOrder): OrderStatus => ({ accept: 'confirmed', reject: 'rejected', start_preparation: 'preparing', mark_ready: order.fulfillment === 'pickup' ? 'ready_for_pickup' : 'ready_for_delivery', complete_pickup: 'completed', dispatch_delivery: 'out_for_delivery', complete_delivery: 'completed', cancel: 'cancelled' } as Record<OrderAction, OrderStatus>)[action];
+const nextStatus = (action: OrderAction, order: StoredOrder): OrderStatus => ({ accept: 'confirmed', reject: 'rejected', start_preparation: 'preparing', mark_ready: order.fulfillment === 'dine_in' ? 'ready_for_table' : order.fulfillment === 'pickup' ? 'ready_for_pickup' : 'ready_for_delivery', complete_dine_in: 'completed', complete_pickup: 'completed', dispatch_delivery: 'out_for_delivery', complete_delivery: 'completed', cancel: 'cancelled' } as Record<OrderAction, OrderStatus>)[action];
 function isReplay(order: StoredOrder, actor: Actor, action: OrderAction, input: OrderActionInput) {
   const prior = order.statusHistory.find(entry => entry.actionId === input.actionId);
   if (!prior) return false;
@@ -47,7 +48,7 @@ export async function performOrderAction(id: string, action: OrderAction, input:
   const status = nextStatus(action, order);
   const now = new Date();
   const updated = await Order.findOneAndUpdate({ _id: id, status: order.status, paymentStatus: order.paymentStatus, updatedAt: order.updatedAt }, {
-    $set: { status, ...(driver ? { deliveryAssignment: { driverId: driver.id, name: driver.name, phone: driver.phone, dispatchedAt: now, dispatchedBy: actor.userId, checklistRequired: true }, deliveryHandoffCode: String(randomInt(100000, 1000000)), handoffAttempts: 0, handoffBlockedUntil: null } : {}), ...(action === 'complete_delivery' ? { 'deliveryAssignment.completedAt': now } : {}), ...(action === 'accept' ? { acceptedAt: now, acceptedBy: actor.userId, readyEstimateMinAt: new Date(now.getTime() + settings.restaurant[order.fulfillment].estimatedMinutes.min * 60000), readyEstimateMaxAt: new Date(now.getTime() + settings.restaurant[order.fulfillment].estimatedMinutes.max * 60000) } : {}), ...(action === 'reject' ? { rejectedReason: input.reason.trim() } : {}) },
+    $set: { status, ...(driver ? { deliveryAssignment: { driverId: driver.id, name: driver.name, phone: driver.phone, dispatchedAt: now, dispatchedBy: actor.userId, checklistRequired: true }, deliveryHandoffCode: String(randomInt(100000, 1000000)), handoffAttempts: 0, handoffBlockedUntil: null } : {}), ...(action === 'complete_delivery' ? { 'deliveryAssignment.completedAt': now } : {}), ...(action === 'accept' ? { acceptedAt: now, acceptedBy: actor.userId, readyEstimateMinAt: new Date(now.getTime() + settings.restaurant[order.fulfillment === 'dine_in' ? 'pickup' : order.fulfillment].estimatedMinutes.min * 60000), readyEstimateMaxAt: new Date(now.getTime() + settings.restaurant[order.fulfillment === 'dine_in' ? 'pickup' : order.fulfillment].estimatedMinutes.max * 60000) } : {}), ...(action === 'reject' ? { rejectedReason: input.reason.trim() } : {}) },
     $push: { statusHistory: { status, previousStatus: order.status, newStatus: status, changedAt: now, changedBy: actor.userId, actorRole: actor.role, reason: input.reason.trim(), action, driverId: input.driverId, actionId: input.actionId } },
   }, { new: true, runValidators: true }).select('-requestKey');
   if (!updated) { const latest = await orderDetail(id); if (isReplay(latest, actor, action, input)) return latest; throw new AppError(409, 'STALE_ORDER', 'The order changed. Refresh before continuing.'); }
@@ -59,10 +60,11 @@ export async function statusAction(id: string, status: OrderStatus, input: Order
   switch (status) {
     case 'confirmed': action = 'accept'; break;
     case 'preparing': action = 'start_preparation'; break;
+    case 'ready_for_table': if (order.fulfillment !== 'dine_in') throw new AppError(409, 'INVALID_STATUS_TRANSITION', 'Only dine-in orders can be ready for a table.'); action = 'mark_ready'; break;
     case 'ready_for_pickup': if (order.fulfillment !== 'pickup') throw new AppError(409, 'INVALID_STATUS_TRANSITION', 'Delivery orders cannot be ready for pickup.'); action = 'mark_ready'; break;
     case 'ready_for_delivery': if (order.fulfillment !== 'delivery') throw new AppError(409, 'INVALID_STATUS_TRANSITION', 'Pickup orders cannot be ready for delivery.'); action = 'mark_ready'; break;
     case 'out_for_delivery': action = 'dispatch_delivery'; break;
-    case 'completed': action = order.fulfillment === 'pickup' ? 'complete_pickup' : 'complete_delivery'; break;
+    case 'completed': action = order.fulfillment === 'dine_in' ? 'complete_dine_in' : order.fulfillment === 'pickup' ? 'complete_pickup' : 'complete_delivery'; break;
     case 'rejected': action = 'reject'; break;
     case 'cancelled': action = 'cancel'; break;
     default: throw new AppError(409, 'INVALID_STATUS_TRANSITION', 'Staff cannot set this status directly.');
@@ -78,6 +80,6 @@ export function staffOrderDTO(order: StoredOrder, role: Actor['role'], settings:
 }
 export function kitchenOrderDTO(order: StoredOrder, role: Actor['role'], settings: OperationsSettings) {
   // Deliberate allowlist: no name, phone, email, address, payment reference, price, or staff user IDs.
-  return { _id: order.id, orderNumber: order.orderNumber, fulfillment: order.fulfillment, status: order.status, acceptedAt: order.acceptedAt || null, readyEstimateMinAt: order.readyEstimateMinAt, readyEstimateMaxAt: order.readyEstimateMaxAt, updatedAt: order.updatedAt, preparationNotes: order.preparationNotes || '', items: order.items.map(line => ({ name: line.name, quantity: line.quantity, selectedOptions: line.selectedOptions.map(group => ({ name: group.name, options: group.options.map(option => ({ name: option.name })) })) })), allowedActions: allowedActions(order, role, settings).filter(action => action === 'start_preparation' || action === 'mark_ready') };
+  return { _id: order.id, orderNumber: order.orderNumber, fulfillment: order.fulfillment, table: order.table, status: order.status, acceptedAt: order.acceptedAt || null, readyEstimateMinAt: order.readyEstimateMinAt, readyEstimateMaxAt: order.readyEstimateMaxAt, updatedAt: order.updatedAt, preparationNotes: order.preparationNotes || '', items: order.items.map(line => ({ name: line.name, quantity: line.quantity, selectedOptions: line.selectedOptions.map(group => ({ name: group.name, options: group.options.map(option => ({ name: option.name })) })) })), allowedActions: allowedActions(order, role, settings).filter(action => action === 'start_preparation' || action === 'mark_ready') };
 }
 

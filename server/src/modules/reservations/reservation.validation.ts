@@ -1,8 +1,10 @@
 import { z } from 'zod';
 import { customer, optionalText, pagination } from '../../utils/validation.js';
 import { reservationStatuses } from './reservation.model.js';
-export const reservationInput = z.object({ customer, dateTime: z.string().datetime({ offset: true }), partySize: z.number().int().min(1), notes: optionalText(1500) }).strict();
+export const reservationInput = z.object({ customer, smsConsent: z.boolean().default(false), dateTime: z.string().datetime({ offset: true }), partySize: z.number().int().min(1), notes: optionalText(1500) }).strict();
 export type ReservationInput = z.infer<typeof reservationInput>;
-export const reservationQuery = z.object({ ...pagination, status: z.enum(reservationStatuses).optional() }).strict();
+export const reservationQuery = z.object({ ...pagination, status: z.enum(reservationStatuses).optional(), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine(value => { const date = new Date(value + 'T00:00:00Z'); return Number.isFinite(date.getTime()) && date.toISOString().slice(0,10) === value; }, 'Choose a real date.').optional() }).strict();
 export type ReservationQuery = z.infer<typeof reservationQuery>;
-export const reservationStatusInput = z.object({ status: z.enum(reservationStatuses) }).strict();
+const mutationFields = { expectedStatus: z.enum(reservationStatuses), expectedUpdatedAt: z.string().datetime({ offset: true }), reason: optionalText(1000) };
+export const reservationStatusInput = z.object({ status: z.enum(reservationStatuses), ...mutationFields }).strict().superRefine((data, ctx) => { if (data.status === 'cancelled' && !data.reason.trim()) ctx.addIssue({ code: 'custom', path: ['reason'], message: 'Explain the cancellation for the customer.' }); });
+export const reservationCancelInput = z.object(mutationFields).strict();
