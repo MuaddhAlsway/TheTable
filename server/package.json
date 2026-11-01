@@ -17,7 +17,10 @@
     "seed:menu": "tsx src/scripts/seedMenu.ts",
     "setup:hero": "tsx src/scripts/setupHero.ts",
     "test:flow": "tsx scripts/check-system-flow.mts",
-    "setup:content": "tsx src/scripts/setupContent.ts"
+    "setup:content": "tsx src/scripts/setupContent.ts",
+    "setup:push": "node dist/scripts/setupPush.js",
+    "start:push-worker": "node dist/scripts/pushWorker.js",
+    "test:push": "tsx scripts/check-push-flow.mts"
   },
   "dependencies": {
     "@clerk/express": "^2.1.86",
@@ -29,12 +32,14 @@
     "mongoose": "^9.11.4",
     "stripe": "^23.1.0",
     "svix": "^2.9.1",
+    "web-push": "^3.6.7",
     "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.6",
+    "@types/web-push": "^3.6.4",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }

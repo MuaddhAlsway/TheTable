@@ -1,3 +1,6 @@
+import { PushDevice,PushJob } from './modules/push/push.model.js';
+import { startPushWorker } from './modules/push/push.worker.js';
+import { pushReady } from './modules/push/push.config.js';
 import './config/database.js';
 import { initializeWebsiteContent } from './modules/content/content.service.js';
 import { StaffEmailAccess } from './modules/team/emailAccess.model.js';
@@ -22,13 +25,15 @@ async function start() {
   if (!paymentReadiness().ready) console.warn('Stripe setup is incomplete: payment sessions and new orders are disabled. API startup can continue.');
   await connectDatabase();
   startupStage = 'database index initialization';
-  const models: { createCollection(): Promise<unknown>; createIndexes(): Promise<unknown> }[] = [Menu, Order, Reservation, UserProfile, Operations, WebhookReceipt, Fulfillment, WebsiteContent, TeamAudit, StaffEmailAccess];
+  const models: { createCollection(): Promise<unknown>; createIndexes(): Promise<unknown> }[] = [Menu, Order, Reservation, UserProfile, Operations, WebhookReceipt, Fulfillment, WebsiteContent, TeamAudit, StaffEmailAccess, PushDevice, PushJob];
   await Promise.all(models.map(async model => { await model.createCollection(); await model.createIndexes(); }));
   await initializeWebsiteContent();
+  if(!pushReady())console.warn('Web Push is not configured: background driver alerts are disabled; acknowledgement warnings remain available.');
+  const stopPush = startPushWorker();
   startupStage = 'HTTP listener';
   const server = app.listen(env.PORT, '0.0.0.0', () => console.log(`The Table API listening on 0.0.0.0:${env.PORT}`));
   server.on('error', error => { console.error(startupDiagnostic('HTTP listener', error)); void mongoose.disconnect().finally(() => process.exit(1)); });
-  const stop = () => { server.close(() => { void mongoose.disconnect().finally(() => process.exit(0)); }); setTimeout(() => process.exit(1), 10000).unref(); };
+  const stop = () => { stopPush(); server.close(() => { void mongoose.disconnect().finally(() => process.exit(0)); }); setTimeout(() => process.exit(1), 10000).unref(); };
   process.on('SIGINT', stop); process.on('SIGTERM', stop);
 }
 start().catch(error => { console.error(startupDiagnostic(startupStage, error)); void mongoose.disconnect().finally(() => process.exit(1)); });

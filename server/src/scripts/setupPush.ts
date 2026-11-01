@@ -1,0 +1,4 @@
+import webpush from 'web-push';
+import { writeFile } from 'node:fs/promises';
+const subject=process.argv[2];
+if(!subject||!subject.startsWith('https://')){console.error('Usage: node dist/scripts/setupPush.js https://your-public-frontend.example');process.exitCode=1;}else{try{const url=new URL(subject);if(url.username||url.password||url.protocol!=='https:')throw new Error();const keys=webpush.generateVAPIDKeys();await writeFile(new URL('../../.env.push.local',import.meta.url),'VAPID_PUBLIC_KEY='+keys.publicKey+'\nVAPID_PRIVATE_KEY='+keys.privateKey+'\nWEB_PUSH_SUBJECT='+url.origin+'\n',{flag:'wx',mode:0o600});console.log('Created ignored server/.env.push.local. Keys are not displayed. Configure these three values privately in Render.');}catch{console.error('Push setup file already exists or could not be created. It was not overwritten.');process.exitCode=1;}}

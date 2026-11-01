@@ -1,0 +1,22 @@
+import { Router } from 'express';
+import { createHash } from 'node:crypto';
+import { z } from 'zod';
+import { PushDevice,PushJob } from './push.model.js';
+import { pushReady } from './push.config.js';
+import { env } from '../../config/env.js';
+import { authorizeRoles } from '../../middleware/authorizeRoles.js';
+import { validateRequest,input } from '../../middleware/validateRequest.js';
+import { actor } from '../../utils/roles.js';
+import { AppError } from '../../utils/errors.js';
+import { staffMutationLimit } from '../../middleware/rateLimits.js';
+import { Order } from '../orders/order.model.js';
+import { trusted } from 'mongoose';
+export function allowedPushEndpoint(value:string){try{const url=new URL(value);return url.protocol==='https:'&&!url.port&&!url.username&&!url.password&&['fcm.googleapis.com','push.services.mozilla.com','web.push.apple.com','notify.windows.com'].some(host=>url.hostname===host||url.hostname.endsWith('.'+host));}catch{return false;}}
+const endpoint=z.string().max(4096).refine(allowedPushEndpoint,'Unsupported browser push endpoint.');
+const subscription=z.object({endpoint,expirationTime:z.number().nullable().optional(),keys:z.object({p256dh:z.string().regex(/^[A-Za-z0-9_-]{87}$/),auth:z.string().regex(/^[A-Za-z0-9_-]{22}$/)}).strict()}).strict();
+export const pushRoutes=Router();pushRoutes.use(authorizeRoles('driver'));
+pushRoutes.get('/config',(_req,res)=>res.json({data:{enabled:pushReady(),publicKey:pushReady()?env.VAPID_PUBLIC_KEY:null}}));
+pushRoutes.put('/subscription',staffMutationLimit,validateRequest(subscription),async(_req,res)=>{if(!pushReady())throw new AppError(503,'PUSH_SETUP_REQUIRED','Background notifications require server setup.');const data=input<z.infer<typeof subscription>>(res),userId=actor(res).userId,endpointHash=createHash('sha256').update(data.endpoint).digest('hex');const existing=await PushDevice.findOne({endpointHash});if(existing&&existing.userId!==userId)throw new AppError(409,'DEVICE_IN_USE','Disable notifications using the previous account on this device first.');if(!existing&&await PushDevice.countDocuments({userId})>=10)throw new AppError(422,'DEVICE_LIMIT','This account already has ten notification devices.');try{await PushDevice.findOneAndUpdate({endpointHash,userId},{$set:{endpoint:data.endpoint,keys:data.keys}},{upsert:true,runValidators:true,returnDocument:'after'});}catch(error){if((error as {code?:number}).code===11000)throw new AppError(409,'DEVICE_IN_USE','This notification device changed owners. Retry after disabling its previous subscription.');throw error;}res.json({data:{saved:true}});});
+pushRoutes.delete('/subscription',staffMutationLimit,validateRequest(z.object({endpoint}).strict()),async(_req,res)=>{const hash=createHash('sha256').update(input<{endpoint:string}>(res).endpoint).digest('hex');await PushDevice.deleteOne({endpointHash:hash,userId:actor(res).userId});res.json({data:{removed:true}});});
+export const dispatchAlertRoutes=Router();dispatchAlertRoutes.use(authorizeRoles('admin','cashier'));
+dispatchAlertRoutes.get('/',async(_req,res)=>{const cutoff=new Date(Date.now()-env.DRIVER_ACK_TIMEOUT_SECONDS*1000);const orders=await Order.find({status:'out_for_delivery','deliveryAssignment.driverId':trusted({$exists:true}),'deliveryAssignment.dispatchedAt':trusted({$lte:cutoff}),'deliveryProgress.acknowledgedAt':null}).select('orderNumber deliveryAssignment updatedAt').sort({'deliveryAssignment.dispatchedAt':1}).limit(100).lean();const rows=await Promise.all(orders.map(async order=>{const jobs=await PushJob.find({orderId:order._id,driverId:order.deliveryAssignment?.driverId,dispatchedAt:order.deliveryAssignment?.dispatchedAt}).select('state').lean();const notificationState=['sent','sending','pending','failed','skipped'].find(state=>jobs.some(job=>job.state===state))||'no_job';return {...order,notificationState,ackDeadline:new Date(order.deliveryAssignment!.dispatchedAt!.getTime()+env.DRIVER_ACK_TIMEOUT_SECONDS*1000)};}));res.json({data:rows,timeoutSeconds:env.DRIVER_ACK_TIMEOUT_SECONDS,pushEnabled:pushReady()});});

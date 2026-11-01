@@ -1,0 +1,22 @@
+import { useEffect,useState } from 'react';
+import { useBackendAuth } from '../../hooks/useBackendAuth';
+import { apiRequest } from '../../lib/api';
+type Config={enabled:boolean;publicKey:string|null};
+export default function DriverPush(){
+ const {getToken}=useBackendAuth();const[config,setConfig]=useState<Config|null>(null),[active,setActive]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ const supported=typeof window!=='undefined'&&window.isSecureContext&&'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+ useEffect(()=>{let live=true;async function load(){try{const result=await apiRequest<Config>('/driver/push/config',{token:await getToken()});if(live)setConfig(result.data);
+ if(supported&&result.data.enabled&&Notification.permission==='granted'){const registration=await navigator.serviceWorker.getRegistration('/');const subscription=await registration?.pushManager.getSubscription();if(subscription){await apiRequest('/driver/push/subscription',{method:'PUT',token:await getToken(),body:subscription.toJSON()});if(live)setActive(true);}}
+ }catch(error){if(live)setError(error instanceof Error?error.message:'Unable to check background notifications.');}}void load();return()=>{live=false;};},[getToken,supported]);
+ async function enable(){setBusy(true);setError('');setNotice('');try{
+ if(!config?.enabled||!config.publicKey)throw new Error('Background notifications need server configuration.');
+ if(!supported)throw new Error('Use a supported browser over HTTPS. On iPhone, first add this website to your Home Screen.');
+ const permission=await Notification.requestPermission();if(permission!=='granted')throw new Error('Notifications are blocked. Allow them in your browser/device settings, then try again.');
+ await navigator.serviceWorker.register('/sw.js',{scope:'/'});const registration=await navigator.serviceWorker.ready;
+ const base64=config.publicKey.replace(/-/g,'+').replace(/_/g,'/');const key=Uint8Array.from(atob(base64+'='.repeat((4-base64.length%4)%4)),character=>character.charCodeAt(0));
+ const subscription=await registration.pushManager.getSubscription()||await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:key.buffer});
+ await apiRequest('/driver/push/subscription',{method:'PUT',token:await getToken(),body:subscription.toJSON()});setActive(true);setNotice('This device is registered for background assignment alerts. A sent notification is not an acknowledgement: open the delivery and acknowledge it.');
+ }catch(error){setError(error instanceof Error?error.message:'Unable to enable background notifications.');}finally{setBusy(false);}}
+ async function disable(){setBusy(true);setError('');try{const registration=await navigator.serviceWorker.getRegistration('/'),subscription=await registration?.pushManager.getSubscription();if(subscription){await apiRequest('/driver/push/subscription',{method:'DELETE',token:await getToken(),body:{endpoint:subscription.endpoint}});await subscription.unsubscribe();}setActive(false);setNotice('Background notifications disabled on this device.');}catch(error){setError(error instanceof Error?error.message:'Unable to disable notifications.');}finally{setBusy(false);}}
+ return <section className="delivery-issues" aria-labelledby="driver-push-title"><h2 id="driver-push-title">Background delivery alerts</h2><p>Get assignment notifications even when the dashboard tab is closed. Delivery depends on connectivity, notification permissions and device settings.</p><p>On iPhone/iPad, use Share → Add to Home Screen, open The Table from that icon, then enable notifications here.</p>{!supported&&<p>Background push is unavailable in this browser session. Use HTTPS and a supported browser or install the Home Screen app.</p>}{config&&!config.enabled&&<p className="staff-notice">Server push setup is required. Ask the administrator to configure the VAPID keys and Web Push subject.</p>}<button type="button" disabled={busy||!config?.enabled||!supported} onClick={()=>void(active?disable():enable())}>{busy?'Updating…':active?'Disable background notifications':'Enable background notifications'}</button>{notice&&<p role="status">{notice}</p>}{error&&<p role="alert" className="staff-error">{error}</p>}<p>Keep your phone reachable. If you do not acknowledge, the cashier will be prompted to contact you. Closing or signing out does not unsubscribe this device; disable notifications here before sharing it.</p></section>;
+}

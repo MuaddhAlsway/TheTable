@@ -1,3 +1,4 @@
+import { pushRoutes,dispatchAlertRoutes } from './modules/push/push.routes.js';
 import { teamRoutes } from './modules/team/team.routes.js';
 import { driverRoutes, driverDirectoryRoutes } from './modules/delivery/delivery.routes.js';
 import { publicContentRoutes, adminContentRoutes } from './modules/content/content.routes.js';
@@ -45,6 +46,8 @@ if (serverPublishableKey && clientOrigins.length) app.use(clerkMiddleware({ secr
 app.use('/api/v1/users', authenticate, userRoutes);
 app.use('/api/v1/orders', authenticate, orderRoutes);
 app.use('/api/v1/reservations', authenticate, reservationRoutes);
+app.use('/api/v1/driver/push', authenticate, pushRoutes);
+app.use('/api/v1/staff/dispatch-alerts', authenticate, dispatchAlertRoutes);
 app.use('/api/v1/driver/orders', authenticate, driverRoutes);
 app.use('/api/v1/staff/drivers', authenticate, driverDirectoryRoutes);
 app.use('/api/v1/staff/orders', authenticate, cashierRoutes);

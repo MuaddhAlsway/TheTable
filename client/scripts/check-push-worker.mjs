@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import vm from 'node:vm';
+const handlers={},notifications=[],opened=[];let waited;
+const self={location:{origin:'https://restaurant.test'},addEventListener:(name,fn)=>handlers[name]=fn,skipWaiting:()=>{},registration:{showNotification:async(title,options)=>notifications.push({title,...options})},clients:{claim:async()=>{},matchAll:async()=>[],openWindow:async url=>opened.push(url)}};
+vm.runInNewContext(await readFile(new URL('../public/sw.js',import.meta.url),'utf8'),{self,URL});
+handlers.push({data:{json:()=>({body:'PRIVATE ADDRESS',url:'https://evil.invalid',tag:'delivery-fixture'})},waitUntil:value=>waited=value});await waited;
+assert.equal(notifications.length,1);assert.equal(notifications[0].body,'New delivery assigned — open your dashboard.');assert.equal(notifications[0].data.url,'/driver');
+handlers.notificationclick({notification:{close:()=>{}},waitUntil:value=>waited=value});await waited;assert.equal(opened[0],'https://restaurant.test/driver');assert.equal(handlers.fetch,undefined);
+const manifest=JSON.parse(await readFile(new URL('../public/manifest.webmanifest',import.meta.url),'utf8'));assert.equal(manifest.start_url,'/driver');for(const icon of manifest.icons)assert.ok((await readFile(new URL('../public'+icon.src,import.meta.url))).length>0);
+const config=JSON.parse(await readFile(new URL('../vercel.json',import.meta.url),'utf8'));const rewrite=new RegExp('^'+config.rewrites[0].source+'$');assert.equal(rewrite.test('/sw.js'),false);assert.equal(rewrite.test('/manifest.webmanifest'),false);
+console.log('PASS push service worker: private generic payload, fixed authenticated destination, no API cache, manifest/icons and Vercel static exclusions');

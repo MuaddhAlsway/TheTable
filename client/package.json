@@ -14,7 +14,8 @@
     "test:cart": "node scripts/check-cart.mjs",
     "test:checkout": "node scripts/check-checkout.mjs",
     "typecheck": "tsc -b --pretty false",
-    "test:flow": "node scripts/check-system-flow.mjs"
+    "test:flow": "node scripts/check-system-flow.mjs",
+    "test:push": "node scripts/check-push-worker.mjs && node scripts/check-push-ui.mjs"
   },
   "dependencies": {
     "@clerk/react": "^6.18.4",

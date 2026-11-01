@@ -3,7 +3,12 @@ import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 // Render environment variables take precedence; local .env values are never overwritten.
 config({ path: fileURLToPath(new URL('../../.env', import.meta.url)), quiet: true });
+config({ path: fileURLToPath(new URL('../../.env.push.local', import.meta.url)), quiet: true });
 const schema = z.object({
+  VAPID_PUBLIC_KEY: z.string().regex(/^[A-Za-z0-9_-]{87}$/).optional(),
+  VAPID_PRIVATE_KEY: z.string().regex(/^[A-Za-z0-9_-]{43}$/).optional(),
+  WEB_PUSH_SUBJECT: z.string().refine(value => /^mailto:[^\s@]+@[^\s@]+$/.test(value) || (()=>{try{return new URL(value).protocol==='https:';}catch{return false;}})()).optional(),
+  DRIVER_ACK_TIMEOUT_SECONDS: z.coerce.number().int().min(30).max(3600).default(120),
   PORT: z.coerce.number().int().min(1).max(65535).default(4000),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   MONGODB_URI: z.string().min(1).refine(value => /^mongodb(?:\+srv)?:\/\//.test(value), 'Invalid database configuration.'),

@@ -40,3 +40,5 @@ Deploy the updated backend to Render and frontend to Vercel together before veri
 ## Automated verification update — 1 November 2026
 
 The user subsequently requested full system testing. All six frontend test suites and the isolated backend integration suite now pass, including browser-level checkout/cashier/kitchen/handoff fixtures and real MongoDB service integration. See `SYSTEM_TEST_REPORT.md` for exact scope, isolation, results and external-integration limits. This supersedes the earlier statement that no test suite had been run; real Clerk OAuth and Stripe-to-Render payment verification remain untested end to end.
+
+Background Web Push is now implemented. Production activation requires the VAPID settings and an always-running API or notification worker; see WEB_PUSH_SETUP.md. Driver acknowledgement escalation defaults to 120 seconds. Tests use provider/browser fixtures and do not prove real-phone notification delivery.

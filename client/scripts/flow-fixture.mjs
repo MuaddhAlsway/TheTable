@@ -17,6 +17,9 @@ export async function installRoutes(page){
  if(request.method()==='OPTIONS')return route.fulfill({status:204,headers:{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'*','Access-Control-Allow-Methods':'*'}});
  state.requests.push({method:request.method(),path,body:request.postDataJSON(),key:request.headers()['idempotency-key']});
  if(path==='/menu')return reply([dish],200,{pagination:{page:1,pages:1,total:1,limit:100}});
+ if(path==='/driver/push/config')return reply({enabled:!!state.pushConfigured,publicKey:state.pushConfigured?'B'+'A'.repeat(86):null});
+ if(path==='/driver/push/subscription')return reply({saved:request.method()==='PUT',removed:request.method()==='DELETE'});
+ if(path==='/staff/dispatch-alerts')return reply([...state.orders.values()].filter(order=>order.status==='out_for_delivery'&&!order.deliveryProgress?.acknowledgedAt).map(order=>({...order,ackDeadline:stamp(),notificationState:'no_job'})));
  if(path==='/staff/drivers/issues')return reply([...state.orders.values()].filter(order=>order.deliveryIssue?.reportedAt&&!order.deliveryIssue?.resolvedAt));
  if(path==='/staff/drivers')return reply([{id:'user_fixtureDriver',name:'TEST DRIVER',phone:'+966512345678'}]);
  if(path==='/settings')return reply(settings);

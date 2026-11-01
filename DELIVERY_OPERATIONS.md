@@ -11,7 +11,10 @@ Sign in at /driver. Enable delivery alerts and keep the dashboard visible and on
 
 If the customer cannot be reached, the address cannot be found, or the vehicle has a problem, use Report a delivery problem. Completion is blocked until the cashier records a resolution. Driver updates and issue resolutions use authenticated role/ownership checks, stale-record protection, and timestamped MongoDB delivery events. Staff issue notes are withheld from the customer response; customers see a support-needed indication and actual progress timestamps.
 
-## Notification limits and launch
-Alerts are opt-in sound and optional browser notifications driven by polling while the dashboard is open/visible and online. Initial current assignments alert when enabled; subsequent new assignments/issues alert once per page session. Closing/suspending the page stops polling. These are not background push, SMS, automatic phone calls or live driver tracking. Arrange direct cashier-to-driver contact for unattended devices. Sound/notification permission and device restrictions can prevent an alert.
+## Notification setup and launch
 
-Deploy client and server together. No extra map API key is required. No real deliveries, charges or customer addresses were created by implementation verification. A restaurant must supply actual available drivers and confirm its operating coverage/settings. Automated checks use isolated data and payment/auth fixtures.
+Open-dashboard sound/optional browser alerts still require a visible online page. Background Web Push has now been added separately: drivers enable Background delivery alerts in /driver. It uses a service worker so the tab need not remain open, subject to phone/browser permissions and OS restrictions. iPhone/iPad users first install the Home Screen app. Signing out alone does not unsubscribe a device; disable background alerts before sharing it.
+
+See WEB_PUSH_SETUP.md for VAPID configuration, always-running Render requirements and a real-phone verification checklist. The default driver acknowledgement deadline is 120 seconds. Cashier warnings and call links escalate unacknowledged assignments. A successful push-service response is not a driver acknowledgement, proof of delivery to a device, or a physical delivery guarantee.
+
+Deploy client and server together. No map API key is required. No real deliveries, charges or customer addresses were created by implementation verification. Your restaurant supplies actual available drivers and confirmed operating coverage. SMS, automatic phone calls and live driver tracking are not connected.

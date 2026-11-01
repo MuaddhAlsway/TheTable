@@ -1,0 +1,16 @@
+import {chromium,expect} from '@playwright/test';
+import assert from 'node:assert/strict';
+import {fixtureServer,installRoutes,state} from './flow-fixture.mjs';
+const server=await fixtureServer();let browser;
+try{browser=await chromium.launch({channel:'chrome',headless:true});const page=await browser.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));state.pushConfigured=true;state.role='driver';state.user='user_fixtureDriver';
+ await page.addInitScript(()=>{
+ if(!sessionStorage.getItem('fixture-role'))sessionStorage.setItem('fixture-role','driver');if(!sessionStorage.getItem('fixture-user'))sessionStorage.setItem('fixture-user','user_fixtureDriver');
+ let current=null;const registration={pushManager:{getSubscription:async()=>current,subscribe:async()=>{current={endpoint:'https://fcm.googleapis.com/fixture/browser',toJSON:()=>({endpoint:'https://fcm.googleapis.com/fixture/browser',expirationTime:null,keys:{p256dh:'B'+'A'.repeat(86),auth:'a'.repeat(22)}}),unsubscribe:async()=>{current=null;return true;}};return current;}}};
+ Object.defineProperty(navigator,'serviceWorker',{configurable:true,value:{getRegistration:async()=>registration,register:async()=>registration,ready:Promise.resolve(registration)}});
+ Object.defineProperty(window,'PushManager',{configurable:true,value:class{}});
+ Object.defineProperty(window,'Notification',{configurable:true,value:class{static permission='default';static async requestPermission(){this.permission='granted';return'granted';}}});
+ });await installRoutes(page);await page.goto(server.resolvedUrls.local[0]+'driver');await page.getByRole('button',{name:'Enable background notifications',exact:true}).click();await expect(page.getByRole('button',{name:'Disable background notifications',exact:true})).toBeVisible();
+ const saved=state.requests.find(request=>request.path==='/driver/push/subscription'&&request.method==='PUT');assert.ok(saved);assert.equal(saved.body.userId,undefined);
+ await page.getByRole('button',{name:'Disable background notifications',exact:true}).click();await expect(page.getByRole('button',{name:'Enable background notifications',exact:true})).toBeVisible();assert.ok(state.requests.some(request=>request.path==='/driver/push/subscription'&&request.method==='DELETE'));const id='d'.repeat(24);state.orders.set(id,{_id:id,orderNumber:'TBL-PUSH-UI',status:'out_for_delivery',paymentStatus:'paid',fulfillment:'delivery',items:[],customer:{name:'TEST',email:'fixture@example.invalid',phone:'+966512345678'},createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),totalHalalas:12000,statusHistory:[],deliveryAssignment:{driverId:'user_fixtureDriver',name:'TEST DRIVER',phone:'+966512345678',dispatchedAt:new Date(Date.now()-180000).toISOString()}});state.role='cashier';await page.evaluate(()=>sessionStorage.setItem('fixture-role','cashier'));await page.goto(server.resolvedUrls.local[0]+'cashier');await expect(page.getByText('Driver hasn’t acknowledged—contact them.',{exact:true})).toBeVisible();assert.deepEqual(errors,[]);
+ console.log('PASS driver background push enable/disable UI with browser subscription fixtures; no real device/provider registration');
+}finally{await browser?.close();await server.close();}

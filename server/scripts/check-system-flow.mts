@@ -1,3 +1,4 @@
+import webpush from 'web-push';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import express from 'express';
@@ -6,6 +7,10 @@ import type { Server } from 'node:http';
 // Separate process + unique database. Never use or mutate the restaurant database.
 const databaseName = 'tbl_flow_' + randomUUID().replaceAll('-', '').slice(0, 16);
 Object.assign(process.env, { NODE_ENV: 'test', MONGODB_DB_NAME: databaseName, STRIPE_SECRET_KEY: 'sk_test_fixture_only_not_real', STRIPE_WEBHOOK_SECRET: 'whsec_fixture_only_not_real', CLIENT_ORIGINS: 'https://restaurant.test', ORDER_CREATION_ENABLED: 'true', RESERVATION_CREATION_ENABLED: 'true' });
+const pushKeys=webpush.generateVAPIDKeys();Object.assign(process.env,{VAPID_PUBLIC_KEY:pushKeys.publicKey,VAPID_PRIVATE_KEY:pushKeys.privateKey,WEB_PUSH_SUBJECT:'https://restaurant.test'});
+const { PushDevice,PushJob }=await import('../src/modules/push/push.model.js');
+const { pushRoutes,dispatchAlertRoutes,allowedPushEndpoint }=await import('../src/modules/push/push.routes.js');
+const { enqueueAssignments,processPushJobs }=await import('../src/modules/push/push.worker.js');
 const { connectDatabase } = await import('../src/config/database.js');
 const { clerk } = await import('../src/config/clerk.js');
 const { UserProfile } = await import('../src/modules/users/user.model.js');
@@ -51,7 +56,7 @@ const admin = { userId: 'fixture_admin', role: 'admin' as const }, cashier = { u
 try {
   await connectDatabase(); connected = true;
   assert.equal(mongoose.connection.name, databaseName);
-  for (const model of [Menu, Order, Fulfillment, Operations, Reservation, WebsiteContent, WebhookReceipt, UserProfile, TeamAudit, StaffEmailAccess]) { await model.createCollection(); await model.createIndexes(); }
+  for (const model of [Menu, Order, Fulfillment, Operations, Reservation, WebsiteContent, WebhookReceipt, UserProfile, TeamAudit, StaffEmailAccess, PushDevice, PushJob]) { await model.createCollection(); await model.createIndexes(); }
   const hour = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Riyadh', hour: '2-digit', hourCycle: 'h23' }).format(new Date()));
   const hh = (value: number) => String((value + 24) % 24).padStart(2, '0') + ':00';
   const settings = structuredClone(defaultFulfillment);
@@ -95,6 +100,8 @@ try {
   app.use('/admin/content', (req, res, next) => { const role = req.header('x-test-role'); if (role) res.locals.actor = { userId: 'fixture_' + role, role }; next(); }, authorizeRoles('admin'), adminContentRoutes);
   app.use('/admin/team', (req,res,next) => { const role=req.header('x-test-role'); if(role) res.locals.actor={userId:'fixture_'+role,role}; next(); }, authorizeRoles('admin'), teamRoutes);
   app.use('/driver/orders', (req,res,next) => { if(req.header('x-test-user')) res.locals.actor={userId:req.header('x-test-user'),role:req.header('x-test-role')}; next(); }, driverRoutes);
+  const pushActor:express.RequestHandler=(req,res,next)=>{if(req.header('x-test-user'))res.locals.actor={userId:req.header('x-test-user'),role:req.header('x-test-role')};next();};
+  app.use('/driver/push',pushActor,pushRoutes);app.use('/staff/dispatch-alerts',pushActor,dispatchAlertRoutes);
   app.use(errorHandler);
   server = await new Promise<Server>(resolve => { const listener = app.listen(0, '127.0.0.1', () => resolve(listener)); });
   const base = 'http://127.0.0.1:' + (server.address() as any).port;
@@ -166,11 +173,32 @@ try {
   await rejects(action(deliveryStored.id, 'dispatch_delivery', cashier), 'DRIVER_REQUIRED');
   assert.equal((await action(deliveryStored.id, 'dispatch_delivery', cashier, '', { driverId: 'user_fixtureDriver' })).status, 'out_for_delivery');
   assert.equal((await orderDetail(deliveryStored.id)).deliveryAddress?.coordinates?.latitude,21.75);
+  const pushRequest=(path:string,method='GET',body?:any,who='user_fixtureDriver',role='driver')=>fetch(base+path,{method,headers:{'Content-Type':'application/json','x-test-user':who,'x-test-role':role},...(body?{body:JSON.stringify(body)}:{})});
+  assert.equal((await pushRequest('/driver/push/config','GET',undefined,'fixture_customer','customer')).status,403);
+  assert.equal(allowedPushEndpoint('https://127.0.0.1/private'),false);assert.equal(allowedPushEndpoint('https://fcm.googleapis.com.evil.invalid/x'),false);
+  const deviceBody=(name:string)=>({endpoint:'https://fcm.googleapis.com/fixture/'+name,keys:{p256dh:pushKeys.publicKey,auth:'a'.repeat(22)}});
+  assert.equal((await pushRequest('/driver/push/subscription','PUT',{...deviceBody('bad'),endpoint:'https://localhost/private'})).status,422);
+  for(const name of ['success','retry','expired'])assert.equal((await pushRequest('/driver/push/subscription','PUT',deviceBody(name))).status,200);
+  assert.equal((await pushRequest('/driver/push/subscription','PUT',deviceBody('success'),'user_otherDriver')).status,409);
+  const dispatchTime=new Date(Date.now()-180000);await Order.updateOne({_id:deliveryStored.id},{$set:{'deliveryAssignment.dispatchedAt':dispatchTime}});
+  await enqueueAssignments();await enqueueAssignments();assert.equal(await PushJob.countDocuments(),3);
+  let retryCalls=0;const sentPayloads:string[]=[];
+  webpush.sendNotification=(async(subscription:any,payload:any)=>{sentPayloads.push(String(payload));if(subscription.endpoint.endsWith('/expired'))throw {statusCode:410};if(subscription.endpoint.endsWith('/retry')&&retryCalls++===0)throw {statusCode:503};return {statusCode:201,body:'',headers:{}};}) as any;
+  await processPushJobs();assert.equal(await PushJob.countDocuments({state:'sent'}),1);assert.equal(await PushJob.countDocuments({state:'pending'}),1);assert.equal(await PushDevice.countDocuments(),2);
+  assert.ok(sentPayloads.every(value=>!value.includes('TEST STREET')&&!value.includes('123456')&&!value.includes('TEST RECIPIENT')));
+  assert.equal((await orderDetail(deliveryStored.id)).deliveryProgress?.acknowledgedAt,undefined);
+  const overdue=await pushRequest('/staff/dispatch-alerts','GET',undefined,'fixture_cashier','cashier');assert.equal(overdue.status,200);assert.equal((await overdue.json()).data.length,1);
+  await PushJob.updateMany({state:'pending'},{$set:{nextAttemptAt:new Date(0)}});await processPushJobs();assert.equal(await PushJob.countDocuments({state:'sent'}),2);
+  const acceptedCount=sentPayloads.length;await processPushJobs();assert.equal(sentPayloads.length,acceptedCount);
+  pass('push role/endpoint/ownership guards, durable deduplication, retry, expired-device removal, private payload and unacknowledged escalation');
+
   async function progress(kind:'acknowledge'|'collect'|'arrive'|'report_issue',driver='user_fixtureDriver') {const current=await orderDetail(deliveryStored.id);return updateDeliveryProgress(current.id,{kind,expectedUpdatedAt:current.updatedAt.toISOString(),category:'address_problem',note:'TEST ENTRANCE ISSUE'},driver);}
   await rejects(action(deliveryStored.id,'complete_delivery',cashier,'',{handoffCode:'000000'}),'DELIVERY_CHECKLIST_REQUIRED');
   await rejects(progress('acknowledge','user_otherDriver'),'NOT_FOUND');
   await rejects(progress('arrive'),'INVALID_DELIVERY_PROGRESS');
-  await progress('acknowledge');await progress('collect');await progress('arrive');await progress('report_issue');
+  await progress('acknowledge');
+  const anyDevice=await PushDevice.findOne();await PushJob.create({key:'fixture_ack_cancel',orderId:deliveryStored.id,driverId:'user_fixtureDriver',deviceId:anyDevice!._id,dispatchedAt:dispatchTime});await processPushJobs();assert.equal((await PushJob.findOne({key:'fixture_ack_cancel'}))?.state,'skipped');assert.equal((await (await pushRequest('/staff/dispatch-alerts','GET',undefined,'fixture_cashier','cashier')).json()).data.length,0);
+  await progress('collect');await progress('arrive');await progress('report_issue');
   await rejects(action(deliveryStored.id,'complete_delivery',cashier,'',{handoffCode:'000000'}),'DELIVERY_ISSUE_OPEN');
   await rejects(resolveDeliveryIssue(deliveryStored.id,{expectedUpdatedAt:'2000-01-01T00:00:00.000Z',resolution:'TEST RESOLVED'},cashier.userId),'STALE_ORDER');
   await resolveDeliveryIssue(deliveryStored.id,{expectedUpdatedAt:(await orderDetail(deliveryStored.id)).updatedAt.toISOString(),resolution:'TEST ENTRANCE CONFIRMED BY PHONE'},cashier.userId);

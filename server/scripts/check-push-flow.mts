@@ -1,0 +1,40 @@
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import webpush from 'web-push';
+import mongoose from 'mongoose';
+import express from 'express';
+const databaseName='tbl_push_'+randomUUID().replaceAll('-','').slice(0,16),keys=webpush.generateVAPIDKeys();
+Object.assign(process.env,{NODE_ENV:'test',MONGODB_DB_NAME:databaseName,VAPID_PUBLIC_KEY:keys.publicKey,VAPID_PRIVATE_KEY:keys.privateKey,WEB_PUSH_SUBJECT:'https://restaurant.test'});
+const {connectDatabase}=await import('../src/config/database.js');
+const {Order}=await import('../src/modules/orders/order.model.js');
+const {PushDevice,PushJob}=await import('../src/modules/push/push.model.js');
+const {enqueueAssignments,processPushJobs}=await import('../src/modules/push/push.worker.js');
+const {pushRoutes,dispatchAlertRoutes}=await import('../src/modules/push/push.routes.js');
+const {clerk}=await import('../src/config/clerk.js');
+const {errorHandler}=await import('../src/middleware/errorHandler.js');
+let server:ReturnType<ReturnType<typeof express>['listen']>|undefined,connected=false;
+try{await connectDatabase();connected=true;assert.equal(mongoose.connection.name,databaseName);for(const model of[Order,PushDevice,PushJob]){await model.createCollection();await model.createIndexes();}
+ let role='driver';clerk.users.getUser=(async()=>({id:'user_pushFixture',primaryEmailAddressId:'email_fixture',emailAddresses:[{id:'email_fixture',verification:{status:'verified'}}],publicMetadata:{role}})) as any;
+ const app=express();app.use(express.json());app.use((req,res,next)=>{if(req.header('x-role'))res.locals.actor={userId:req.header('x-user')||'user_pushFixture',role:req.header('x-role')};next();});app.use('/push',pushRoutes);app.use('/alerts',dispatchAlertRoutes);app.use(errorHandler);
+ server=await new Promise<any>(resolve=>{const listener=app.listen(0,'127.0.0.1',()=>resolve(listener));});const base='http://127.0.0.1:'+(server!.address() as any).port;
+ const request=(path:string,method='GET',body?:unknown,user='user_pushFixture',who='driver')=>fetch(base+path,{method,headers:{'Content-Type':'application/json','x-user':user,'x-role':who},...(body?{body:JSON.stringify(body)}:{})});
+ const device=(name:string)=>({endpoint:'https://fcm.googleapis.com/fixture/'+name,keys:{p256dh:keys.publicKey,auth:'a'.repeat(22)}});
+ assert.equal((await fetch(base+'/push/config')).status,401);assert.equal((await request('/push/config','GET',undefined,'customer','customer')).status,403);
+ assert.equal((await request('/push/subscription','PUT',{...device('invalid'),endpoint:'https://127.0.0.1/internal'})).status,422);
+ for(const name of ['success','retry','expired'])assert.equal((await request('/push/subscription','PUT',device(name))).status,200);
+ assert.equal((await request('/push/subscription','PUT',device('success'),'user_other')).status,409);
+ const order=await Order.create({orderNumber:'TEST-PUSH',userId:'fixture_customer',requestKey:randomUUID(),requestHash:'fixture',customer:{name:'TEST CUSTOMER',email:'fixture@example.invalid',phone:'+966512345678'},fulfillment:'delivery',items:[],subtotalHalalas:10000,deliveryFeeHalalas:2000,taxHalalas:0,totalHalalas:12000,status:'out_for_delivery',paymentStatus:'paid',deliveryAssignment:{driverId:'user_pushFixture',name:'TEST DRIVER',phone:'+966512345678',dispatchedAt:new Date(Date.now()-180000)}});
+ await Promise.all([enqueueAssignments(),enqueueAssignments()]);assert.equal(await PushJob.countDocuments(),3);
+ let retries=0;const calls:string[]=[];webpush.sendNotification=(async(sub:any,payload:any)=>{calls.push(sub.endpoint);const data=JSON.parse(payload);assert.equal(data.url,'/driver');assert.equal(data.body,'New delivery assigned — open your dashboard.');if(sub.endpoint.endsWith('/expired'))throw{statusCode:410};if(sub.endpoint.endsWith('/retry')&&retries++===0)throw{statusCode:503};await new Promise(resolve=>setTimeout(resolve,20));return{statusCode:201,body:'',headers:{}};}) as any;
+ await Promise.all([processPushJobs(),processPushJobs()]);assert.equal(calls.length,3);assert.equal(await PushJob.countDocuments({state:'pending'}),1);assert.equal(await PushJob.countDocuments({state:'sent'}),1);assert.equal(await PushDevice.countDocuments(),2);
+ assert.equal((await Order.findById(order.id))?.deliveryProgress?.acknowledgedAt,undefined);
+ const alert=await request('/alerts','GET',undefined,'cashier','cashier');assert.equal(alert.status,200);assert.equal((await alert.json()).data[0].notificationState,'sent');
+ await PushJob.updateMany({state:'pending'},{$set:{nextAttemptAt:new Date(0)}});await processPushJobs();assert.equal(await PushJob.countDocuments({state:'sent'}),2);
+ await PushJob.create({key:'limit-fixture',orderId:order._id,driverId:'user_pushFixture',deviceId:(await PushDevice.findOne())!._id,dispatchedAt:order.deliveryAssignment!.dispatchedAt,state:'sending',attempts:5,leaseUntil:new Date(0)});await processPushJobs();assert.equal((await PushJob.findOne({key:'limit-fixture'}))?.state,'failed');
+ const count=calls.length;await processPushJobs();assert.equal(calls.length,count);
+ const saved=await PushDevice.findOne();await PushJob.create({key:'lease-fixture',orderId:order._id,driverId:'user_pushFixture',deviceId:saved!._id,dispatchedAt:order.deliveryAssignment!.dispatchedAt,state:'sending',leaseUntil:new Date(0)});await processPushJobs();assert.equal((await PushJob.findOne({key:'lease-fixture'}))?.state,'sent');
+ await PushJob.create({key:'ack-fixture',orderId:order._id,driverId:'user_pushFixture',deviceId:saved!._id,dispatchedAt:order.deliveryAssignment!.dispatchedAt});await Order.updateOne({_id:order.id},{$set:{'deliveryProgress.acknowledgedAt':new Date()}});const prior=calls.length;await processPushJobs();assert.equal(calls.length,prior);assert.equal((await (await request('/alerts','GET',undefined,'cashier','cashier')).json()).data.length,0);
+ await Order.updateOne({_id:order.id},{$unset:{'deliveryProgress.acknowledgedAt':1}});await PushJob.create({key:'revoked-fixture',orderId:order._id,driverId:'user_pushFixture',deviceId:saved!._id,dispatchedAt:order.deliveryAssignment!.dispatchedAt});role='customer';await processPushJobs();assert.equal(calls.length,prior);assert.equal(await PushDevice.countDocuments(),0);
+ console.log('PASS isolated Web Push: ownership/role/SSRF guards, concurrent dedup/leases, retries, expired cleanup, generic payload, acknowledgement escalation/cancellation and revoked access');
+}catch(error){console.error('FAIL push verification:',error instanceof Error?error.name:'unknown',(error as {path?:string})?.path||'');if(error instanceof Error)console.error(error.stack?.split('\n').slice(1,5).join('\n'));process.exitCode=1;}
+finally{if(server)await new Promise<void>(resolve=>server!.close(()=>resolve()));if(connected){assert.equal(mongoose.connection.name,databaseName);assert.match(databaseName,/^tbl_push_[a-f0-9]{16}$/);await mongoose.connection.dropDatabase();console.log('Isolated push database removed.');}await mongoose.disconnect();}
