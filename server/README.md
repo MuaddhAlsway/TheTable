@@ -414,3 +414,7 @@ See [SMS_SETUP.md](../SMS_SETUP.md) for phone setup, Render environment variable
 ## Infobip SMS provider
 
 See [INFOBIP_SETUP.md](../INFOBIP_SETUP.md). Set SMS_PROVIDER=infobip with INFOBIP_BASE_URL, INFOBIP_API_KEY and INFOBIP_SENDER. SMS_ENABLED and the admin sending switch remain required. No Android gateway is needed for this provider. `npm run test:infobip` uses mocked HTTP and sends no real SMS.
+
+## Email notifications
+
+Gmail SMTP with an App Password and optional Resend demo are implemented independently of SMS. See [EMAIL_SETUP.md](../EMAIL_SETUP.md) for settings, demo recipient restrictions, verification and Render SMTP limitations. Admin: /admin/email; customer preferences: /account. Credentials remain backend-only.

@@ -5,6 +5,17 @@ import { z } from 'zod';
 config({ path: fileURLToPath(new URL('../../.env', import.meta.url)), quiet: true });
 config({ path: fileURLToPath(new URL('../../.env.push.local', import.meta.url)), quiet: true });
 const schema = z.object({
+  EMAIL_PROVIDER: z.enum(['gmail', 'resend']).default('gmail'),
+  GMAIL_USER: z.string().email().optional(),
+  GMAIL_APP_PASSWORD: z.string().optional(),
+  EMAIL_ENABLED: z.enum(['true', 'false']).default('false'),
+  EMAIL_MODE: z.enum(['demo', 'production']).default('demo'),
+  RESEND_API_KEY: z.string().trim().optional(),
+  RESEND_FROM: z.string().email().optional(),
+  EMAIL_TEST_RECIPIENT: z.string().email().optional(),
+  RESEND_TEST_RECIPIENT: z.string().email().optional(),
+  EMAIL_DAILY_LIMIT: z.coerce.number().int().min(1).max(1000).default(50),
+  EMAIL_FRONTEND_URL: z.string().refine(value => { try { const u = new URL(value); return u.origin === value && !u.username && !u.password && (u.protocol === 'https:' || (u.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(u.hostname))); } catch { return false; } }, 'Use an exact frontend origin.').optional(),
   SMS_PROVIDER: z.enum(['android', 'infobip']).default('android'),
   API_KEY: z.string().optional(),
   INFOBIP_API_KEY: z.string().optional(),
@@ -36,6 +47,8 @@ const schema = z.object({
   ORDER_CREATION_ENABLED: z.enum(['true', 'false']).default('false').describe('Stripe readiness and confirmed fulfillment remain mandatory.'),
   RESERVATION_CREATION_ENABLED: z.enum(['true', 'false']).default('false').describe('Reservation requests use the saved restaurant schedule and party limit.'),
 }).superRefine((value, ctx) => {
+  if (value.EMAIL_MODE === 'production' && value.RESEND_FROM?.endsWith('@resend.dev')) ctx.addIssue({ code: 'custom', path: ['RESEND_FROM'], message: 'Production email requires your verified domain.' });
+  if (value.NODE_ENV === 'production' && value.EMAIL_FRONTEND_URL?.startsWith('http:')) ctx.addIssue({ code: 'custom', path: ['EMAIL_FRONTEND_URL'], message: 'Production requires HTTPS.' });
   if (value.NODE_ENV !== 'production') return;
   for (const name of ['CLERK_PUBLISHABLE_KEY'] as const) {
     if (!value[name]?.trim()) ctx.addIssue({ code: 'custom', path: [name], message: 'Required for production.' });

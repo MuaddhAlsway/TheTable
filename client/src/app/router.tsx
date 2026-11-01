@@ -1,3 +1,4 @@
+import EmailSettings from '../pages/admin/EmailSettings';
 import SmsSettings from '../pages/admin/SmsSettings';
 import ReservationDesk from '../pages/staff/ReservationDesk';
 import CustomerReservation from '../pages/CustomerReservation';
@@ -57,6 +58,7 @@ export const routes: RouteObject[] = [{
     { path: "admin/menu", element: <RequireAuth admin><AdminMenu /></RequireAuth> },
     { path: "cart", element: <Cart /> },
     { path: "table/:token", element: <TableLanding /> },
+    { path: "admin/email", element: <RequireAuth admin><EmailSettings /></RequireAuth> },
     { path: "admin/sms", element: <RequireAuth admin><SmsSettings /></RequireAuth> },
     { path: "admin/tables", element: <RequireAuth admin><Tables /></RequireAuth> },
     { path: "checkout", element: <CheckoutEntry /> },

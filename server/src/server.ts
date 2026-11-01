@@ -1,3 +1,5 @@
+import { EmailJob, EmailControl, EmailPreference } from './modules/email/email.model.js';
+import { startEmailWorker } from './modules/email/email.worker.js';
 import { SmsJob, SmsControl, SmsPreference } from './modules/sms/sms.model.js';
 import { startSmsWorker } from './modules/sms/sms.worker.js';
 import { DiningTable } from './modules/tables/table.model.js';
@@ -28,16 +30,17 @@ async function start() {
   if (!paymentReadiness().ready) console.warn('Stripe setup is incomplete: payment sessions and new orders are disabled. API startup can continue.');
   await connectDatabase();
   startupStage = 'database index initialization';
-  const models: { createCollection(): Promise<unknown>; createIndexes(): Promise<unknown> }[] = [SmsJob, SmsControl, SmsPreference, DiningTable, Menu, Order, Reservation, UserProfile, Operations, WebhookReceipt, Fulfillment, WebsiteContent, TeamAudit, StaffEmailAccess, PushDevice, PushJob];
+  const models: { createCollection(): Promise<unknown>; createIndexes(): Promise<unknown> }[] = [EmailJob, EmailControl, EmailPreference, SmsJob, SmsControl, SmsPreference, DiningTable, Menu, Order, Reservation, UserProfile, Operations, WebhookReceipt, Fulfillment, WebsiteContent, TeamAudit, StaffEmailAccess, PushDevice, PushJob];
   await Promise.all(models.map(async model => { await model.createCollection(); await model.createIndexes(); }));
   await initializeWebsiteContent();
   if(!pushReady())console.warn('Web Push is not configured: background driver alerts are disabled; acknowledgement warnings remain available.');
   const stopPush = startPushWorker();
   const stopSms = startSmsWorker();
+  const stopEmail = startEmailWorker();
   startupStage = 'HTTP listener';
   const server = app.listen(env.PORT, '0.0.0.0', () => console.log(`The Table API listening on 0.0.0.0:${env.PORT}`));
   server.on('error', error => { console.error(startupDiagnostic('HTTP listener', error)); void mongoose.disconnect().finally(() => process.exit(1)); });
-  const stop = () => { stopPush(); stopSms(); server.close(() => { void mongoose.disconnect().finally(() => process.exit(0)); }); setTimeout(() => process.exit(1), 10000).unref(); };
+  const stop = () => { stopPush(); stopSms(); stopEmail(); server.close(() => { void mongoose.disconnect().finally(() => process.exit(0)); }); setTimeout(() => process.exit(1), 10000).unref(); };
   process.on('SIGINT', stop); process.on('SIGTERM', stop);
 }
 start().catch(error => { console.error(startupDiagnostic(startupStage, error)); void mongoose.disconnect().finally(() => process.exit(1)); });
